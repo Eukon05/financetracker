@@ -1,0 +1,101 @@
+package com.eukon05.financetracker.integration;
+
+import com.eukon05.financetracker.dto.RegisterDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.validation.Validator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@Transactional
+class RegistrationTests {
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final MockMvc mockMvc;
+    private final Validator validator;
+
+    @Autowired
+    RegistrationTests(MockMvc mockMvc, Validator validator) {
+        this.mockMvc = mockMvc;
+        this.validator = validator;
+    }
+/*
+    @BeforeEach
+    void cleanDB() {
+        repository.deleteAll();
+    }
+
+ */
+
+    RegisterDTO createRegisterRequest() {
+        return new RegisterDTO("test",
+                "test1234",
+                "test1234",
+                "test",
+                "test",
+                "test@test.com");
+    }
+
+    @Test
+    void should_register_user() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/users")
+                        .content(objectMapper.writeValueAsString(createRegisterRequest()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void should_validate_user_already_exists() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/users")
+                        .content(objectMapper.writeValueAsString(createRegisterRequest()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/users")
+                        .content(objectMapper.writeValueAsString(createRegisterRequest()))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void should_validate_password_mismatch() {
+        RegisterDTO dto = new RegisterDTO("test", "test1234", "invalid123", "test", "test", "email@email.com");
+        assertEquals(1, validator.validate(dto).size());
+    }
+
+    @Test
+    void should_validate_email_invalid() {
+        RegisterDTO dto = new RegisterDTO("test", "test1234", "test1234", "test", "test", "email");
+        assertEquals(1, validator.validate(dto).size());
+    }
+
+    @Test
+    void should_validate_password_length() {
+        RegisterDTO dto = new RegisterDTO("test", "h", "h", "test", "test", "email@email.com");
+        assertEquals(2, validator.validate(dto).size());
+    }
+
+    @Test
+    void should_validate_blank_fields() {
+        RegisterDTO dto = new RegisterDTO(" ", " ", " ", " ", " ", " ");
+        assertEquals(8, validator.validate(dto).size());
+    }
+
+}

@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: financetracker
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+  
+  maildev:
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
