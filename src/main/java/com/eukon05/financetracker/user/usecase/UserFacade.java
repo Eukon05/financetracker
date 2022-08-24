@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserFacade {
 
-    private final CreateUserService createUserService;
+    private final CreateUserUseCase createUserUseCase;
     private final CheckUserExistsUseCase checkUserExistsUseCase;
 
     public void createUser(RegisterDTO dto, String rootUrl) {
-        createUserService.createUser(dto, rootUrl);
+        createUserUseCase.createUser(dto, rootUrl);
     }
 
     public boolean checkUserExistsByUsername(String username) {

@@ -8,6 +8,7 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -22,47 +23,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @Transactional
+@Import({IntegrationTestsUtils.class, IntegrationTestsConfiguration.class})
 class RegistrationTests {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final MockMvc mockMvc;
-    private final Validator validator;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private Validator validator;
 
     @Autowired
-    RegistrationTests(MockMvc mockMvc, Validator validator) {
-        this.mockMvc = mockMvc;
-        this.validator = validator;
-    }
-
-    RegisterDTO createRegisterRequest() {
-        return new RegisterDTO("test",
-                "test1234",
-                "test1234",
-                "test",
-                "test",
-                "test@test.com");
-    }
+    private IntegrationTestsUtils utils;
 
     @Test
     void should_register_user() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/users")
-                        .content(objectMapper.writeValueAsString(createRegisterRequest()))
+                        .content(objectMapper.writeValueAsString(utils.createRegisterDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
 
     @Test
     void should_validate_user_already_exists() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/users")
-                        .content(objectMapper.writeValueAsString(createRegisterRequest()))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+        utils.registerTestUser();
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/users")
-                        .content(objectMapper.writeValueAsString(createRegisterRequest()))
+                        .content(objectMapper.writeValueAsString(utils.createRegisterDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
