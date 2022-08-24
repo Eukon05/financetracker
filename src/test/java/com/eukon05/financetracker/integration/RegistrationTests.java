@@ -1,6 +1,6 @@
 package com.eukon05.financetracker.integration;
 
-import com.eukon05.financetracker.dto.RegisterDTO;
+import com.eukon05.financetracker.user.dto.RegisterDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +33,6 @@ class RegistrationTests {
         this.mockMvc = mockMvc;
         this.validator = validator;
     }
-/*
-    @BeforeEach
-    void cleanDB() {
-        repository.deleteAll();
-    }
-
- */
 
     RegisterDTO createRegisterRequest() {
         return new RegisterDTO("test",

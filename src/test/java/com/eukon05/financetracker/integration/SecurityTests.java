@@ -1,8 +1,8 @@
 package com.eukon05.financetracker.integration;
 
-import com.eukon05.financetracker.dto.LoginDTO;
-import com.eukon05.financetracker.dto.RegisterDTO;
-import com.eukon05.financetracker.repository.UserRepository;
+import com.eukon05.financetracker.auth.dto.LoginDTO;
+import com.eukon05.financetracker.user.UserRepository;
+import com.eukon05.financetracker.user.dto.RegisterDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

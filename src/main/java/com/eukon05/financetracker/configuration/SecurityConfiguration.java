@@ -1,6 +1,6 @@
 package com.eukon05.financetracker.configuration;
 
-import com.eukon05.financetracker.filter.JwtAuthorizationFilter;
+import com.eukon05.financetracker.jwt.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
