@@ -60,26 +60,26 @@ class RegistrationTests {
 
     @Test
     void should_validate_password_mismatch() {
-        RegisterDTO dto = new RegisterDTO("test", "test1234", "invalid123", "test", "test", "email@email.com");
+        RegisterDTO dto = new RegisterDTO("test", "test1234", "invalid123", "email@email.com");
         assertEquals(1, validator.validate(dto).size());
     }
 
     @Test
     void should_validate_email_invalid() {
-        RegisterDTO dto = new RegisterDTO("test", "test1234", "test1234", "test", "test", "email");
+        RegisterDTO dto = new RegisterDTO("test", "test1234", "test1234", "email");
         assertEquals(1, validator.validate(dto).size());
     }
 
     @Test
     void should_validate_password_length() {
-        RegisterDTO dto = new RegisterDTO("test", "h", "h", "test", "test", "email@email.com");
+        RegisterDTO dto = new RegisterDTO("test", "h", "h", "email@email.com");
         assertEquals(2, validator.validate(dto).size());
     }
 
     @Test
     void should_validate_blank_fields() {
-        RegisterDTO dto = new RegisterDTO(" ", " ", " ", " ", " ", " ");
-        assertEquals(8, validator.validate(dto).size());
+        RegisterDTO dto = new RegisterDTO(" ", " ", " ", " ");
+        assertEquals(6, validator.validate(dto).size());
     }
 
 }

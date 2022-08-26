@@ -22,8 +22,6 @@ class IntegrationTestsUtils {
         return new RegisterDTO("test",
                 "test1234",
                 "test1234",
-                "test",
-                "test",
                 "test@test.com");
     }
 
