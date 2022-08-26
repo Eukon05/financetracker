@@ -40,11 +40,11 @@ public class User implements UserDetails {
     @ElementCollection
     private final Set<RoleType> roles = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private final List<Token> tokens = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private final List<Wallet> wallets = new ArrayList<>();
 

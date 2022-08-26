@@ -22,4 +22,10 @@ class WalletController {
         walletFacade.createWallet(principal.getName(), dto.name());
     }
 
+    @DeleteMapping
+    @RequestMapping("/{walletID}")
+    void deleteWallet(@PathVariable long walletID, Principal principal) {
+        walletFacade.deleteWallet(principal.getName(), walletID);
+    }
+
 }

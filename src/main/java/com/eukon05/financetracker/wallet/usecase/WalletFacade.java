@@ -8,9 +8,14 @@ import org.springframework.stereotype.Service;
 public class WalletFacade {
 
     private final CreateWalletUseCase createWalletUseCase;
+    private final DeleteWalletUseCase deleteWalletUseCase;
 
     public void createWallet(String username, String name) {
         createWalletUseCase.createWallet(username, name);
+    }
+
+    public void deleteWallet(String username, long walletID) {
+        deleteWalletUseCase.deleteWallet(username, walletID);
     }
 
 }
