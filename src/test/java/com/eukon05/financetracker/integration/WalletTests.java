@@ -2,6 +2,7 @@ package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @Transactional
 @Import({IntegrationTestsUtils.class, IntegrationTestsConfiguration.class})
 class WalletTests {
@@ -32,10 +35,13 @@ class WalletTests {
 
     private static final CreateWalletDTO dto = new CreateWalletDTO("test wallet");
 
+    @BeforeEach
+    void setUp() {
+        utils.registerTestUser();
+    }
+
     @Test
     void should_create_a_new_wallet() throws Exception {
-        utils.registerTestUser();
-        utils.enableTestUser();
         String token = utils.getTestAccessToken();
 
         mockMvc.perform(post("/wallets")
@@ -47,8 +53,6 @@ class WalletTests {
 
     @Test
     void should_validate_wallet_already_exists() throws Exception {
-        utils.registerTestUser();
-        utils.enableTestUser();
         String token = utils.getTestAccessToken();
 
         mockMvc.perform(post("/wallets")

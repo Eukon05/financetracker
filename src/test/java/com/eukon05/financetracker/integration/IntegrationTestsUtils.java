@@ -33,11 +33,15 @@ class IntegrationTestsUtils {
 
     void registerTestUser() {
         userFacade.createUser(createRegisterDTO(), "");
-    }
-
-    void enableTestUser() {
         userRepository.findById(1L).ifPresent(user -> {
             user.setEnabled(true);
+            userRepository.save(user);
+        });
+    }
+
+    void disableTestUser() {
+        userRepository.findById(1L).ifPresent(user -> {
+            user.setEnabled(false);
             userRepository.save(user);
         });
     }

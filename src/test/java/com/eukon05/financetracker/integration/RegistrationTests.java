@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ class RegistrationTests {
     private IntegrationTestsUtils utils;
 
     @Test
+    @DirtiesContext
     void should_register_user() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/users")
@@ -45,6 +47,7 @@ class RegistrationTests {
     }
 
     @Test
+    @DirtiesContext
     void should_validate_user_already_exists() throws Exception {
         utils.registerTestUser();
 
