@@ -1,13 +1,12 @@
 package com.eukon05.financetracker.token.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class TokenNotFoundException extends RuntimeException {
+public class TokenNotFoundException extends ResponseStatusException {
     private static final String MESSAGE_TOKEN_NOT_FOUND = "Token not found.";
 
     public TokenNotFoundException() {
-        super(MESSAGE_TOKEN_NOT_FOUND);
+        super(HttpStatus.NOT_FOUND, MESSAGE_TOKEN_NOT_FOUND);
     }
 }

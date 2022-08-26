@@ -1,6 +1,7 @@
 package com.eukon05.financetracker.user;
 
 import com.eukon05.financetracker.token.Token;
+import com.eukon05.financetracker.wallet.Wallet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,9 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -49,7 +48,11 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private final Set<Token> tokens = new HashSet<>();
+    private final List<Token> tokens = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private final List<Wallet> wallets = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

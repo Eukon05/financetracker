@@ -18,7 +18,7 @@ class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(@RequestBody @Valid RegisterDTO dto, HttpServletRequest request) {
+    void createUser(@RequestBody @Valid RegisterDTO dto, HttpServletRequest request) {
         userFacade.createUser(dto, request.getRequestURL().toString().replace("/users", ""));
     }
 

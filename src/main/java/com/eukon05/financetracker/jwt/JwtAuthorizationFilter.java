@@ -6,7 +6,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.eukon05.financetracker.jwt.usecase.JwtFacade;
 import com.eukon05.financetracker.user.usecase.UserFacade;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -83,7 +82,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return urls.contains(request.getServletPath()) || request.getMethod().equals(HttpMethod.POST.toString());
+        return urls.contains(request.getRequestURI().replace("/api/v1", ""));
     }
 
     private void printForbidden(HttpServletResponse response, String message) throws IOException {

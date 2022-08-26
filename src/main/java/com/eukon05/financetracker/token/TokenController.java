@@ -13,7 +13,7 @@ class TokenController {
     private final TokenFacade tokenFacade;
 
     @GetMapping("/confirm-registration")
-    public void confirmRegistration(@RequestParam String token) {
+    void confirmRegistration(@RequestParam String token) {
         tokenFacade.confirmRegistration(token);
     }
 
