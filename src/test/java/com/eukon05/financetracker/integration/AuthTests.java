@@ -1,7 +1,5 @@
 package com.eukon05.financetracker.integration;
 
-import com.eukon05.financetracker.auth.dto.LoginDTO;
-import com.eukon05.financetracker.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +27,7 @@ class AuthTests {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserRepository repository;
-
-    @Autowired
     private IntegrationTestsUtils utils;
-
-    private final LoginDTO dto = new LoginDTO("test", "test1234");
 
     @Test
     void should_not_let_disabled_user_login() throws Exception {
@@ -42,7 +35,7 @@ class AuthTests {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/login")
-                        .content(objectMapper.writeValueAsString(dto))
+                        .content(objectMapper.writeValueAsString(utils.createLoginDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
@@ -50,15 +43,11 @@ class AuthTests {
     @Test
     void should_let_enabled_user_login() throws Exception {
         utils.registerTestUser();
-
-        repository.findById(1L).ifPresent(user -> {
-            user.setEnabled(true);
-            repository.save(user);
-        });
+        utils.enableTestUser();
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/login")
-                        .content(objectMapper.writeValueAsString(dto))
+                        .content(objectMapper.writeValueAsString(utils.createLoginDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(status().isOk(), jsonPath("$.access_token").isNotEmpty(), jsonPath("$.refresh_token").isNotEmpty());
     }

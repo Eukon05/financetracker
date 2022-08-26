@@ -19,15 +19,17 @@ public class SecurityConfiguration {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().disable().csrf().disable();
+        http.csrf().disable();
+        http.cors();
 
-        http.authorizeRequests(auth -> {
-            auth.antMatchers("/api/v1/test").authenticated();
-            auth.anyRequest().permitAll();
-        });
-
+        http.logout().invalidateHttpSession(true).clearAuthentication(true).permitAll();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.authorizeRequests(auth -> {
+            auth.antMatchers("/api/v1/wallets").authenticated();
+            auth.anyRequest().permitAll();
+        });
 
         return http.build();
     }
