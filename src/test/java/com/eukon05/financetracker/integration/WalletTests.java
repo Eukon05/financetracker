@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,6 +67,21 @@ class WalletTests {
                         .content(objectMapper.writeValueAsString(dto))
                         .header(AUTHORIZATION, token))
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    void should_delete_wallet() throws Exception {
+        String token = utils.getTestAccessToken();
+
+        mockMvc.perform(post("/wallets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto))
+                        .header(AUTHORIZATION, token))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/wallets/1")
+                        .header(AUTHORIZATION, token))
+                .andExpect(status().isOk());
     }
 
 }
