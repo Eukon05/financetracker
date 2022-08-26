@@ -13,7 +13,5 @@ import javax.validation.constraints.Size;
 public record RegisterDTO(@Size(min = 1, max = 50) @NotBlank @UsernameNotTaken String username,
                           @Size(min = 8, max = 50) @NotBlank String password,
                           @Size(min = 8, max = 50) @NotBlank String repeatPassword,
-                          @Size(min = 1, max = 100) @NotBlank String name,
-                          @Size(min = 1, max = 200) @NotBlank String surname,
                           @Email @NotEmpty @EmailNotTaken String email) {
 }

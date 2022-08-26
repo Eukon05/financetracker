@@ -28,7 +28,7 @@ class CreateUserUseCaseImpl implements CreateUserUseCase {
         user.getTokens().add(token);
         userRepository.save(user);
 
-        emailFacade.sendRegistrationEmail(dto.name(), dto.email(), rootUrl, token.getId());
+        emailFacade.sendRegistrationEmail(dto.username(), dto.email(), rootUrl, token.getId());
     }
 
 }

@@ -26,17 +26,11 @@ public class User implements UserDetails {
 
     private String password;
 
-    private String name;
-
-    private String surname;
-
     private String email;
 
-    public User(String username, String password, String name, String surname) {
+    public User(String username, String password) {
         setUsername(username);
         setPassword(password);
-        setName(name);
-        setSurname(surname);
     }
 
     private boolean enabled = false;

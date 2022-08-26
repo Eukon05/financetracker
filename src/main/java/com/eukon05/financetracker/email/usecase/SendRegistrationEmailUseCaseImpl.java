@@ -15,11 +15,11 @@ class SendRegistrationEmailUseCaseImpl implements SendRegistrationEmailUseCase {
     private static final String REGISTRATION_LINK = "%s/confirm-registration?token=%s";
 
     @Override
-    public void sendRegistrationEmail(String name, String email, String rootUrl, String tokenId) {
+    public void sendRegistrationEmail(String username, String email, String rootUrl, String tokenId) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject(REGISTRATION_MAIL_SUBJECT);
-        message.setText(String.format(REGISTRATION_MAIL_TEXT, name, String.format(REGISTRATION_LINK, rootUrl, tokenId)));
+        message.setText(String.format(REGISTRATION_MAIL_TEXT, username, String.format(REGISTRATION_LINK, rootUrl, tokenId)));
 
         mailSender.send(message);
     }

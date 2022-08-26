@@ -9,8 +9,8 @@ public class EmailFacade {
 
     private final SendRegistrationEmailUseCase sendRegistrationEmailUseCase;
 
-    public void sendRegistrationEmail(String name, String email, String rootUrl, String tokenId) {
-        sendRegistrationEmailUseCase.sendRegistrationEmail(name, email, rootUrl, tokenId);
+    public void sendRegistrationEmail(String username, String email, String rootUrl, String tokenId) {
+        sendRegistrationEmailUseCase.sendRegistrationEmail(username, email, rootUrl, tokenId);
     }
 
 }
