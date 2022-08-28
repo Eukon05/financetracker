@@ -5,6 +5,7 @@ import com.eukon05.financetracker.auth.usecase.AuthFacade;
 import com.eukon05.financetracker.user.UserRepository;
 import com.eukon05.financetracker.user.dto.RegisterDTO;
 import com.eukon05.financetracker.user.usecase.UserFacade;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.context.TestComponent;
 
@@ -18,33 +19,22 @@ class IntegrationTestsUtils {
     private final UserRepository userRepository;
     private final AuthFacade authFacade;
 
-    RegisterDTO createRegisterDTO() {
-        return new RegisterDTO("test",
-                "test1234",
-                "test1234",
-                "test@test.com");
-    }
+    @Getter
+    private final RegisterDTO registerDTO = new RegisterDTO("test", "test1234", "test1234", "test@test.com");
 
-    LoginDTO createLoginDTO() {
-        return new LoginDTO("test", "test1234");
-    }
+    @Getter
+    private final LoginDTO loginDTO = new LoginDTO(registerDTO.username(), registerDTO.password());
 
     void registerTestUser() {
-        userFacade.createUser(createRegisterDTO(), "");
+        userFacade.createUser(registerDTO, "");
         userRepository.findById(1L).ifPresent(user -> {
             user.setEnabled(true);
             userRepository.save(user);
         });
     }
 
-    void disableTestUser() {
-        userRepository.findById(1L).ifPresent(user -> {
-            user.setEnabled(false);
-            userRepository.save(user);
-        });
-    }
 
     String getTestAccessToken() {
-        return authFacade.login(createLoginDTO(), "").get(ACCESS_TOKEN);
+        return authFacade.login(loginDTO, "").get(ACCESS_TOKEN);
     }
 }

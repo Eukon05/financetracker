@@ -1,6 +1,8 @@
 package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.wallet.dto.CreateEditWalletDTO;
+import com.eukon05.financetracker.wallet.dto.WalletDTO;
+import com.eukon05.financetracker.wallet.usecase.WalletFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -34,6 +39,9 @@ class WalletTests {
     @Autowired
     private IntegrationTestsUtils utils;
 
+    @Autowired
+    private WalletFacade walletFacade;
+
     private static final CreateEditWalletDTO dto = new CreateEditWalletDTO("test wallet");
 
     @BeforeEach
@@ -50,6 +58,8 @@ class WalletTests {
                         .content(objectMapper.writeValueAsString(dto))
                         .header(AUTHORIZATION, token))
                 .andExpect(status().isCreated());
+
+        assertFalse(getTestUserWallets().isEmpty());
     }
 
     @Test
@@ -79,9 +89,13 @@ class WalletTests {
                         .header(AUTHORIZATION, token))
                 .andExpect(status().isCreated());
 
+        assertFalse(getTestUserWallets().isEmpty());
+
         mockMvc.perform(delete("/wallets/1")
                         .header(AUTHORIZATION, token))
                 .andExpect(status().isOk());
+
+        assertTrue(getTestUserWallets().isEmpty());
     }
 
     @Test
@@ -94,11 +108,13 @@ class WalletTests {
                         .header(AUTHORIZATION, token))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(delete("/wallets/1")
+        mockMvc.perform(put("/wallets/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CreateEditWalletDTO("new name")))
                         .header(AUTHORIZATION, token))
                 .andExpect(status().isOk());
+
+        assertEquals("new name", getTestUserWallets().get(0).name());
     }
 
     @Test
@@ -136,7 +152,11 @@ class WalletTests {
 
         mockMvc.perform(get("/wallets")
                         .header(AUTHORIZATION, token))
-                .andExpectAll(status().isOk(), jsonPath("$.[0].name").value("test wallet"));
+                .andExpectAll(status().isOk(), jsonPath("$.[0].name").value(dto.name()));
+    }
+
+    private List<WalletDTO> getTestUserWallets() {
+        return walletFacade.getUserWallets(utils.getRegisterDTO().username());
     }
 
 }

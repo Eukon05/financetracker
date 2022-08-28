@@ -1,5 +1,6 @@
 package com.eukon05.financetracker.integration;
 
+import com.eukon05.financetracker.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,9 @@ class AuthTests {
     @Autowired
     private IntegrationTestsUtils utils;
 
+    @Autowired
+    private UserRepository repository;
+
     @BeforeEach
     void setUp() {
         utils.registerTestUser();
@@ -39,10 +43,10 @@ class AuthTests {
 
     @Test
     void should_not_let_disabled_user_login() throws Exception {
-        utils.disableTestUser();
+        disableTestUser();
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/login")
-                        .content(objectMapper.writeValueAsString(utils.createLoginDTO()))
+                        .content(objectMapper.writeValueAsString(utils.getLoginDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
@@ -51,9 +55,16 @@ class AuthTests {
     void should_let_enabled_user_login() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/login")
-                        .content(objectMapper.writeValueAsString(utils.createLoginDTO()))
+                        .content(objectMapper.writeValueAsString(utils.getLoginDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(status().isOk(), jsonPath("$.access_token").isNotEmpty(), jsonPath("$.refresh_token").isNotEmpty());
+    }
+
+    private void disableTestUser() {
+        repository.findById(1L).ifPresent(user -> {
+            user.setEnabled(false);
+            repository.save(user);
+        });
     }
 
 }
