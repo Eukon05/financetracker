@@ -9,6 +9,6 @@ import org.mapstruct.Mapping;
 public interface UserModelMapper {
 
     @Mapping(source = "password", target = "password", qualifiedBy = EncodedMapping.class)
-    User mapRegisterRequestDTOToUser(RegisterDTO dto);
+    User mapRegisterDTOToUser(RegisterDTO dto);
 
 }

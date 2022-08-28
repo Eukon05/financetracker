@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -122,6 +122,21 @@ class WalletTests {
                         .content(objectMapper.writeValueAsString(new CreateEditWalletDTO("new name")))
                         .header(AUTHORIZATION, token))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void should_get_user_wallets() throws Exception {
+        String token = utils.getTestAccessToken();
+
+        mockMvc.perform(post("/wallets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto))
+                        .header(AUTHORIZATION, token))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/wallets")
+                        .header(AUTHORIZATION, token))
+                .andExpectAll(status().isOk(), jsonPath("$.[0].name").value("test wallet"));
     }
 
 }

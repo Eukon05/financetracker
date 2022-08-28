@@ -21,7 +21,7 @@ class CreateUserUseCaseImpl implements CreateUserUseCase {
 
     @Override
     public void createUser(RegisterDTO dto, String rootUrl) {
-        User user = mapper.mapRegisterRequestDTOToUser(dto);
+        User user = mapper.mapRegisterDTOToUser(dto);
         user.getRoles().add(RoleType.USER);
 
         Token token = new Token(TokenType.CONFIRM_REGISTRATION);
