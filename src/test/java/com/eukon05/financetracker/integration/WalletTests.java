@@ -1,6 +1,6 @@
 package com.eukon05.financetracker.integration;
 
-import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
+import com.eukon05.financetracker.wallet.dto.CreateEditWalletDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class WalletTests {
     @Autowired
     private IntegrationTestsUtils utils;
 
-    private static final CreateWalletDTO dto = new CreateWalletDTO("test wallet");
+    private static final CreateEditWalletDTO dto = new CreateEditWalletDTO("test wallet");
 
     @BeforeEach
     void setUp() {
@@ -80,6 +80,46 @@ class WalletTests {
                 .andExpect(status().isCreated());
 
         mockMvc.perform(delete("/wallets/1")
+                        .header(AUTHORIZATION, token))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void should_edit_wallet() throws Exception {
+        String token = utils.getTestAccessToken();
+
+        mockMvc.perform(post("/wallets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto))
+                        .header(AUTHORIZATION, token))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/wallets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CreateEditWalletDTO("new name")))
+                        .header(AUTHORIZATION, token))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void should_not_edit_wallet() throws Exception {
+        String token = utils.getTestAccessToken();
+
+        mockMvc.perform(post("/wallets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto))
+                        .header(AUTHORIZATION, token))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/wallets")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CreateEditWalletDTO("new name")))
+                        .header(AUTHORIZATION, token))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(delete("/wallets/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CreateEditWalletDTO("new name")))
                         .header(AUTHORIZATION, token))
                 .andExpect(status().isOk());
     }

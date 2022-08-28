@@ -1,6 +1,6 @@
 package com.eukon05.financetracker.wallet;
 
-import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
+import com.eukon05.financetracker.wallet.dto.CreateEditWalletDTO;
 import com.eukon05.financetracker.wallet.usecase.WalletFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,14 +18,18 @@ class WalletController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    void createWallet(@RequestBody @Valid CreateWalletDTO dto, Principal principal) {
+    void createWallet(@RequestBody @Valid CreateEditWalletDTO dto, Principal principal) {
         walletFacade.createWallet(principal.getName(), dto.name());
     }
 
-    @DeleteMapping
-    @RequestMapping("/{walletID}")
+    @DeleteMapping("/{walletID}")
     void deleteWallet(@PathVariable long walletID, Principal principal) {
         walletFacade.deleteWallet(principal.getName(), walletID);
+    }
+
+    @PutMapping("/{walletID}")
+    void editWallet(@PathVariable long walletID, @RequestBody @Valid CreateEditWalletDTO dto, Principal principal) {
+        walletFacade.editWallet(principal.getName(), walletID, dto.name());
     }
 
 }
