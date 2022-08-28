@@ -1,6 +1,7 @@
 package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.user.dto.RegisterDTO;
+import com.eukon05.financetracker.user.usecase.UserFacade;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Validator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -36,14 +38,19 @@ class RegistrationTests {
     @Autowired
     private IntegrationTestsUtils utils;
 
+    @Autowired
+    private UserFacade facade;
+
     @Test
     @DirtiesContext
     void should_register_user() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/users")
-                        .content(objectMapper.writeValueAsString(utils.createRegisterDTO()))
+                        .content(objectMapper.writeValueAsString(utils.getRegisterDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
+
+        assertTrue(facade.checkUserExistsByUsername(utils.getRegisterDTO().username()));
     }
 
     @Test
@@ -53,7 +60,7 @@ class RegistrationTests {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/users")
-                        .content(objectMapper.writeValueAsString(utils.createRegisterDTO()))
+                        .content(objectMapper.writeValueAsString(utils.getRegisterDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
