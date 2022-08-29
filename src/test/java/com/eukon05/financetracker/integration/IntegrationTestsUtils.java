@@ -5,6 +5,7 @@ import com.eukon05.financetracker.auth.usecase.AuthFacade;
 import com.eukon05.financetracker.user.UserRepository;
 import com.eukon05.financetracker.user.dto.RegisterDTO;
 import com.eukon05.financetracker.user.usecase.UserFacade;
+import com.eukon05.financetracker.wallet.Wallet;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.context.TestComponent;
@@ -31,6 +32,11 @@ class IntegrationTestsUtils {
             user.setEnabled(true);
             userRepository.save(user);
         });
+    }
+
+    void createTestWallet() {
+        userFacade.getUserByUsernameOrThrow(registerDTO.username())
+                .getWallets().add(new Wallet("test wallet"));
     }
 
 
