@@ -1,13 +1,13 @@
 package com.eukon05.financetracker.wallet;
 
-import com.eukon05.financetracker.expense.Expense;
+import com.eukon05.financetracker.transaction.Transaction;
 import com.eukon05.financetracker.user.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -30,6 +30,6 @@ public class Wallet {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "wallet_id")
-    private final Set<Expense> expenses = new HashSet<>();
+    private final List<Transaction> transactions = new ArrayList<>();
 
 }

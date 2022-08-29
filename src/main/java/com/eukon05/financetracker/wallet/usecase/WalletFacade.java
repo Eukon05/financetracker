@@ -1,5 +1,6 @@
 package com.eukon05.financetracker.wallet.usecase;
 
+import com.eukon05.financetracker.wallet.Wallet;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class WalletFacade {
     private final DeleteWalletUseCase deleteWalletUseCase;
     private final EditWalletUseCase editWalletUseCase;
     private final GetUserWalletsUseCase getUserWalletsUseCase;
+    private final GetWalletByIdUseCase getWalletByIdUseCase;
 
     public void createWallet(String username, String name) {
         createWalletUseCase.createWallet(username, name);
@@ -29,6 +31,10 @@ public class WalletFacade {
 
     public List<WalletDTO> getUserWallets(String username) {
         return getUserWalletsUseCase.getUserWallets(username);
+    }
+
+    public Wallet getWalletById(String username, long walletID) {
+        return getWalletByIdUseCase.getWalletById(username, walletID);
     }
 
 }

@@ -27,7 +27,7 @@ public class SecurityConfiguration {
         http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeRequests(auth -> {
-            auth.antMatchers("/api/v1/wallets").authenticated();
+            auth.antMatchers("/api/v1/wallets**").authenticated();
             auth.anyRequest().permitAll();
         });
 
