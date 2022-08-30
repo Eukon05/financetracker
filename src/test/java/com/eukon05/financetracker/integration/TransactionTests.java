@@ -36,7 +36,7 @@ class TransactionTests {
     @Autowired
     private IntegrationTestsUtils utils;
 
-    private final CreateTransactionDTO dto = new CreateTransactionDTO("transaction", new BigDecimal("11.5"), TransactionType.EXPENSE);
+    private final CreateTransactionDTO dto = new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), TransactionType.EXPENSE);
 
     @BeforeEach
     void setUp() {
@@ -48,7 +48,7 @@ class TransactionTests {
     void should_create_a_transaction() throws Exception {
         String token = utils.getTestAccessToken();
 
-        mockMvc.perform(post("/wallets/1/transactions")
+        mockMvc.perform(post("/transactions")
                         .header(AUTHORIZATION, token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))

@@ -17,8 +17,8 @@ class CreateTransactionUseCaseImpl implements CreateTransactionUseCase {
 
     @Override
     @Transactional
-    public void createTransaction(String username, long walletID, CreateTransactionDTO dto) {
-        Wallet wallet = walletFacade.getWalletById(username, walletID);
+    public void createTransaction(String username, CreateTransactionDTO dto) {
+        Wallet wallet = walletFacade.getWalletById(username, dto.walletID());
         wallet.getTransactions().add(mapper.mapCreateTransactionDTOtoTransaction(dto));
     }
 }

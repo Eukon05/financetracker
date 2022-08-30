@@ -10,7 +10,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/wallets/{walletID}/transactions")
+@RequestMapping("/transactions")
 @RequiredArgsConstructor
 class TransactionController {
 
@@ -18,8 +18,8 @@ class TransactionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    void createTransaction(@PathVariable long walletID, @RequestBody @Valid CreateTransactionDTO dto, Principal principal) {
-        facade.createTransaction(principal.getName(), walletID, dto);
+    void createTransaction(@RequestBody @Valid CreateTransactionDTO dto, Principal principal) {
+        facade.createTransaction(principal.getName(), dto);
     }
 
 }
