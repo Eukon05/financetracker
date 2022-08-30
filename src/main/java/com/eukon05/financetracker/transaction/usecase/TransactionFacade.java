@@ -10,8 +10,8 @@ public class TransactionFacade {
 
     private final CreateTransactionUseCase createTransactionUseCase;
 
-    public void createTransaction(String username, long walletID, CreateTransactionDTO dto) {
-        createTransactionUseCase.createTransaction(username, walletID, dto);
+    public void createTransaction(String username, CreateTransactionDTO dto) {
+        createTransactionUseCase.createTransaction(username, dto);
     }
 
 }

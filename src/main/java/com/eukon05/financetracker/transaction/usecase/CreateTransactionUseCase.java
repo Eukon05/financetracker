@@ -4,6 +4,6 @@ import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 
 interface CreateTransactionUseCase {
 
-    void createTransaction(String username, long walletID, CreateTransactionDTO dto);
+    void createTransaction(String username, CreateTransactionDTO dto);
 
 }
