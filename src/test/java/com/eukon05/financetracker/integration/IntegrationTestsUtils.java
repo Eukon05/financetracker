@@ -10,6 +10,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.context.TestComponent;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import static com.eukon05.financetracker.auth.AuthFinals.ACCESS_TOKEN;
 
 @TestComponent
@@ -19,6 +22,9 @@ class IntegrationTestsUtils {
     private final UserFacade userFacade;
     private final UserRepository userRepository;
     private final AuthFacade authFacade;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Getter
     private final RegisterDTO registerDTO = new RegisterDTO("test", "test1234", "test1234", "test@test.com");
@@ -39,8 +45,14 @@ class IntegrationTestsUtils {
                 .getWallets().add(new Wallet("test wallet"));
     }
 
+    void flushDatabase() {
+        em.flush();
+        em.clear();
+    }
 
     String getTestAccessToken() {
         return authFacade.login(loginDTO, "").get(ACCESS_TOKEN);
     }
+
+
 }

@@ -22,4 +22,9 @@ class TransactionController {
         facade.createTransaction(principal.getName(), dto);
     }
 
+    @DeleteMapping("/{transactionID}")
+    void deleteTransaction(@PathVariable long transactionID, Principal principal) {
+        facade.deleteTransaction(principal.getName(), transactionID);
+    }
+
 }
