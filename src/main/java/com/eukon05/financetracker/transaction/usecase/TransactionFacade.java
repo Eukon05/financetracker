@@ -9,9 +9,14 @@ import org.springframework.stereotype.Service;
 public class TransactionFacade {
 
     private final CreateTransactionUseCase createTransactionUseCase;
+    private final DeleteTransactionUseCase deleteTransactionUseCase;
 
     public void createTransaction(String username, CreateTransactionDTO dto) {
         createTransactionUseCase.createTransaction(username, dto);
+    }
+
+    public void deleteTransaction(String username, long transactionID) {
+        deleteTransactionUseCase.deleteTransaction(username, transactionID);
     }
 
 }

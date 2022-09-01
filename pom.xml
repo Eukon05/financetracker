@@ -19,6 +19,8 @@
         <java.version>17</java.version>
         <jwt.version>4.0.0</jwt.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
+        <testcontainers.version>1.17.3</testcontainers.version>
+        <postgresql.version>42.5.0</postgresql.version>
     </properties>
 
     <dependencies>
@@ -46,6 +48,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -83,9 +86,25 @@
             <optional>true</optional>
         </dependency>
 
+
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

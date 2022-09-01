@@ -2,19 +2,12 @@ package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.user.dto.RegisterDTO;
 import com.eukon05.financetracker.user.usecase.UserFacade;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Validator;
 
@@ -22,21 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-@Transactional
-@Import({IntegrationTestsUtils.class, IntegrationTestsConfiguration.class})
-class RegistrationTests {
+class RegistrationTests extends AbstractIntegrationTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    @Autowired
-    private MockMvc mockMvc;
+    @Override
+    @BeforeEach
+    void setUp() {
+
+    }
+
     @Autowired
     private Validator validator;
-
-    @Autowired
-    private IntegrationTestsUtils utils;
 
     @Autowired
     private UserFacade facade;
