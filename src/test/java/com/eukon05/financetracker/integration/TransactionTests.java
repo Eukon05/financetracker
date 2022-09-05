@@ -2,6 +2,7 @@ package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.transaction.TransactionType;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
+import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.usecase.TransactionFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,6 +59,23 @@ class TransactionTests extends AbstractIntegrationTest {
         mockMvc.perform(get("/transactions/1")
                         .header(AUTHORIZATION, token))
                 .andExpectAll(status().isOk(), jsonPath("$.name").value(dto.name()));
+    }
+
+    @Test
+    void should_edit_a_transaction() throws Exception {
+        String token = utils.getTestAccessToken();
+        createTestTransaction();
+
+        mockMvc.perform(put("/transactions/1")
+                        .header(AUTHORIZATION, token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new EditTransactionDTO("newname", new BigDecimal("54321"), TransactionType.INCOME))))
+                .andExpectAll(status().isOk());
+
+        mockMvc.perform(get("/transactions/1")
+                        .header(AUTHORIZATION, token))
+                .andExpectAll(status().isOk(), jsonPath("$.name").value("newname"),
+                        jsonPath("$.value").value(54321), jsonPath("$.type").value(TransactionType.INCOME.name()));
     }
 
     private void createTestTransaction() {
