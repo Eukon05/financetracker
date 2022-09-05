@@ -1,6 +1,7 @@
 package com.eukon05.financetracker.transaction.usecase;
 
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
+import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ public class TransactionFacade {
     private final CreateTransactionUseCase createTransactionUseCase;
     private final DeleteTransactionUseCase deleteTransactionUseCase;
     private final GetTransactionDTOByIdUseCase getTransactionDTOByIdUseCase;
+    private final EditTransactionUseCase editTransactionUseCase;
 
     public void createTransaction(String username, CreateTransactionDTO dto) {
         createTransactionUseCase.createTransaction(username, dto);
@@ -23,6 +25,10 @@ public class TransactionFacade {
 
     public TransactionDTO getTransactionDTOById(String username, long transactionID) {
         return getTransactionDTOByIdUseCase.getTransactionDTOById(username, transactionID);
+    }
+
+    public void editTransaction(String username, long transactionID, EditTransactionDTO dto) {
+        editTransactionUseCase.editTransaction(username, transactionID, dto);
     }
 
 }

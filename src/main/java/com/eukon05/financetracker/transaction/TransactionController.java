@@ -1,6 +1,7 @@
 package com.eukon05.financetracker.transaction;
 
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
+import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
 import com.eukon05.financetracker.transaction.usecase.TransactionFacade;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,11 @@ class TransactionController {
     @GetMapping("/{transactionID}")
     TransactionDTO getTransaction(@PathVariable long transactionID, Principal principal) {
         return facade.getTransactionDTOById(principal.getName(), transactionID);
+    }
+
+    @PutMapping("/{transactionID}")
+    void editTransaction(@PathVariable long transactionID, Principal principal, @RequestBody EditTransactionDTO dto) {
+        facade.editTransaction(principal.getName(), transactionID, dto);
     }
 
 }
