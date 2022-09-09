@@ -1,4 +1,6 @@
 package com.eukon05.financetracker.wallet.dto;
 
-public record WalletDTO(long id, String name) {
+import java.math.BigDecimal;
+
+public record WalletDTO(long id, String name, BigDecimal balance) {
 }
