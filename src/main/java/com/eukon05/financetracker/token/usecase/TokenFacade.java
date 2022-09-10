@@ -8,9 +8,14 @@ import org.springframework.stereotype.Service;
 public class TokenFacade {
 
     private final ConfirmRegistrationUseCase confirmRegistrationUseCase;
+    private final ConfirmEmailChangeUseCase confirmEmailChangeUseCase;
 
     public void confirmRegistration(String id) {
         confirmRegistrationUseCase.confirmRegistration(id);
+    }
+
+    public void confirmEmailChange(String id) {
+        confirmEmailChangeUseCase.confirmEmailChange(id);
     }
 
 }

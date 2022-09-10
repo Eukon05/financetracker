@@ -1,6 +1,7 @@
 package com.eukon05.financetracker.user;
 
 import com.eukon05.financetracker.user.dto.RegisterDTO;
+import com.eukon05.financetracker.user.dto.UpdateEmailDTO;
 import com.eukon05.financetracker.user.dto.UserDTO;
 import com.eukon05.financetracker.user.mapper.UserModelMapper;
 import com.eukon05.financetracker.user.usecase.UserFacade;
@@ -29,6 +30,11 @@ class UserController {
     @GetMapping("/me")
     UserDTO getUser(Principal principal) {
         return mapper.mapUserToUserDTO(userFacade.getUserByUsernameOrThrow(principal.getName()));
+    }
+
+    @PutMapping("/me/email")
+    void updateEmail(Principal principal, @Valid @RequestBody UpdateEmailDTO dto, HttpServletRequest request) {
+        userFacade.updateUserEmail(principal.getName(), dto.email(), request.getRequestURL().toString().replace("/users/me/email", ""));
     }
 
 }
