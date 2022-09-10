@@ -2,6 +2,7 @@ package com.eukon05.financetracker.user.mapper;
 
 import com.eukon05.financetracker.user.User;
 import com.eukon05.financetracker.user.dto.RegisterDTO;
+import com.eukon05.financetracker.user.dto.UserDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -10,5 +11,7 @@ public interface UserModelMapper {
 
     @Mapping(source = "password", target = "password", qualifiedBy = EncodedMapping.class)
     User mapRegisterDTOToUser(RegisterDTO dto);
+
+    UserDTO mapUserToUserDTO(User user);
 
 }
