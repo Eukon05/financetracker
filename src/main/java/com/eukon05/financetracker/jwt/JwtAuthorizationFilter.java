@@ -38,6 +38,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         urls.add("/refresh");
         urls.add("/users");
         urls.add("/confirm-registration");
+        urls.add("/confirm-email-change");
     }
 
     private final JwtFacade jwtFacade;

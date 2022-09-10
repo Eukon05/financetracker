@@ -24,6 +24,8 @@ public class Token {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private User user;
 
+    private String value;
+
     private Instant expiresAt = Instant.now().plus(30, ChronoUnit.MINUTES);
 
     public Token(TokenType tokenType) {

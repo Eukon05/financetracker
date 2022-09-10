@@ -17,4 +17,9 @@ class TokenController {
         tokenFacade.confirmRegistration(token);
     }
 
+    @GetMapping("/confirm-email-change")
+    void confirmEmailChange(@RequestParam String token) {
+        tokenFacade.confirmEmailChange(token);
+    }
+
 }

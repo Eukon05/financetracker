@@ -12,28 +12,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
-@RequiredArgsConstructor
 @Service
-class ConfirmRegistrationUseCaseImpl implements ConfirmRegistrationUseCase {
+@RequiredArgsConstructor
+class ConfirmEmailChangeUseCaseImpl implements ConfirmEmailChangeUseCase {
 
-    private final TokenRepository tokenRepository;
+    private final TokenRepository repository;
+
 
     @Override
     @Transactional
-    public void confirmRegistration(String id) {
-        Token token = tokenRepository.findById(id).orElseThrow(TokenNotFoundException::new);
+    public void confirmEmailChange(String id) {
+        Token token = repository.findById(id).orElseThrow(TokenNotFoundException::new);
 
         if (token.getExpiresAt().isBefore(Instant.now())) {
-            tokenRepository.delete(token);
+            repository.delete(token);
             throw new TokenExpiredException();
         }
 
-        if (!token.getTokenType().equals(TokenType.CONFIRM_REGISTRATION)) {
+        if (!token.getTokenType().equals(TokenType.CONFIRM_EMAIL_CHANGE)) {
             throw new InvalidTokenException();
         }
 
-        token.getUser().setEnabled(true);
-        tokenRepository.delete(token);
+        token.getUser().setEmail(token.getValue());
+        repository.delete(token);
     }
-
 }
