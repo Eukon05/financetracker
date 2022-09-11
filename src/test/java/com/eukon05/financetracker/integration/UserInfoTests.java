@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
+import static com.eukon05.financetracker.auth.AuthFinals.TOKEN_PREFIX;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -15,7 +16,7 @@ class UserInfoTests extends AbstractIntegrationTest {
     void should_get_user_info() throws Exception {
         String token = utils.getTestAccessToken();
 
-        mockMvc.perform(get("/users/me").header(AUTHORIZATION, token))
+        mockMvc.perform(get("/users/me").header(AUTHORIZATION, TOKEN_PREFIX + token))
                 .andExpectAll(status().isOk(),
                         jsonPath("$.username").value(utils.getLoginDTO().username()),
                         jsonPath("$.balance").value(BigDecimal.ZERO));

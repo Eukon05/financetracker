@@ -21,7 +21,7 @@ class AuthTests extends AbstractIntegrationTest {
                         .post("/login")
                         .content(objectMapper.writeValueAsString(utils.getLoginDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
