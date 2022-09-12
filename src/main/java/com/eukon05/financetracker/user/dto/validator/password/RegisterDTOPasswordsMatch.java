@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = RegisterDTOPasswordsMatchValidator.class)
 public @interface RegisterDTOPasswordsMatch {
 
-    String message() default "{password.mismatch}";
+    String message() default "Passwords do not match";
 
     Class<?>[] groups() default {};
 

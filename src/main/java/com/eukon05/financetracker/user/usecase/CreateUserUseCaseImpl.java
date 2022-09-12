@@ -7,6 +7,8 @@ import com.eukon05.financetracker.user.RoleType;
 import com.eukon05.financetracker.user.User;
 import com.eukon05.financetracker.user.UserRepository;
 import com.eukon05.financetracker.user.dto.RegisterDTO;
+import com.eukon05.financetracker.user.exception.EmailTakenException;
+import com.eukon05.financetracker.user.exception.UsernameTakenException;
 import com.eukon05.financetracker.user.mapper.UserModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,13 @@ class CreateUserUseCaseImpl implements CreateUserUseCase {
 
     @Override
     public void createUser(RegisterDTO dto, String rootUrl) {
+
+        if (userRepository.existsByEmail(dto.email())) {
+            throw new EmailTakenException(dto.email());
+        } else if (userRepository.existsByUsername(dto.username())) {
+            throw new UsernameTakenException(dto.username());
+        }
+
         User user = mapper.mapRegisterDTOToUser(dto);
         user.getRoles().add(RoleType.USER);
 
