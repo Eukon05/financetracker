@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.validation.Validator;
@@ -30,7 +29,6 @@ class RegistrationTests extends AbstractIntegrationTest {
     private UserFacade facade;
 
     @Test
-    @DirtiesContext
     void should_register_user() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/users")
@@ -42,7 +40,6 @@ class RegistrationTests extends AbstractIntegrationTest {
     }
 
     @Test
-    @DirtiesContext
     void should_validate_user_already_exists() throws Exception {
         utils.registerTestUser();
 
@@ -50,7 +47,7 @@ class RegistrationTests extends AbstractIntegrationTest {
                         .post("/users")
                         .content(objectMapper.writeValueAsString(utils.getRegisterDTO()))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isConflict());
     }
 
     @Test
