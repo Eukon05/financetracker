@@ -22,4 +22,9 @@ class TokenController {
         tokenFacade.confirmEmailChange(token);
     }
 
+    @GetMapping("/confirm-password-change")
+    void confirmPasswordChange(@RequestParam String token) {
+        tokenFacade.confirmPasswordChange(token);
+    }
+
 }

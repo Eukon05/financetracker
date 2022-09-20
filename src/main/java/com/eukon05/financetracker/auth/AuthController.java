@@ -1,5 +1,6 @@
 package com.eukon05.financetracker.auth;
 
+import com.eukon05.financetracker.auth.dto.ForgotDTO;
 import com.eukon05.financetracker.auth.dto.LoginDTO;
 import com.eukon05.financetracker.auth.usecase.AuthFacade;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ class AuthController {
     @PostMapping("/refresh")
     Map<String, String> refresh(HttpServletRequest request) {
         return authFacade.refresh(request.getHeader(AUTHORIZATION), request.getRequestURL().toString());
+    }
+
+    @PostMapping("/forgot")
+    void forgotPassword(@Valid @RequestBody ForgotDTO dto, HttpServletRequest request) {
+        authFacade.forgot(dto.email(), request.getRequestURL().toString().replace("/forgot", ""));
     }
 
 

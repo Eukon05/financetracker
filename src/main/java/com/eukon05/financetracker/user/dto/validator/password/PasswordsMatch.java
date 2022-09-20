@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = RegisterDTOPasswordsMatchValidator.class)
-public @interface RegisterDTOPasswordsMatch {
+@Constraint(validatedBy = PasswordsMatchValidator.class)
+public @interface PasswordsMatch {
 
     String message() default "Passwords do not match";
 

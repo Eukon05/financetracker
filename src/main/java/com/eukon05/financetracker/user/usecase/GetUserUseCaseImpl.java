@@ -16,4 +16,10 @@ public class GetUserUseCaseImpl implements GetUserUseCase {
     public User getUserByUsernameOrThrow(String username) {
         return repository.getUserByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
+
+    @Override
+    public User getUserByEmailOrThrow(String email) {
+        return repository.getUserByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+    }
+
 }
