@@ -6,4 +6,6 @@ public interface GetUserUseCase {
 
     User getUserByUsernameOrThrow(String username);
 
+    User getUserByEmailOrThrow(String email);
+
 }

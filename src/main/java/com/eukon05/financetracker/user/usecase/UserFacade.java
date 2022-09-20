@@ -13,6 +13,7 @@ public class UserFacade {
     private final CheckUserExistsUseCase checkUserExistsUseCase;
     private final GetUserUseCase getUserUseCase;
     private final UpdateUserEmailUseCase updateUserEmailUseCase;
+    private final UpdateUserPasswordUseCase updateUserPasswordUseCase;
 
     public void createUser(RegisterDTO dto, String rootUrl) {
         createUserUseCase.createUser(dto, rootUrl);
@@ -26,8 +27,16 @@ public class UserFacade {
         return getUserUseCase.getUserByUsernameOrThrow(username);
     }
 
+    public User getUserByEmailOrThrow(String email) {
+        return getUserUseCase.getUserByEmailOrThrow(email);
+    }
+
     public void updateUserEmail(String username, String newEmail, String rootUrl) {
         updateUserEmailUseCase.updateUserEmail(username, newEmail, rootUrl);
+    }
+
+    public void updateUserPassword(String username, String newPassword, String rootUrl) {
+        updateUserPasswordUseCase.updateUserPassword(username, newPassword, rootUrl);
     }
 
 

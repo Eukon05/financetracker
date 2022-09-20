@@ -9,6 +9,7 @@ public class TokenFacade {
 
     private final ConfirmRegistrationUseCase confirmRegistrationUseCase;
     private final ConfirmEmailChangeUseCase confirmEmailChangeUseCase;
+    private final ConfirmPasswordChangeUseCase confirmPasswordChangeUseCase;
 
     public void confirmRegistration(String id) {
         confirmRegistrationUseCase.confirmRegistration(id);
@@ -18,4 +19,7 @@ public class TokenFacade {
         confirmEmailChangeUseCase.confirmEmailChange(id);
     }
 
+    public void confirmPasswordChange(String id) {
+        confirmPasswordChangeUseCase.confirmPasswordChange(id);
+    }
 }

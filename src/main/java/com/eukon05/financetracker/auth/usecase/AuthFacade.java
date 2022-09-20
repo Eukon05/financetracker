@@ -13,6 +13,7 @@ class AuthFacade {
 
     private final LoginUseCase loginUseCase;
     private final RefreshUseCase refreshUseCase;
+    private final ForgotUseCase forgotUseCase;
 
     public Map<String, String> login(LoginDTO dto, String issuerUrl) {
         return loginUseCase.login(dto, issuerUrl);
@@ -20,6 +21,10 @@ class AuthFacade {
 
     public Map<String, String> refresh(String authHeader, String issuerUrl) {
         return refreshUseCase.refresh(authHeader, issuerUrl);
+    }
+
+    public void forgot(String email, String rootUrl) {
+        forgotUseCase.forgot(email, rootUrl);
     }
 
 
