@@ -35,6 +35,7 @@ class RefreshUseCaseImpl implements RefreshUseCase {
 
         //This line isn't required in the "login()" method, since authenticationManager automatically checks if the user exists
         //Here, however, we need to check if the refresh token, even if valid, corresponds to a registered user
+        //It also refreshes the token with any new roles added to the user between refreshes
         UserDetails userDetails = userDetailsService.loadUserByUsername(jwt.getSubject());
 
         Map<String, String> tokens = new HashMap<>();
