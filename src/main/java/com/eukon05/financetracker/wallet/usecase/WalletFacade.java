@@ -14,7 +14,8 @@ public class WalletFacade {
     private final CreateWalletUseCase createWalletUseCase;
     private final DeleteWalletUseCase deleteWalletUseCase;
     private final EditWalletUseCase editWalletUseCase;
-    private final GetUserWalletsUseCase getUserWalletsUseCase;
+    private final GetUserWalletDTOsUseCase getUserWalletDTOsUseCase;
+    private final GetWalletDTOByIdUseCase getWalletDTOByIdUseCase;
     private final GetWalletByIdUseCase getWalletByIdUseCase;
 
     public void createWallet(String username, String name) {
@@ -30,7 +31,11 @@ public class WalletFacade {
     }
 
     public List<WalletDTO> getUserWallets(String username) {
-        return getUserWalletsUseCase.getUserWallets(username);
+        return getUserWalletDTOsUseCase.getUserWalletDTOs(username);
+    }
+
+    public WalletDTO getWalletDTOById(String username, long walletID) {
+        return getWalletDTOByIdUseCase.getWalletDTOById(username, walletID);
     }
 
     public Wallet getWalletById(String username, long walletID) {

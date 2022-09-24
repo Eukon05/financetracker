@@ -10,13 +10,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-class GetUserWalletsUseCaseImpl implements GetUserWalletsUseCase {
+class GetUserWalletDTOsUseCaseImpl implements GetUserWalletDTOsUseCase {
 
     private final UserFacade userFacade;
     private final WalletModelMapper walletModelMapper;
 
     @Override
-    public List<WalletDTO> getUserWallets(String username) {
+    public List<WalletDTO> getUserWalletDTOs(String username) {
         return userFacade.getUserByUsernameOrThrow(username).getWallets().stream().map(walletModelMapper::mapWalletToWalletDTO).toList();
     }
 }
