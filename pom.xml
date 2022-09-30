@@ -19,7 +19,7 @@
         <java.version>17</java.version>
         <jwt.version>4.0.0</jwt.version>
         <mapstruct.version>1.5.2.Final</mapstruct.version>
-        <testcontainers.version>1.17.3</testcontainers.version>
+        <testcontainers.version>1.17.4</testcontainers.version>
         <postgresql.version>42.5.0</postgresql.version>
     </properties>
 
