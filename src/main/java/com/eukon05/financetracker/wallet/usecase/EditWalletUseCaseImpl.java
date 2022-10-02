@@ -9,13 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 class EditWalletUseCaseImpl implements EditWalletUseCase {
-    private final GetWalletByIdUseCase getWalletByIdUseCase;
 
     @Override
     @Transactional
-    public void editWallet(String username, long walletID, String name) {
-        Wallet wallet = getWalletByIdUseCase.getWalletById(username, walletID);
-
+    public void editWallet(Wallet wallet, String name) {
         wallet.getUser().getWallets().stream().filter(found -> found.getName().equals(name)).findFirst().ifPresent(found -> {
             if (!found.equals(wallet)) {
                 throw new WalletNameTakenException(name);

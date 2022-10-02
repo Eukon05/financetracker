@@ -8,13 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 class DeleteTransactionUseCaseImpl implements DeleteTransactionUseCase {
-
-    private final GetTransactionByIdUseCase getTransactionByIdUseCase;
     private final TransactionRepository repository;
 
     @Override
-    public void deleteTransaction(String username, long transactionID) {
-        Transaction transaction = getTransactionByIdUseCase.getTransactionById(username, transactionID);
+    public void deleteTransaction(Transaction transaction) {
         repository.delete(transaction);
     }
 }

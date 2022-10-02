@@ -126,7 +126,7 @@ class WalletTests extends AbstractIntegrationTest {
     }
 
     private List<WalletDTO> getTestUserWallets() {
-        return walletFacade.getUserWallets(utils.getRegisterDTO().username());
+        return walletFacade.getUserWalletDTOs(utils.getRegisterDTO().username());
     }
 
     private void createTestWallet() {
