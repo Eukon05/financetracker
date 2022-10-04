@@ -16,7 +16,7 @@
     <description>financetracker</description>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/${project.groupId}/${project.artifactId}</developerConnection>
+        <developerConnection>scm:git:https://github.com/${env.GITHUB_REPOSITORY}</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
