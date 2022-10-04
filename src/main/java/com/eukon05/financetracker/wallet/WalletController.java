@@ -77,7 +77,7 @@ class WalletController {
     @Operation(summary = "Get information about all wallets")
     @ApiResponse(responseCode = "401", ref = "unauthorized")
     List<WalletDTO> getYourWallets(Principal principal) {
-        return walletFacade.getUserWallets(principal.getName());
+        return walletFacade.getUserWalletDTOs(principal.getName());
     }
 
     @GetMapping(value = "/{walletID}", produces = MediaType.APPLICATION_JSON_VALUE)

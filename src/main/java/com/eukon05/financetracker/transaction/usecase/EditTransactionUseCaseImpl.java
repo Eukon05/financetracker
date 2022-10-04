@@ -12,13 +12,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 class EditTransactionUseCaseImpl implements EditTransactionUseCase {
 
-    private final GetTransactionByIdUseCase getTransactionByIdUseCase;
-
     @Override
     @Transactional
-    public void editTransaction(String username, long transactionID, EditTransactionDTO dto) {
-        Transaction transaction = getTransactionByIdUseCase.getTransactionById(username, transactionID);
-
+    public void editTransaction(Transaction transaction, EditTransactionDTO dto) {
         Optional.ofNullable(dto.name()).ifPresent(transaction::setName);
         Optional.ofNullable(dto.value()).ifPresent(transaction::setValue);
         Optional.ofNullable(dto.type()).ifPresent(transaction::setType);

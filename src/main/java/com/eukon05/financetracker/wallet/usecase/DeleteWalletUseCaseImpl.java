@@ -8,12 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 class DeleteWalletUseCaseImpl implements DeleteWalletUseCase {
-    private final GetWalletByIdUseCase getWalletByIdUseCase;
 
     @Override
     @Transactional
-    public void deleteWallet(String username, long walletID) {
-        Wallet wallet = getWalletByIdUseCase.getWalletById(username, walletID);
+    public void deleteWallet(Wallet wallet) {
         wallet.getUser().getWallets().remove(wallet);
     }
 }

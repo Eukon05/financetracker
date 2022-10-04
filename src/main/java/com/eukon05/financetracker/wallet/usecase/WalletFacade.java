@@ -1,7 +1,10 @@
 package com.eukon05.financetracker.wallet.usecase;
 
+import com.eukon05.financetracker.user.User;
+import com.eukon05.financetracker.user.usecase.UserFacade;
 import com.eukon05.financetracker.wallet.Wallet;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
+import com.eukon05.financetracker.wallet.mapper.WalletModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,35 +14,45 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WalletFacade {
 
+    private final UserFacade userFacade;
+    private final WalletModelMapper mapper;
     private final CreateWalletUseCase createWalletUseCase;
     private final DeleteWalletUseCase deleteWalletUseCase;
     private final EditWalletUseCase editWalletUseCase;
     private final GetUserWalletDTOsUseCase getUserWalletDTOsUseCase;
-    private final GetWalletDTOByIdUseCase getWalletDTOByIdUseCase;
     private final GetWalletByIdUseCase getWalletByIdUseCase;
 
     public void createWallet(String username, String name) {
-        createWalletUseCase.createWallet(username, name);
+        User user = userFacade.getUserByUsernameOrThrow(username);
+        createWalletUseCase.createWallet(user, name);
     }
 
     public void deleteWallet(String username, long walletID) {
-        deleteWalletUseCase.deleteWallet(username, walletID);
+        User user = userFacade.getUserByUsernameOrThrow(username);
+        Wallet wallet = getWalletByIdUseCase.getWalletById(user, walletID);
+        deleteWalletUseCase.deleteWallet(wallet);
     }
 
     public void editWallet(String username, long walletID, String name) {
-        editWalletUseCase.editWallet(username, walletID, name);
+        User user = userFacade.getUserByUsernameOrThrow(username);
+        Wallet wallet = getWalletByIdUseCase.getWalletById(user, walletID);
+        editWalletUseCase.editWallet(wallet, name);
     }
 
-    public List<WalletDTO> getUserWallets(String username) {
-        return getUserWalletDTOsUseCase.getUserWalletDTOs(username);
+    public List<WalletDTO> getUserWalletDTOs(String username) {
+        User user = userFacade.getUserByUsernameOrThrow(username);
+        return getUserWalletDTOsUseCase.getUserWalletDTOs(user);
     }
 
     public WalletDTO getWalletDTOById(String username, long walletID) {
-        return getWalletDTOByIdUseCase.getWalletDTOById(username, walletID);
+        User user = userFacade.getUserByUsernameOrThrow(username);
+        Wallet wallet = getWalletByIdUseCase.getWalletById(user, walletID);
+        return mapper.mapWalletToWalletDTO(wallet);
     }
 
     public Wallet getWalletById(String username, long walletID) {
-        return getWalletByIdUseCase.getWalletById(username, walletID);
+        User user = userFacade.getUserByUsernameOrThrow(username);
+        return getWalletByIdUseCase.getWalletById(user, walletID);
     }
 
 }
