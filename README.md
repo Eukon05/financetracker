@@ -43,5 +43,7 @@ You can also view interactive Swagger UI here:
 
 ## How to deploy
 
-When the project is complete, I'll add a Docker Compose file for easy deployment.  
-The current compose file available in the project only contains the required dependencies and not the project itself.
+You can deploy Finance Tracker with Docker:
+1. Download `docker-compose.yml` file from this repo to an empty folder
+2. Modify the file to contain your e-mail account credentials and e-mail server details. I also recommend changing the default database and JWT settings for enchanced security.
+3. Run the command `docker-compose up` in the directory containing the .yml file
