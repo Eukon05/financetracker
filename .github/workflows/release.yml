@@ -34,6 +34,7 @@ jobs:
         run: git checkout master
       - name: Prepare release
         env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
           GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         run: mvn --batch-mode release:prepare -Dusername=$GITHUB_ACTOR -Dpassword=$GITHUB_TOKEN
       - name: Perform release
