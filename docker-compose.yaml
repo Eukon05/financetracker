@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
 
-  postgres:
+  db:
     image: postgres
     environment:
       POSTGRES_DB: financetracker
@@ -10,28 +10,9 @@ services:
       POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
-    volumes:
-      - db:/var/lib/postgresql/data
-
-  financetracker:
-    image: eukon/financetracker:latest
-    environment:
-      SPRING.JPA.HIBERNATE.DDL-AUTO: update
-      SPRING.DATASOURCE.URL: jdbc:postgresql://postgres:5432/financetracker
-      SPRING.DATASOURCE.USERNAME: postgres
-      SPRING.DATASOURCE.PASSWORD: root
-      SPRING.MAIL.HOST: localhost
-      SPRING.MAIL.PORT: 1025
-      SPRING.MAIL.USERNAME: hello
-      SPRING.MAIL.PASSWORD: hello
-      JWT.ACCESS.SECRET: ACCESS01234567890ABCDEFGHIJKLMNO
-      JWT.REFRESH.SECRET: 01234567890ABCDEFGHIJKLMNOREFRESH
-      JWT.ACCESS.LIFETIMEMINUTES: 15
-      JWT.REFRESH.LIFETIMEMINUTES: 240
-      WAIT_HOSTS: postgres:5432
+  
+  maildev:
+    image: maildev/maildev
     ports:
-      - "8080:8080"
-
-volumes:
-  db:
-    driver: local
+      - "1080:1080"
+      - "1025:1025"
