@@ -13,3 +13,4 @@ services:
     environment:
       WAIT_HOSTS: postgres:5432, maildev:1025
       SPRING.JPA.HIBERNATE.DDL-AUTO: create-drop
+      SPRING.MAIL.HOST: maildev
