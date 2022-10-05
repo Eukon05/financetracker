@@ -11,7 +11,7 @@
 
     <groupId>com.eukon05</groupId>
     <artifactId>financetracker</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>financetracker</name>
     <description>financetracker</description>
 
@@ -133,7 +133,6 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
