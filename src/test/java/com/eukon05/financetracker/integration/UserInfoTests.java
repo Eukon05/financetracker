@@ -2,8 +2,6 @@ package com.eukon05.financetracker.integration;
 
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-
 import static com.eukon05.financetracker.auth.AuthFinals.TOKEN_PREFIX;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -19,7 +17,8 @@ class UserInfoTests extends AbstractIntegrationTest {
         mockMvc.perform(get("/users/me").header(AUTHORIZATION, TOKEN_PREFIX + token))
                 .andExpectAll(status().isOk(),
                         jsonPath("$.username").value(utils.getLoginDTO().username()),
-                        jsonPath("$.balance").value(BigDecimal.ZERO));
+                        jsonPath("$.email").value(utils.getRegisterDTO().email()),
+                        jsonPath("$.roles.[0]").value("USER"));
     }
 
 }

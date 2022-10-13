@@ -13,11 +13,11 @@ public class CreateWalletUseCaseImpl implements CreateWalletUseCase {
 
     @Override
     @Transactional
-    public void createWallet(User user, String name) {
+    public void createWallet(User user, String name, String currency) {
         user.getWallets().stream().filter(wallet -> wallet.getName().equals(name)).findFirst().ifPresent(found -> {
             throw new WalletNameTakenException(name);
         });
-        user.getWallets().add(new Wallet(name));
+        user.getWallets().add(new Wallet(name, currency));
     }
 
 }

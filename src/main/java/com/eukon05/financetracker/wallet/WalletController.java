@@ -2,7 +2,8 @@ package com.eukon05.financetracker.wallet;
 
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
 import com.eukon05.financetracker.transaction.usecase.TransactionFacade;
-import com.eukon05.financetracker.wallet.dto.CreateEditWalletDTO;
+import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
+import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import com.eukon05.financetracker.wallet.usecase.WalletFacade;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,8 +41,8 @@ class WalletController {
                     @ApiResponse(responseCode = "409", ref = "conflict")
             }
     )
-    void createWallet(@RequestBody @Valid CreateEditWalletDTO dto, Principal principal) {
-        walletFacade.createWallet(principal.getName(), dto.name());
+    void createWallet(@RequestBody @Valid CreateWalletDTO dto, Principal principal) {
+        walletFacade.createWallet(principal.getName(), dto.name(), dto.currency());
     }
 
     @DeleteMapping("/{walletID}")
@@ -68,8 +69,8 @@ class WalletController {
                     @ApiResponse(responseCode = "409", ref = "conflict")
             }
     )
-    void editWallet(@PathVariable long walletID, @RequestBody @Valid CreateEditWalletDTO dto, Principal principal) {
-        walletFacade.editWallet(principal.getName(), walletID, dto.name());
+    void editWallet(@PathVariable long walletID, @RequestBody @Valid EditWalletDTO dto, Principal principal) {
+        walletFacade.editWallet(principal.getName(), walletID, dto);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

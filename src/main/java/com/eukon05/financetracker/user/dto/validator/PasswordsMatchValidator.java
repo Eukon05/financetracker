@@ -1,4 +1,4 @@
-package com.eukon05.financetracker.user.dto.validator.password;
+package com.eukon05.financetracker.user.dto.validator;
 
 import com.eukon05.financetracker.user.dto.RegisterDTO;
 import com.eukon05.financetracker.user.dto.UpdatePasswordDTO;

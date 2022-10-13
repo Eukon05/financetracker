@@ -2,7 +2,8 @@ package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.transaction.TransactionType;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
-import com.eukon05.financetracker.wallet.dto.CreateEditWalletDTO;
+import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
+import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import com.eukon05.financetracker.wallet.usecase.WalletFacade;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,8 @@ class WalletTests extends AbstractIntegrationTest {
     @Autowired
     private WalletFacade walletFacade;
 
-    private static final CreateEditWalletDTO dto = new CreateEditWalletDTO("test wallet");
+    private static final CreateWalletDTO dto = new CreateWalletDTO("test wallet", "PLN");
+    private static final EditWalletDTO editDto = new EditWalletDTO("new name", "EUR");
 
     @Test
     void should_create_a_new_wallet() throws Exception {
@@ -42,7 +44,7 @@ class WalletTests extends AbstractIntegrationTest {
     @Test
     void should_validate_wallet_already_exists() throws Exception {
         String token = utils.getTestAccessToken();
-        createTestWallet();
+        utils.createTestWallet();
 
         mockMvc.perform(post("/wallets")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +56,7 @@ class WalletTests extends AbstractIntegrationTest {
     @Test
     void should_delete_wallet() throws Exception {
         String token = utils.getTestAccessToken();
-        createTestWallet();
+        utils.createTestWallet();
 
         assertFalse(getTestUserWallets().isEmpty());
 
@@ -68,31 +70,32 @@ class WalletTests extends AbstractIntegrationTest {
     @Test
     void should_edit_wallet() throws Exception {
         String token = utils.getTestAccessToken();
-        createTestWallet();
+        utils.createTestWallet();
 
         mockMvc.perform(put("/wallets/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new CreateEditWalletDTO("new name")))
+                        .content(objectMapper.writeValueAsString(editDto))
                         .header(AUTHORIZATION, TOKEN_PREFIX + token))
                 .andExpect(status().isOk());
 
-        assertEquals("new name", getTestUserWallets().get(0).name());
+        assertEquals(editDto.name(), getTestUserWallets().get(0).name());
+        assertEquals(editDto.currency(), getTestUserWallets().get(0).currency());
     }
 
     @Test
     void should_not_edit_wallet() throws Exception {
         String token = utils.getTestAccessToken();
-        createTestWallet();
+        utils.createTestWallet();
 
         mockMvc.perform(post("/wallets")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new CreateEditWalletDTO("new name")))
+                        .content(objectMapper.writeValueAsString(editDto))
                         .header(AUTHORIZATION, TOKEN_PREFIX + token))
                 .andExpect(status().isCreated());
 
         mockMvc.perform(delete("/wallets/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new CreateEditWalletDTO("new name")))
+                        .content(objectMapper.writeValueAsString(editDto))
                         .header(AUTHORIZATION, TOKEN_PREFIX + token))
                 .andExpect(status().isOk());
     }
@@ -100,7 +103,7 @@ class WalletTests extends AbstractIntegrationTest {
     @Test
     void should_get_user_wallets() throws Exception {
         String token = utils.getTestAccessToken();
-        createTestWallet();
+        utils.createTestWallet();
 
         mockMvc.perform(get("/wallets")
                         .header(AUTHORIZATION, TOKEN_PREFIX + token))
@@ -110,7 +113,7 @@ class WalletTests extends AbstractIntegrationTest {
     @Test
     void should_get_wallet_transactions() throws Exception {
         String token = utils.getTestAccessToken();
-        createTestWallet();
+        utils.createTestWallet();
 
         mockMvc.perform(post("/transactions")
                         .header(AUTHORIZATION, TOKEN_PREFIX + token)
@@ -127,11 +130,6 @@ class WalletTests extends AbstractIntegrationTest {
 
     private List<WalletDTO> getTestUserWallets() {
         return walletFacade.getUserWalletDTOs(utils.getRegisterDTO().username());
-    }
-
-    private void createTestWallet() {
-        walletFacade.createWallet(utils.getLoginDTO().username(), dto.name());
-        utils.flushDatabase();
     }
 
 }
