@@ -4,7 +4,7 @@ Table of contents:
 
 - [About the project](#about-the-project)
 - [Features](#features)
-- [Tech stack](#tech-stack)
+- [Tools and dependencies](#tools-and-dependencies)
 - [How to use](#how-to-use)
 - [How to deploy](#how-to-deploy)
 
@@ -19,7 +19,7 @@ My goal for this project is to allow its users to keep a history of their income
 wallets.  
 [Check out my GitHub project page to see, which features are implemented and which are still in the process of being added](https://github.com/users/Eukon05/projects/3)
 
-## Tech stack
+## Tools and dependencies
 
 - Java 17
 - Maven
@@ -29,6 +29,7 @@ wallets.
 - PostgreSQL
 - IntelliJ IDEA
 - Postman
+- JUnit 5 + Mockito
 - [MailDev (for testing)](https://maildev.github.io/maildev/)
 - [TestContainers](https://www.testcontainers.org/)
 - [SpringDoc](https://springdoc.org/)
