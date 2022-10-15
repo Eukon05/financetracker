@@ -7,6 +7,8 @@ import com.eukon05.financetracker.user.mapper.UserModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserFacade {
@@ -16,6 +18,7 @@ public class UserFacade {
     private final GetUserUseCase getUserUseCase;
     private final UpdateUserEmailUseCase updateUserEmailUseCase;
     private final UpdateUserPasswordUseCase updateUserPasswordUseCase;
+    private final DeleteMultipleUsersUseCase deleteMultipleUsersUseCase;
     private final UserModelMapper mapper;
 
     public void createUser(RegisterDTO dto, String rootUrl) {
@@ -44,6 +47,10 @@ public class UserFacade {
 
     public void updateUserPassword(String username, String newPassword, String rootUrl) {
         updateUserPasswordUseCase.updateUserPassword(username, newPassword, rootUrl);
+    }
+
+    public void deleteMultipleUsers(List<User> users) {
+        deleteMultipleUsersUseCase.deleteMultipleUsers(users);
     }
 
 
