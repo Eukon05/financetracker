@@ -3,6 +3,7 @@ package com.eukon05.financetracker.wallet.usecase;
 import com.eukon05.financetracker.user.User;
 import com.eukon05.financetracker.user.usecase.UserFacade;
 import com.eukon05.financetracker.wallet.Wallet;
+import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import com.eukon05.financetracker.wallet.mapper.WalletModelMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,9 @@ public class WalletFacade {
     private final GetUserWalletDTOsUseCase getUserWalletDTOsUseCase;
     private final GetWalletByIdUseCase getWalletByIdUseCase;
 
-    public void createWallet(String username, String name) {
+    public void createWallet(String username, String name, String currency) {
         User user = userFacade.getUserByUsernameOrThrow(username);
-        createWalletUseCase.createWallet(user, name);
+        createWalletUseCase.createWallet(user, name, currency);
     }
 
     public void deleteWallet(String username, long walletID) {
@@ -33,10 +34,10 @@ public class WalletFacade {
         deleteWalletUseCase.deleteWallet(wallet);
     }
 
-    public void editWallet(String username, long walletID, String name) {
+    public void editWallet(String username, long walletID, EditWalletDTO dto) {
         User user = userFacade.getUserByUsernameOrThrow(username);
         Wallet wallet = getWalletByIdUseCase.getWalletById(user, walletID);
-        editWalletUseCase.editWallet(wallet, name);
+        editWalletUseCase.editWallet(wallet, dto);
     }
 
     public List<WalletDTO> getUserWalletDTOs(String username) {

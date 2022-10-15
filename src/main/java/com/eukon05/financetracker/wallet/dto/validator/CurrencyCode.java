@@ -1,4 +1,4 @@
-package com.eukon05.financetracker.user.dto.validator.password;
+package com.eukon05.financetracker.wallet.dto.validator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -7,15 +7,17 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PasswordsMatchValidator.class)
-public @interface PasswordsMatch {
+@Constraint(validatedBy = CurrencyCodeValidator.class)
+public @interface CurrencyCode {
 
-    String message() default "Passwords do not match";
+    String message() default "Invalid ISO currency code";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
+    boolean optional() default false;
 
 }

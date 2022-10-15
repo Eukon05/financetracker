@@ -17,8 +17,9 @@ import java.util.List;
 @NoArgsConstructor
 public class Wallet {
 
-    public Wallet(String name) {
+    public Wallet(String name, String currency) {
         this.name = name;
+        this.currency = currency;
     }
 
     @Id
@@ -29,6 +30,8 @@ public class Wallet {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private User user;
+
+    private String currency;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "wallet_id")

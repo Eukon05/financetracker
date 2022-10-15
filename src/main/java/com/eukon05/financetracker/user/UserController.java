@@ -4,7 +4,6 @@ import com.eukon05.financetracker.user.dto.RegisterDTO;
 import com.eukon05.financetracker.user.dto.UpdateEmailDTO;
 import com.eukon05.financetracker.user.dto.UpdatePasswordDTO;
 import com.eukon05.financetracker.user.dto.UserDTO;
-import com.eukon05.financetracker.user.mapper.UserModelMapper;
 import com.eukon05.financetracker.user.usecase.UserFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +26,6 @@ import java.security.Principal;
 class UserController {
 
     private final UserFacade userFacade;
-    private final UserModelMapper mapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -46,7 +44,7 @@ class UserController {
     @Operation(summary = "Get information about your account")
     @ApiResponse(responseCode = "401", ref = "unauthorized")
     UserDTO getUser(Principal principal) {
-        return mapper.mapUserToUserDTO(userFacade.getUserByUsernameOrThrow(principal.getName()));
+        return userFacade.getUserDTO(principal.getName());
     }
 
     @PutMapping("/me/email")

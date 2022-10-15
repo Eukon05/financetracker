@@ -42,7 +42,8 @@ class IntegrationTestsUtils {
 
     void createTestWallet() {
         userFacade.getUserByUsernameOrThrow(registerDTO.username())
-                .getWallets().add(new Wallet("test wallet"));
+                .getWallets().add(new Wallet("test wallet", "PLN"));
+        flushDatabase();
     }
 
     void flushDatabase() {
