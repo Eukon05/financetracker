@@ -34,6 +34,7 @@ wallets.
 - [TestContainers](https://www.testcontainers.org/)
 - [SpringDoc](https://springdoc.org/)
 - [MapStruct](https://mapstruct.org/)
+- [exchangerate.host (for pulling currency exchange rates)](https://exchangerate.host/#/)
 
 ## How to use
 
