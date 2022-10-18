@@ -21,7 +21,7 @@
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <testcontainers.version>1.17.5</testcontainers.version>
         <postgresql.version>42.5.0</postgresql.version>
-        <springdoc.version>1.6.11</springdoc.version>
+        <springdoc.version>1.6.12</springdoc.version>
     </properties>
 
     <dependencies>
