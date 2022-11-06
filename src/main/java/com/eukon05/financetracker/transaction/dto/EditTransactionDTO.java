@@ -6,6 +6,6 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
-public record EditTransactionDTO(@Size(max = 100) String name,
-                                 @PositiveOrZero BigDecimal value, TransactionType type) {
+public record EditTransactionDTO(@Size(max = 100) String name, @PositiveOrZero BigDecimal value, TransactionType type,
+                                 long categoryID) {
 }

@@ -24,6 +24,9 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
+    @ManyToOne
+    private TransactionCategory category;
+
     private BigDecimal value;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

@@ -41,6 +41,8 @@ class SecurityConfiguration {
             auth.antMatchers("/users/**").authenticated();
             auth.antMatchers("/transactions/**").authenticated();
             auth.antMatchers("/wallets/**").authenticated();
+            auth.antMatchers(HttpMethod.GET, "/categories").authenticated();
+            auth.antMatchers("/categories").hasAuthority("ADMIN");
             auth.anyRequest().permitAll();
         });
 

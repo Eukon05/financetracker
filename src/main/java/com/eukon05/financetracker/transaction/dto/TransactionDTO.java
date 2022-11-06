@@ -6,5 +6,5 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 public record TransactionDTO(long id, long walletID, String name, TransactionType type, BigDecimal value,
-                             Instant createdAt) {
+                             Instant createdAt, String categoryName) {
 }

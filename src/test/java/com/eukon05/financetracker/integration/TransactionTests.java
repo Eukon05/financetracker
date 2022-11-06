@@ -3,7 +3,7 @@ package com.eukon05.financetracker.integration;
 import com.eukon05.financetracker.transaction.TransactionType;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
-import com.eukon05.financetracker.transaction.usecase.TransactionFacade;
+import com.eukon05.financetracker.transaction.usecase.transaction.TransactionFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
