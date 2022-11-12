@@ -19,7 +19,7 @@ class CreateTransactionUseCaseImpl implements CreateTransactionUseCase {
     @Transactional
     public void createTransaction(Wallet wallet, TransactionCategory category, CreateTransactionDTO dto) {
         Transaction transaction = mapper.mapCreateTransactionDTOtoTransaction(dto);
-        if (!category.getType().equals(transaction.getType())) {
+        if (category.getId() != 0 && category.getType().sign != transaction.getValue().signum()) {
             throw new TransactionTypeMismatchException();
         }
         transaction.setCategory(category);

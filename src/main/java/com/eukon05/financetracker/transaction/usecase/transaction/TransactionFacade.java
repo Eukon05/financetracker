@@ -34,6 +34,7 @@ public class TransactionFacade {
     public void createTransaction(String username, CreateTransactionDTO dto) {
         Wallet wallet = walletFacade.getWalletById(username, dto.walletID());
         TransactionCategory category = categoryFacade.getTransactionCategory(dto.categoryID());
+
         createTransactionUseCase.createTransaction(wallet, category, dto);
     }
 
@@ -51,11 +52,7 @@ public class TransactionFacade {
     public void editTransaction(String username, long transactionID, EditTransactionDTO dto) {
         User user = userFacade.getUserByUsernameOrThrow(username);
         Transaction transaction = getTransactionByIdUseCase.getTransactionById(user, transactionID);
-        TransactionCategory category = null;
-
-        if (dto.categoryID() != 0) {
-            category = categoryFacade.getTransactionCategory(dto.categoryID());
-        }
+        TransactionCategory category = categoryFacade.getTransactionCategory(dto.categoryID());
 
         editTransactionUseCase.editTransaction(transaction, dto, category);
     }

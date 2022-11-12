@@ -20,7 +20,7 @@ public class TransactionCategory {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    private TransactionCategoryType type;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "category_id")

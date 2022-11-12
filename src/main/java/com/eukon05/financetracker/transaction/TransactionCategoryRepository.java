@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface TransactionCategoryRepository extends JpaRepository<TransactionCategory, Long> {
 
-    List<TransactionCategory> findAllByType(TransactionType type);
+    List<TransactionCategory> findAllByType(TransactionCategoryType type);
 
-    boolean existsByNameAndType(String name, TransactionType type);
+    boolean existsByNameAndType(String name, TransactionCategoryType type);
 
 }

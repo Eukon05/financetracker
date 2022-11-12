@@ -1,7 +1,7 @@
 package com.eukon05.financetracker.transaction.usecase.transactionCategory;
 
 import com.eukon05.financetracker.transaction.TransactionCategory;
-import com.eukon05.financetracker.transaction.TransactionType;
+import com.eukon05.financetracker.transaction.TransactionCategoryType;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionCategoryDTO;
@@ -21,7 +21,7 @@ public class TransactionCategoryFacade {
     private final EditTransactionCategoryUseCase editTransactionCategoryUseCase;
     private final GetTransactionCategoryUseCase getTransactionCategoryUseCase;
 
-    public List<TransactionCategoryDTO> getTransactionCategoryDTOs(TransactionType type) {
+    public List<TransactionCategoryDTO> getTransactionCategoryDTOs(TransactionCategoryType type) {
         if (Optional.ofNullable(type).isEmpty()) {
             return getTransactionCategoryDTOsUseCase.getTransactionCategoryDTOs();
         } else {

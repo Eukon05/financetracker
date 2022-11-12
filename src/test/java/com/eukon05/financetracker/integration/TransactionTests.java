@@ -1,6 +1,6 @@
 package com.eukon05.financetracker.integration;
 
-import com.eukon05.financetracker.transaction.TransactionType;
+import com.eukon05.financetracker.transaction.TransactionCategoryType;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.usecase.transaction.TransactionFacade;
@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class TransactionTests extends AbstractIntegrationTest {
 
-    private final CreateTransactionDTO dto = new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), TransactionType.EXPENSE);
+    private final CreateTransactionDTO dto = new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), TransactionCategoryType.EXPENSE);
 
     @Autowired
     private TransactionFacade facade;
@@ -70,13 +70,13 @@ class TransactionTests extends AbstractIntegrationTest {
         mockMvc.perform(put("/transactions/1")
                         .header(AUTHORIZATION, TOKEN_PREFIX + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new EditTransactionDTO("newname", new BigDecimal("54321"), TransactionType.INCOME))))
+                        .content(objectMapper.writeValueAsString(new EditTransactionDTO("newname", new BigDecimal("54321"), TransactionCategoryType.INCOME))))
                 .andExpectAll(status().isOk());
 
         mockMvc.perform(get("/transactions/1")
                         .header(AUTHORIZATION, TOKEN_PREFIX + token))
                 .andExpectAll(status().isOk(), jsonPath("$.name").value("newname"),
-                        jsonPath("$.value").value(54321), jsonPath("$.type").value(TransactionType.INCOME.name()));
+                        jsonPath("$.value").value(54321), jsonPath("$.type").value(TransactionCategoryType.INCOME.name()));
     }
 
     private void createTestTransaction() {

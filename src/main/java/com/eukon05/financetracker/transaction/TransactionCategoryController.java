@@ -25,7 +25,7 @@ class TransactionCategoryController {
     }
 
     @GetMapping
-    List<TransactionCategoryDTO> getAllCategories(@RequestParam(name = "type", required = false) TransactionType type) {
+    List<TransactionCategoryDTO> getAllCategories(@RequestParam(name = "type", required = false) TransactionCategoryType type) {
         return facade.getTransactionCategoryDTOs(type);
     }
 

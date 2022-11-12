@@ -1,7 +1,7 @@
 package com.eukon05.financetracker.transaction.usecase.transactionCategory;
 
 import com.eukon05.financetracker.transaction.TransactionCategoryRepository;
-import com.eukon05.financetracker.transaction.TransactionType;
+import com.eukon05.financetracker.transaction.TransactionCategoryType;
 import com.eukon05.financetracker.transaction.dto.TransactionCategoryDTO;
 import com.eukon05.financetracker.transaction.mapper.TransactionCategoryModelMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ class GetTransactionCategoryDTOsUseCaseImpl implements GetTransactionCategoryDTO
     }
 
     @Override
-    public List<TransactionCategoryDTO> getTransactionCategoryDTOs(TransactionType type) {
+    public List<TransactionCategoryDTO> getTransactionCategoryDTOs(TransactionCategoryType type) {
         return repository.findAllByType(type).stream().map(mapper::mapTransactionCategoryToTransactionCategoryDTO).toList();
     }
 

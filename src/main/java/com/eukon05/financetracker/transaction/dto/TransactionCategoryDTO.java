@@ -1,6 +1,6 @@
 package com.eukon05.financetracker.transaction.dto;
 
-import com.eukon05.financetracker.transaction.TransactionType;
+import com.eukon05.financetracker.transaction.TransactionCategoryType;
 
-public record TransactionCategoryDTO(long id, String name, TransactionType type) {
+public record TransactionCategoryDTO(long id, String name, TransactionCategoryType type) {
 }

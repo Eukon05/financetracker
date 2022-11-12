@@ -21,9 +21,6 @@ public class Transaction {
 
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private TransactionType type;
-
     @ManyToOne
     private TransactionCategory category;
 

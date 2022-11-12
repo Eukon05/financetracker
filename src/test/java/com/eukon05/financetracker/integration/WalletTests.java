@@ -1,6 +1,6 @@
 package com.eukon05.financetracker.integration;
 
-import com.eukon05.financetracker.transaction.TransactionType;
+import com.eukon05.financetracker.transaction.TransactionCategoryType;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
@@ -118,7 +118,7 @@ class WalletTests extends AbstractIntegrationTest {
         mockMvc.perform(post("/transactions")
                         .header(AUTHORIZATION, TOKEN_PREFIX + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), TransactionType.EXPENSE))))
+                        .content(objectMapper.writeValueAsString(new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), TransactionCategoryType.EXPENSE))))
                 .andExpect(status().isCreated());
 
         utils.flushDatabase();
