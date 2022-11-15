@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class TransactionTests extends AbstractIntegrationTest {
 
-    private final CreateTransactionDTO dto = new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), TransactionCategoryType.EXPENSE);
+    private final CreateTransactionDTO dto = new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), 0);
 
     @Autowired
     private TransactionFacade facade;
@@ -70,7 +70,7 @@ class TransactionTests extends AbstractIntegrationTest {
         mockMvc.perform(put("/transactions/1")
                         .header(AUTHORIZATION, TOKEN_PREFIX + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new EditTransactionDTO("newname", new BigDecimal("54321"), TransactionCategoryType.INCOME))))
+                        .content(objectMapper.writeValueAsString(new EditTransactionDTO("newname", new BigDecimal("54321"), 0))))
                 .andExpectAll(status().isOk());
 
         mockMvc.perform(get("/transactions/1")

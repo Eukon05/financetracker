@@ -4,6 +4,5 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 public record CreateTransactionDTO(@Positive long walletID, @NotBlank @Size(min = 1, max = 100) String name,
-                                   @NotNull BigDecimal value, /*@NotNull TransactionType type,*/
-                                   @PositiveOrZero long categoryID) {
+                                   @NotNull BigDecimal value, @PositiveOrZero long categoryID) {
 }
