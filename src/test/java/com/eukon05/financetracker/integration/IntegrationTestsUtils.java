@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.TestComponent;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import static com.eukon05.financetracker.auth.AuthFinals.ACCESS_TOKEN;
+import static com.eukon05.financetracker.auth.AuthConstants.ACCESS_TOKEN;
 
 @TestComponent
 @RequiredArgsConstructor
@@ -52,7 +52,7 @@ class IntegrationTestsUtils {
     }
 
     String getTestAccessToken() {
-        return authFacade.login(loginDTO, "").get(ACCESS_TOKEN);
+        return authFacade.login(loginDTO, "").get(ACCESS_TOKEN.getValue());
     }
 
 
