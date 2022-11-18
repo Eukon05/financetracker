@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.eukon05.financetracker.auth.AuthFinals.TOKEN_PREFIX;
+import static com.eukon05.financetracker.auth.AuthConstants.TOKEN_PREFIX;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -35,7 +35,7 @@ class WalletTests extends AbstractIntegrationTest {
         mockMvc.perform(post("/wallets")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto))
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpect(status().isCreated());
 
         assertFalse(getTestUserWallets().isEmpty());
@@ -49,7 +49,7 @@ class WalletTests extends AbstractIntegrationTest {
         mockMvc.perform(post("/wallets")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto))
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpect(status().isConflict());
     }
 
@@ -61,7 +61,7 @@ class WalletTests extends AbstractIntegrationTest {
         assertFalse(getTestUserWallets().isEmpty());
 
         mockMvc.perform(delete("/wallets/1")
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpect(status().isOk());
 
         assertTrue(getTestUserWallets().isEmpty());
@@ -75,7 +75,7 @@ class WalletTests extends AbstractIntegrationTest {
         mockMvc.perform(put("/wallets/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(editDto))
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpect(status().isOk());
 
         assertEquals(editDto.name(), getTestUserWallets().get(0).name());
@@ -90,13 +90,13 @@ class WalletTests extends AbstractIntegrationTest {
         mockMvc.perform(post("/wallets")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(editDto))
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpect(status().isCreated());
 
         mockMvc.perform(delete("/wallets/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(editDto))
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpect(status().isOk());
     }
 
@@ -106,7 +106,7 @@ class WalletTests extends AbstractIntegrationTest {
         utils.createTestWallet();
 
         mockMvc.perform(get("/wallets")
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpectAll(status().isOk(), jsonPath("$.[0].name").value(dto.name()));
     }
 
@@ -116,7 +116,7 @@ class WalletTests extends AbstractIntegrationTest {
         utils.createTestWallet();
 
         mockMvc.perform(post("/transactions")
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token)
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), TransactionType.EXPENSE))))
                 .andExpect(status().isCreated());
@@ -124,7 +124,7 @@ class WalletTests extends AbstractIntegrationTest {
         utils.flushDatabase();
 
         mockMvc.perform(get("/wallets/1/transactions")
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpectAll(status().isOk(), jsonPath("$.content.[0].id").value(1));
     }
 

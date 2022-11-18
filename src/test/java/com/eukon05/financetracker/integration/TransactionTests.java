@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
 
-import static com.eukon05.financetracker.auth.AuthFinals.TOKEN_PREFIX;
+import static com.eukon05.financetracker.auth.AuthConstants.TOKEN_PREFIX;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,7 +36,7 @@ class TransactionTests extends AbstractIntegrationTest {
         String token = utils.getTestAccessToken();
 
         mockMvc.perform(post("/transactions")
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token)
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
@@ -48,7 +48,7 @@ class TransactionTests extends AbstractIntegrationTest {
         createTestTransaction();
 
         mockMvc.perform(delete("/transactions/1")
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpect(status().isOk());
     }
 
@@ -58,7 +58,7 @@ class TransactionTests extends AbstractIntegrationTest {
         createTestTransaction();
 
         mockMvc.perform(get("/transactions/1")
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpectAll(status().isOk(), jsonPath("$.name").value(dto.name()));
     }
 
@@ -68,13 +68,13 @@ class TransactionTests extends AbstractIntegrationTest {
         createTestTransaction();
 
         mockMvc.perform(put("/transactions/1")
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token)
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new EditTransactionDTO("newname", new BigDecimal("54321"), TransactionType.INCOME))))
                 .andExpectAll(status().isOk());
 
         mockMvc.perform(get("/transactions/1")
-                        .header(AUTHORIZATION, TOKEN_PREFIX + token))
+                        .header(AUTHORIZATION, TOKEN_PREFIX.getValue() + token))
                 .andExpectAll(status().isOk(), jsonPath("$.name").value("newname"),
                         jsonPath("$.value").value(54321), jsonPath("$.type").value(TransactionType.INCOME.name()));
     }
