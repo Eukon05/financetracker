@@ -10,7 +10,7 @@ spring:
   mail:
     host: localhost
     port: 1025
-    username: mail
+    username: mail@maildev.com
     password: dev
     properties:
       smtp:
