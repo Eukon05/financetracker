@@ -7,14 +7,14 @@ import com.eukon05.financetracker.user.RoleType;
 import com.eukon05.financetracker.user.User;
 import com.eukon05.financetracker.wallet.Wallet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.test.context.TestComponent;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-import static com.eukon05.financetracker.auth.AuthFinals.TOKEN_PREFIX;
+import static com.eukon05.financetracker.auth.AuthConstants.TOKEN_PREFIX;
 
-@Component
+@TestComponent
 class IntegrationTestsUtils {
 
     @Autowired
@@ -48,6 +48,6 @@ class IntegrationTestsUtils {
     }
 
     String getDefaultToken() {
-        return TOKEN_PREFIX + jwtFacade.generateAccessToken(testUser, "test");
+        return TOKEN_PREFIX.getValue() + jwtFacade.generateAccessToken(testUser, "test");
     }
 }

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.eukon05.financetracker.auth.AuthFinals.ACCESS_TOKEN;
-import static com.eukon05.financetracker.auth.AuthFinals.REFRESH_TOKEN;
+import static com.eukon05.financetracker.auth.AuthConstants.ACCESS_TOKEN;
+import static com.eukon05.financetracker.auth.AuthConstants.REFRESH_TOKEN;
 
 @RequiredArgsConstructor
 @Service
@@ -25,8 +25,8 @@ class LoginUseCaseImpl implements LoginUseCase {
         UserDetails userDetails = (UserDetails) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.username(), dto.password())).getPrincipal();
 
         Map<String, String> tokens = new HashMap<>();
-        tokens.put(ACCESS_TOKEN, jwtFacade.generateAccessToken(userDetails, issuer));
-        tokens.put(REFRESH_TOKEN, jwtFacade.generateRefreshToken(dto.username(), issuer));
+        tokens.put(ACCESS_TOKEN.getValue(), jwtFacade.generateAccessToken(userDetails, issuer));
+        tokens.put(REFRESH_TOKEN.getValue(), jwtFacade.generateRefreshToken(dto.username(), issuer));
 
         return tokens;
     }
