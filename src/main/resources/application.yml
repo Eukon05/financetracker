@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/financetracker
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  mail:
+    host: localhost
+    port: 1025
+    username: mail
+    password: dev
+    properties:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+
+jwt:
+  access:
+    secret: access01234567890ABCDEFGHIJKLMNO
+    lifetimeMinutes: 15
+  refresh:
+    secret: 01234567890ABCDEFGHIJKLMNOrefresh
+    lifetimeMinutes: 240
+
+server:
+  servlet:
+    context-path: /api/v1
+  error:
+    include-message: always
+
+springdoc:
+  api-docs:
+    path: /api-docs

@@ -1,59 +1,53 @@
 package com.eukon05.financetracker.integration;
 
-import com.eukon05.financetracker.auth.dto.LoginDTO;
-import com.eukon05.financetracker.auth.usecase.AuthFacade;
-import com.eukon05.financetracker.user.UserRepository;
-import com.eukon05.financetracker.user.dto.RegisterDTO;
-import com.eukon05.financetracker.user.usecase.UserFacade;
+import com.eukon05.financetracker.jwt.usecase.JwtFacade;
+import com.eukon05.financetracker.transaction.Transaction;
+import com.eukon05.financetracker.transaction.TransactionType;
+import com.eukon05.financetracker.user.RoleType;
+import com.eukon05.financetracker.user.User;
 import com.eukon05.financetracker.wallet.Wallet;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import java.math.BigDecimal;
+import java.time.Instant;
 
-import static com.eukon05.financetracker.auth.AuthConstants.ACCESS_TOKEN;
+import static com.eukon05.financetracker.auth.AuthConstants.TOKEN_PREFIX;
 
 @TestComponent
-@RequiredArgsConstructor
 class IntegrationTestsUtils {
 
-    private final UserFacade userFacade;
-    private final UserRepository userRepository;
-    private final AuthFacade authFacade;
+    @Autowired
+    private JwtFacade jwtFacade;
 
-    @PersistenceContext
-    private EntityManager em;
+    static final User testUser = new User();
+    static final Wallet testWallet = new Wallet();
+    static final Transaction testTransaction = new Transaction();
 
-    @Getter
-    private final RegisterDTO registerDTO = new RegisterDTO("test", "test1234", "test1234", "test@test.com");
+    static {
+        testUser.setEnabled(true);
+        testUser.setId(1);
+        testUser.setUsername("test");
+        testUser.setEmail("test@test.com");
+        testUser.getRoles().add(RoleType.USER);
+        testUser.setPassword("$2a$12$HkAx9wUgrHqtPnGoyHwwNOdY6d1e/cOyLfkwUrfev2Gw9OXc7M0z6");
 
-    @Getter
-    private final LoginDTO loginDTO = new LoginDTO(registerDTO.username(), registerDTO.password());
+        testWallet.setId(1);
+        testWallet.setCurrency("EUR");
+        testWallet.setName("test wallet");
+        testWallet.setUser(testUser);
+        testUser.getWallets().add(testWallet);
 
-    void registerTestUser() {
-        userFacade.createUser(registerDTO, "");
-        userRepository.findById(1L).ifPresent(user -> {
-            user.setEnabled(true);
-            userRepository.save(user);
-        });
+
+        testTransaction.setValue(BigDecimal.valueOf(100));
+        testTransaction.setWallet(testWallet);
+        testTransaction.setType(TransactionType.INCOME);
+        testTransaction.setCreatedAt(Instant.now());
+        testTransaction.setId(1);
+        testWallet.getTransactions().add(testTransaction);
     }
 
-    void createTestWallet() {
-        userFacade.getUserByUsernameOrThrow(registerDTO.username())
-                .getWallets().add(new Wallet("test wallet", "PLN"));
-        flushDatabase();
+    String getDefaultToken() {
+        return TOKEN_PREFIX.getValue() + jwtFacade.generateAccessToken(testUser, "test");
     }
-
-    void flushDatabase() {
-        em.flush();
-        em.clear();
-    }
-
-    String getTestAccessToken() {
-        return authFacade.login(loginDTO, "").get(ACCESS_TOKEN.getValue());
-    }
-
-
 }
