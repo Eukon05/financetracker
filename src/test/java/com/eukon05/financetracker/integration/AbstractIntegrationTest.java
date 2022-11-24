@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import(IntegrationTestsConfiguration.class)
+@Import({IntegrationTestsConfiguration.class, IntegrationTestsUtils.class})
 @ActiveProfiles("test")
 abstract class AbstractIntegrationTest {
 
