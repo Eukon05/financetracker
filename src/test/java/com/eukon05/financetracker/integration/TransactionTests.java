@@ -1,7 +1,6 @@
 package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.transaction.TransactionRepository;
-import com.eukon05.financetracker.transaction.TransactionType;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.user.UserRepository;
@@ -33,7 +32,7 @@ class TransactionTests extends AbstractIntegrationTest {
     @Test
     void should_create_a_transaction() throws Exception {
         Mockito.when(userRepository.getUserByUsername(Mockito.any(String.class))).thenReturn(Optional.of(testUser));
-        CreateTransactionDTO dto = new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), TransactionType.EXPENSE);
+        CreateTransactionDTO dto = new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), 0);
 
         mockMvc.perform(post("/transactions")
                         .header(AUTHORIZATION, utils.getDefaultToken())
@@ -72,7 +71,7 @@ class TransactionTests extends AbstractIntegrationTest {
         Mockito.when(userRepository.getUserByUsername(Mockito.any(String.class))).thenReturn(Optional.of(testUser));
         Mockito.when(transactionRepository.findById(1L)).thenReturn(Optional.of(testTransaction));
 
-        EditTransactionDTO dto = new EditTransactionDTO("newname", BigDecimal.valueOf(5431), TransactionType.EXPENSE);
+        EditTransactionDTO dto = new EditTransactionDTO("newname", BigDecimal.valueOf(-5431), 0);
 
         mockMvc.perform(put("/transactions/1")
                         .header(AUTHORIZATION, utils.getDefaultToken())
@@ -81,7 +80,6 @@ class TransactionTests extends AbstractIntegrationTest {
                 .andExpectAll(status().isOk());
 
         assertEquals(dto.name(), testTransaction.getName());
-        assertEquals(dto.type(), testTransaction.getType());
         assertEquals(dto.value(), testTransaction.getValue());
     }
 

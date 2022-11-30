@@ -2,7 +2,8 @@ package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.jwt.usecase.JwtFacade;
 import com.eukon05.financetracker.transaction.Transaction;
-import com.eukon05.financetracker.transaction.TransactionType;
+import com.eukon05.financetracker.transaction.TransactionCategory;
+import com.eukon05.financetracker.transaction.TransactionCategoryType;
 import com.eukon05.financetracker.user.RoleType;
 import com.eukon05.financetracker.user.User;
 import com.eukon05.financetracker.wallet.Wallet;
@@ -23,6 +24,8 @@ class IntegrationTestsUtils {
     static final User testUser = new User();
     static final Wallet testWallet = new Wallet();
     static final Transaction testTransaction = new Transaction();
+    static final TransactionCategory testExpenseCategory = new TransactionCategory();
+    static final TransactionCategory testIncomeCategory = new TransactionCategory();
 
     static {
         testUser.setEnabled(true);
@@ -38,12 +41,20 @@ class IntegrationTestsUtils {
         testWallet.setUser(testUser);
         testUser.getWallets().add(testWallet);
 
+        testExpenseCategory.setId(1);
+        testExpenseCategory.setType(TransactionCategoryType.EXPENSE);
+        testExpenseCategory.setName("EXPENSE");
+
+        testIncomeCategory.setId(2);
+        testIncomeCategory.setType(TransactionCategoryType.INCOME);
+        testIncomeCategory.setName("INCOME");
+
 
         testTransaction.setValue(BigDecimal.valueOf(100));
         testTransaction.setWallet(testWallet);
-        testTransaction.setType(TransactionType.INCOME);
+        testTransaction.setCategory(testIncomeCategory);
         testTransaction.setCreatedAt(Instant.now());
-        testTransaction.setId(1);
+        testTransaction.setId(2);
         testWallet.getTransactions().add(testTransaction);
     }
 
