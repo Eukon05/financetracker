@@ -1,11 +1,10 @@
 package com.eukon05.financetracker.user.dto;
 
 import com.eukon05.financetracker.user.dto.validator.PasswordsMatch;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @PasswordsMatch
 public record RegisterDTO(@Size(min = 1, max = 50) @NotBlank String username,

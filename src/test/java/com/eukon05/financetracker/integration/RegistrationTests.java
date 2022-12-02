@@ -3,14 +3,13 @@ package com.eukon05.financetracker.integration;
 import com.eukon05.financetracker.email.usecase.EmailFacade;
 import com.eukon05.financetracker.user.User;
 import com.eukon05.financetracker.user.dto.RegisterDTO;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import javax.validation.Validator;
 
 import static com.eukon05.financetracker.integration.IntegrationTestsUtils.testUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;

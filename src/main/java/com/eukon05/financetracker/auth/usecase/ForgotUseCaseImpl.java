@@ -4,7 +4,7 @@ import com.eukon05.financetracker.token.Token;
 import com.eukon05.financetracker.token.TokenType;
 import com.eukon05.financetracker.user.User;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.utility.RandomString;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,7 @@ class ForgotUseCaseImpl implements ForgotUseCase {
     @Transactional
     public Token forgot(User user) {
         Token token = new Token(TokenType.CONFIRM_PASSWORD_CHANGE);
-        token.setValue(RandomString.make(8));
+        token.setValue(RandomStringUtils.randomAlphanumeric(8));
         user.getTokens().add(token);
 
         return token;
