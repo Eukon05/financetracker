@@ -24,6 +24,7 @@ class IntegrationTestsUtils {
     static final User testUser = new User();
     static final Wallet testWallet = new Wallet();
     static final Transaction testTransaction = new Transaction();
+    static final TransactionCategory defaultCategory = new TransactionCategory();
     static final TransactionCategory testExpenseCategory = new TransactionCategory();
     static final TransactionCategory testIncomeCategory = new TransactionCategory();
 
@@ -41,11 +42,11 @@ class IntegrationTestsUtils {
         testWallet.setUser(testUser);
         testUser.getWallets().add(testWallet);
 
-        testExpenseCategory.setId(1);
-        testExpenseCategory.setType(TransactionCategoryType.EXPENSE);
-        testExpenseCategory.setName("EXPENSE");
+        defaultCategory.setId(0);
+        defaultCategory.setType(TransactionCategoryType.DEFAULT);
+        defaultCategory.setName("No category");
 
-        testIncomeCategory.setId(2);
+        testIncomeCategory.setId(1);
         testIncomeCategory.setType(TransactionCategoryType.INCOME);
         testIncomeCategory.setName("INCOME");
 
@@ -60,5 +61,9 @@ class IntegrationTestsUtils {
 
     String getDefaultToken() {
         return TOKEN_PREFIX.getValue() + jwtFacade.generateAccessToken(testUser, "test");
+    }
+
+    String getToken(User user) {
+        return TOKEN_PREFIX.getValue() + jwtFacade.generateAccessToken(user, "test");
     }
 }
