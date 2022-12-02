@@ -1,5 +1,6 @@
 package com.eukon05.financetracker.transaction;
 
+import com.eukon05.financetracker.transaction.exceptions.TransactionTypeMismatchException;
 import com.eukon05.financetracker.wallet.Wallet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,8 @@ public class Transaction {
 
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    @ManyToOne
+    private TransactionCategory category;
 
     private BigDecimal value;
 
@@ -31,5 +32,12 @@ public class Transaction {
 
     @CreationTimestamp
     private Instant createdAt;
+
+    public void setCategory(TransactionCategory category){
+        if (category.getId() != 0 && category.getType().sign != getValue().signum()) {
+            throw new TransactionTypeMismatchException();
+        }
+        this.category = category;
+    }
 
 }

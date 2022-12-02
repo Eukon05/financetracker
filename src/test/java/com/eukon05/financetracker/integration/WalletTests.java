@@ -1,7 +1,6 @@
 package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.transaction.TransactionRepository;
-import com.eukon05.financetracker.user.UserRepository;
 import com.eukon05.financetracker.wallet.Wallet;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
@@ -25,9 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class WalletTests extends AbstractIntegrationTest {
-
-    @MockBean
-    private UserRepository userRepository;
 
     @MockBean
     private TransactionRepository transactionRepository;

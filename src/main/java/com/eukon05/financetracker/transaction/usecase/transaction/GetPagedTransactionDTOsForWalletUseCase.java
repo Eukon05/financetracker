@@ -1,4 +1,4 @@
-package com.eukon05.financetracker.transaction.usecase;
+package com.eukon05.financetracker.transaction.usecase.transaction;
 
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
 import com.eukon05.financetracker.wallet.Wallet;

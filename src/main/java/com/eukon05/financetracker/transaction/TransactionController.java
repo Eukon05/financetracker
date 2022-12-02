@@ -3,7 +3,7 @@ package com.eukon05.financetracker.transaction;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
-import com.eukon05.financetracker.transaction.usecase.TransactionFacade;
+import com.eukon05.financetracker.transaction.usecase.transaction.TransactionFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

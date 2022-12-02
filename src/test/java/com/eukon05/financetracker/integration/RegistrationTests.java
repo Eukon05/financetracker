@@ -2,12 +2,10 @@ package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.email.usecase.EmailFacade;
 import com.eukon05.financetracker.user.User;
-import com.eukon05.financetracker.user.UserRepository;
 import com.eukon05.financetracker.user.dto.RegisterDTO;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -23,9 +21,6 @@ class RegistrationTests extends AbstractIntegrationTest {
     @Autowired
     private Validator validator;
 
-    @MockBean
-    private UserRepository repository;
-
     @Autowired
     private EmailFacade emailFacade;
 
@@ -35,15 +30,15 @@ class RegistrationTests extends AbstractIntegrationTest {
     void should_register_user() throws Exception {
         makeRegisterRequest().andExpect(status().isCreated());
 
-        Mockito.verify(repository).save(Mockito.any(User.class));
+        Mockito.verify(userRepository).save(Mockito.any(User.class));
         Mockito.verify(emailFacade).sendRegistrationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
 
     }
 
     @Test
     void should_validate_user_already_exists() throws Exception {
-        Mockito.when(repository.existsByUsername(registerDTO.username())).thenReturn(true);
-        Mockito.when(repository.existsByEmail(registerDTO.username())).thenReturn(true);
+        Mockito.when(userRepository.existsByUsername(registerDTO.username())).thenReturn(true);
+        Mockito.when(userRepository.existsByEmail(registerDTO.username())).thenReturn(true);
 
         makeRegisterRequest().andExpect(status().isConflict());
     }

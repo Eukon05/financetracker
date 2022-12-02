@@ -1,10 +1,9 @@
 package com.eukon05.financetracker.integration;
 
+import com.eukon05.financetracker.transaction.TransactionCategoryRepository;
 import com.eukon05.financetracker.transaction.TransactionRepository;
-import com.eukon05.financetracker.transaction.TransactionType;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
-import com.eukon05.financetracker.user.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,15 +24,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TransactionTests extends AbstractIntegrationTest {
 
     @MockBean
-    private UserRepository userRepository;
+    private TransactionRepository transactionRepository;
 
     @MockBean
-    private TransactionRepository transactionRepository;
+    private TransactionCategoryRepository transactionCategoryRepository;
 
     @Test
     void should_create_a_transaction() throws Exception {
         Mockito.when(userRepository.getUserByUsername(Mockito.any(String.class))).thenReturn(Optional.of(testUser));
-        CreateTransactionDTO dto = new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), TransactionType.EXPENSE);
+        Mockito.when(transactionCategoryRepository.findById(0L)).thenReturn(Optional.of(defaultCategory));
+
+        CreateTransactionDTO dto = new CreateTransactionDTO(1L, "transaction", new BigDecimal("11.5"), 0);
 
         mockMvc.perform(post("/transactions")
                         .header(AUTHORIZATION, utils.getDefaultToken())
@@ -71,8 +72,9 @@ class TransactionTests extends AbstractIntegrationTest {
     void should_edit_a_transaction() throws Exception {
         Mockito.when(userRepository.getUserByUsername(Mockito.any(String.class))).thenReturn(Optional.of(testUser));
         Mockito.when(transactionRepository.findById(1L)).thenReturn(Optional.of(testTransaction));
+        Mockito.when(transactionCategoryRepository.findById(2L)).thenReturn(Optional.of(testExpenseCategory));
 
-        EditTransactionDTO dto = new EditTransactionDTO("newname", BigDecimal.valueOf(5431), TransactionType.EXPENSE);
+        EditTransactionDTO dto = new EditTransactionDTO("newname", BigDecimal.valueOf(-5431), 2);
 
         mockMvc.perform(put("/transactions/1")
                         .header(AUTHORIZATION, utils.getDefaultToken())
@@ -81,8 +83,23 @@ class TransactionTests extends AbstractIntegrationTest {
                 .andExpectAll(status().isOk());
 
         assertEquals(dto.name(), testTransaction.getName());
-        assertEquals(dto.type(), testTransaction.getType());
+        assertEquals(testExpenseCategory, testTransaction.getCategory());
         assertEquals(dto.value(), testTransaction.getValue());
+    }
+
+    @Test
+    void should_not_edit_transaction() throws Exception {
+        Mockito.when(userRepository.getUserByUsername(Mockito.any(String.class))).thenReturn(Optional.of(testUser));
+        Mockito.when(transactionRepository.findById(1L)).thenReturn(Optional.of(testTransaction));
+        Mockito.when(transactionCategoryRepository.findById(1L)).thenReturn(Optional.of(testIncomeCategory));
+
+        EditTransactionDTO dto = new EditTransactionDTO(null, BigDecimal.valueOf(-5431), 1);
+
+        mockMvc.perform(put("/transactions/1")
+                        .header(AUTHORIZATION, utils.getDefaultToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpectAll(status().isConflict());
     }
 
     private ResultActions getTestTransaction() throws Exception {

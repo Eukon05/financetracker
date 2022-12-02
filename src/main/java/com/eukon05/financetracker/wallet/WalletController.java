@@ -1,7 +1,7 @@
 package com.eukon05.financetracker.wallet;
 
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
-import com.eukon05.financetracker.transaction.usecase.TransactionFacade;
+import com.eukon05.financetracker.transaction.usecase.transaction.TransactionFacade;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
