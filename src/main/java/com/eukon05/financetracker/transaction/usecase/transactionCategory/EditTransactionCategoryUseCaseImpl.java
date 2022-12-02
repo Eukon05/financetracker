@@ -24,8 +24,6 @@ class EditTransactionCategoryUseCaseImpl implements EditTransactionCategoryUseCa
             throw new DefaultTransactionCategoryModificationException();
         }
 
-        Optional.ofNullable(dto.type()).ifPresent(category::setType);
-
         Optional.ofNullable(dto.name()).ifPresent(name -> {
             if (repository.existsByNameAndType(name, category.getType())) {
                 throw new TransactionCategoryAlreadyExistsException(name);

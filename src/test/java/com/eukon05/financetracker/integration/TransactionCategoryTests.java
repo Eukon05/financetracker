@@ -28,7 +28,7 @@ class TransactionCategoryTests extends AbstractIntegrationTest {
     private TransactionCategoryRepository transactionCategoryRepository;
 
     private static final CreateTransactionCategoryDTO incomeCreateDTO = new CreateTransactionCategoryDTO("Test expense", TransactionCategoryType.EXPENSE);
-    private static final EditTransactionCategoryDTO editDto = new EditTransactionCategoryDTO("new name", TransactionCategoryType.INCOME);
+    private static final EditTransactionCategoryDTO editDto = new EditTransactionCategoryDTO("new name");
     private static final User adminUser = new User();
 
     static {
@@ -86,7 +86,7 @@ class TransactionCategoryTests extends AbstractIntegrationTest {
 
     @Test
     void should_not_edit_category_with_duplicate_name() throws Exception {
-        Mockito.when(transactionCategoryRepository.existsByNameAndType(editDto.name(), editDto.type()))
+        Mockito.when(transactionCategoryRepository.existsByNameAndType(editDto.name(), testIncomeCategory.getType()))
                 .thenReturn(true);
         Mockito.when(transactionCategoryRepository.findById(1L)).thenReturn(Optional.of(testIncomeCategory));
 
