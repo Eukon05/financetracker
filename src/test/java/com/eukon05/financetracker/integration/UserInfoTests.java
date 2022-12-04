@@ -1,8 +1,11 @@
 package com.eukon05.financetracker.integration;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
-import static com.eukon05.financetracker.auth.AuthFinals.TOKEN_PREFIX;
+import java.util.Optional;
+
+import static com.eukon05.financetracker.integration.IntegrationTestsUtils.testUser;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -12,12 +15,12 @@ class UserInfoTests extends AbstractIntegrationTest {
 
     @Test
     void should_get_user_info() throws Exception {
-        String token = utils.getTestAccessToken();
+        Mockito.when(userRepository.getUserByUsername(Mockito.any(String.class))).thenReturn(Optional.of(testUser));
 
-        mockMvc.perform(get("/users/me").header(AUTHORIZATION, TOKEN_PREFIX + token))
+        mockMvc.perform(get("/users/me").header(AUTHORIZATION, utils.getDefaultToken()))
                 .andExpectAll(status().isOk(),
-                        jsonPath("$.username").value(utils.getLoginDTO().username()),
-                        jsonPath("$.email").value(utils.getRegisterDTO().email()),
+                        jsonPath("$.username").value(testUser.getUsername()),
+                        jsonPath("$.email").value(testUser.getEmail()),
                         jsonPath("$.roles.[0]").value("USER"));
     }
 

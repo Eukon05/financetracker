@@ -1,53 +1,45 @@
 package com.eukon05.financetracker.integration;
 
+import com.eukon05.financetracker.email.usecase.EmailFacade;
+import com.eukon05.financetracker.user.User;
 import com.eukon05.financetracker.user.dto.RegisterDTO;
-import com.eukon05.financetracker.user.usecase.UserFacade;
-import org.junit.jupiter.api.BeforeEach;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.validation.Validator;
-
+import static com.eukon05.financetracker.integration.IntegrationTestsUtils.testUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class RegistrationTests extends AbstractIntegrationTest {
-
-    @Override
-    @BeforeEach
-    void setUp() {
-
-    }
 
     @Autowired
     private Validator validator;
 
     @Autowired
-    private UserFacade facade;
+    private EmailFacade emailFacade;
+
+    private static final RegisterDTO registerDTO = new RegisterDTO(testUser.getUsername(), "test2134", "test2134", testUser.getEmail());
 
     @Test
     void should_register_user() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/users")
-                        .content(objectMapper.writeValueAsString(utils.getRegisterDTO()))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+        makeRegisterRequest().andExpect(status().isCreated());
 
-        assertTrue(facade.checkUserExistsByUsername(utils.getRegisterDTO().username()));
+        Mockito.verify(userRepository).save(Mockito.any(User.class));
+        Mockito.verify(emailFacade).sendRegistrationEmail(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
+
     }
 
     @Test
     void should_validate_user_already_exists() throws Exception {
-        utils.registerTestUser();
+        Mockito.when(userRepository.existsByUsername(registerDTO.username())).thenReturn(true);
+        Mockito.when(userRepository.existsByEmail(registerDTO.username())).thenReturn(true);
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/users")
-                        .content(objectMapper.writeValueAsString(utils.getRegisterDTO()))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isConflict());
+        makeRegisterRequest().andExpect(status().isConflict());
     }
 
     @Test
@@ -72,6 +64,13 @@ class RegistrationTests extends AbstractIntegrationTest {
     void should_validate_blank_fields() {
         RegisterDTO dto = new RegisterDTO(" ", " ", " ", " ");
         assertEquals(6, validator.validate(dto).size());
+    }
+
+    private ResultActions makeRegisterRequest() throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders
+                .post("/users")
+                .content(objectMapper.writeValueAsString(registerDTO))
+                .contentType(MediaType.APPLICATION_JSON));
     }
 
 }

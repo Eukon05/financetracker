@@ -1,7 +1,9 @@
 package com.eukon05.financetracker.handler;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -13,7 +15,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,7 @@ class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
     private static final String MESSAGE_VALIDATION_ERROR = "Validation error";
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         List<String> errors = new ArrayList<>();
 
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
@@ -42,8 +43,8 @@ class GlobalControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     protected ResponseEntity<Object> handleResponseStatusException(ResponseStatusException ex, HttpServletRequest request) {
-        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(ex.getStatus(), ex.getReason(), Collections.emptyList(), request.getRequestURI());
-        return new ResponseEntity<>(apiErrorDTO, ex.getStatus());
+        ApiErrorDTO apiErrorDTO = new ApiErrorDTO(HttpStatus.resolve(ex.getStatusCode().value()), ex.getReason(), Collections.emptyList(), request.getRequestURI());
+        return new ResponseEntity<>(apiErrorDTO, ex.getStatusCode());
     }
 
 }

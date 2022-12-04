@@ -1,7 +1,7 @@
 package com.eukon05.financetracker.wallet;
 
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
-import com.eukon05.financetracker.transaction.usecase.TransactionFacade;
+import com.eukon05.financetracker.transaction.usecase.transaction.TransactionFacade;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
@@ -10,15 +10,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.api.annotations.ParameterObject;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 

@@ -10,13 +10,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.security.Principal;
 
 @RestController
@@ -67,6 +67,19 @@ class UserController {
     })
     void updatePassword(Principal principal, @Valid @RequestBody UpdatePasswordDTO dto, HttpServletRequest request) {
         userFacade.updateUserPassword(principal.getName(), dto.password(), request.getRequestURL().toString().replace("/users/me/password", ""));
+    }
+
+    @PostMapping("/admin")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Register an administrator account")
+    @SecurityRequirements
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "409", ref = "conflict"),
+            @ApiResponse(responseCode = "400", ref = "validation"),
+            @ApiResponse(responseCode = "401", ref = "unauthorized")
+    })
+    void createAdmin(@RequestParam(name = "masterPassword") String masterPassword, RegisterDTO dto, HttpServletRequest request) {
+        userFacade.createAdmin(masterPassword, dto, request.getRequestURL().toString().replace("/users/admin", ""));
     }
 
 }

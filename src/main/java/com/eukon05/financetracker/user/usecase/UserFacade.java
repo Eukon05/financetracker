@@ -12,9 +12,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserFacade {
-
     private final CreateUserUseCase createUserUseCase;
-    private final CheckUserExistsUseCase checkUserExistsUseCase;
     private final GetUserUseCase getUserUseCase;
     private final UpdateUserEmailUseCase updateUserEmailUseCase;
     private final UpdateUserPasswordUseCase updateUserPasswordUseCase;
@@ -23,10 +21,6 @@ public class UserFacade {
 
     public void createUser(RegisterDTO dto, String rootUrl) {
         createUserUseCase.createUser(dto, rootUrl);
-    }
-
-    public boolean checkUserExistsByUsername(String username) {
-        return checkUserExistsUseCase.checkUserExistsByUsername(username);
     }
 
     public User getUserByUsernameOrThrow(String username) {
@@ -53,5 +47,8 @@ public class UserFacade {
         deleteMultipleUsersUseCase.deleteMultipleUsers(users);
     }
 
+    public void createAdmin(String masterPassword, RegisterDTO dto, String rootUrl) {
+        createUserUseCase.createAdminUser(masterPassword, dto, rootUrl);
+    }
 
 }

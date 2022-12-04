@@ -1,10 +1,10 @@
 package com.eukon05.financetracker.token;
 
 import com.eukon05.financetracker.user.User;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;

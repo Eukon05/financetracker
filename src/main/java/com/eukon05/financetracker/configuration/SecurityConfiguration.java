@@ -1,6 +1,7 @@
 package com.eukon05.financetracker.configuration;
 
 import com.eukon05.financetracker.jwt.JwtToAuthenticationConverter;
+import com.eukon05.financetracker.user.RoleType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,11 +37,14 @@ class SecurityConfiguration {
         http.logout().invalidateHttpSession(true).clearAuthentication(true).permitAll();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests(auth -> {
-            auth.antMatchers(HttpMethod.POST, "/users").permitAll();
-            auth.antMatchers("/users/**").authenticated();
-            auth.antMatchers("/transactions/**").authenticated();
-            auth.antMatchers("/wallets/**").authenticated();
+        http.authorizeHttpRequests(auth -> {
+            auth.requestMatchers(HttpMethod.POST, "/users").permitAll();
+            auth.requestMatchers(HttpMethod.POST, "/users/admin").permitAll();
+            auth.requestMatchers("/users/**").authenticated();
+            auth.requestMatchers("/transactions/**").authenticated();
+            auth.requestMatchers("/wallets/**").authenticated();
+            auth.requestMatchers(HttpMethod.GET, "/categories/**").authenticated();
+            auth.requestMatchers("/categories/**").hasAuthority(RoleType.ADMIN.name());
             auth.anyRequest().permitAll();
         });
 
@@ -51,7 +55,7 @@ class SecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return web -> web.ignoring().antMatchers("/refresh");
+        return web -> web.ignoring().requestMatchers("/refresh");
     }
 
     @Bean

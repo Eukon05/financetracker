@@ -1,5 +1,7 @@
-package com.eukon05.financetracker.transaction.usecase;
+package com.eukon05.financetracker.transaction.usecase.transaction;
 
+import com.eukon05.financetracker.transaction.Transaction;
+import com.eukon05.financetracker.transaction.TransactionCategory;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.mapper.TransactionModelMapper;
 import com.eukon05.financetracker.wallet.Wallet;
@@ -14,7 +16,9 @@ class CreateTransactionUseCaseImpl implements CreateTransactionUseCase {
 
     @Override
     @Transactional
-    public void createTransaction(Wallet wallet, CreateTransactionDTO dto) {
-        wallet.getTransactions().add(mapper.mapCreateTransactionDTOtoTransaction(dto));
+    public void createTransaction(Wallet wallet, TransactionCategory category, CreateTransactionDTO dto) {
+        Transaction transaction = mapper.mapCreateTransactionDTOtoTransaction(dto);
+        transaction.setCategory(category);
+        wallet.getTransactions().add(transaction);
     }
 }
