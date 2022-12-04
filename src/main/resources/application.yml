@@ -35,3 +35,5 @@ server:
 springdoc:
   api-docs:
     path: /api-docs
+
+masterPassword: thisisamasterpass

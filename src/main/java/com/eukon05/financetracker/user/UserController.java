@@ -69,4 +69,17 @@ class UserController {
         userFacade.updateUserPassword(principal.getName(), dto.password(), request.getRequestURL().toString().replace("/users/me/password", ""));
     }
 
+    @PostMapping("/admin")
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Register an administrator account")
+    @SecurityRequirements
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "409", ref = "conflict"),
+            @ApiResponse(responseCode = "400", ref = "validation"),
+            @ApiResponse(responseCode = "401", ref = "unauthorized")
+    })
+    void createAdmin(@RequestParam(name = "masterPassword") String masterPassword, RegisterDTO dto, HttpServletRequest request) {
+        userFacade.createAdmin(masterPassword, dto, request.getRequestURL().toString().replace("/users/admin", ""));
+    }
+
 }

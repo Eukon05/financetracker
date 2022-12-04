@@ -7,10 +7,14 @@ import com.eukon05.financetracker.user.RoleType;
 import com.eukon05.financetracker.user.User;
 import com.eukon05.financetracker.user.UserRepository;
 import com.eukon05.financetracker.user.dto.RegisterDTO;
+import com.eukon05.financetracker.user.exception.AdminUserAlreadyExistsException;
 import com.eukon05.financetracker.user.exception.EmailTakenException;
 import com.eukon05.financetracker.user.exception.UsernameTakenException;
 import com.eukon05.financetracker.user.mapper.UserModelMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -21,8 +25,11 @@ class CreateUserUseCaseImpl implements CreateUserUseCase {
     private final EmailFacade emailFacade;
     private final UserRepository userRepository;
 
+    @Value("${masterPassword}")
+    private String masterPassword;
+
     @Override
-    public void createUser(RegisterDTO dto, String rootUrl) {
+    public User createUser(RegisterDTO dto, String rootUrl) {
 
         if (userRepository.existsByEmail(dto.email())) {
             throw new EmailTakenException(dto.email());
@@ -38,6 +45,23 @@ class CreateUserUseCaseImpl implements CreateUserUseCase {
         userRepository.save(user);
 
         emailFacade.sendRegistrationEmail(dto.username(), dto.email(), rootUrl, token.getId());
+
+        return user;
+    }
+
+    @Override
+    public void createAdminUser(String masterPassword, RegisterDTO dto, String rootUrl) {
+        if (!this.masterPassword.equals(masterPassword)) {
+            throw new AccessDeniedException(HttpStatus.UNAUTHORIZED.getReasonPhrase());
+        }
+
+        if (userRepository.existsByRolesContaining(RoleType.ADMIN)) {
+            throw new AdminUserAlreadyExistsException();
+        }
+
+        User user = createUser(dto, rootUrl);
+        user.getRoles().add(RoleType.ADMIN);
+        userRepository.save(user);
     }
 
 }
