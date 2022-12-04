@@ -30,8 +30,8 @@ wallets.
 - IntelliJ IDEA
 - Postman
 - JUnit 5 + Mockito
+- H2 Embedded Database (for testing)
 - [MailDev (for testing)](https://maildev.github.io/maildev/)
-- [TestContainers](https://www.testcontainers.org/)
 - [SpringDoc](https://springdoc.org/)
 - [MapStruct](https://mapstruct.org/)
 - [exchangerate.host (for pulling currency exchange rates)](https://exchangerate.host/#/)
