@@ -12,7 +12,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserFacade {
-
     private final CreateUserUseCase createUserUseCase;
     private final GetUserUseCase getUserUseCase;
     private final UpdateUserEmailUseCase updateUserEmailUseCase;
@@ -48,5 +47,8 @@ public class UserFacade {
         deleteMultipleUsersUseCase.deleteMultipleUsers(users);
     }
 
+    public void createAdmin(String masterPassword, RegisterDTO dto, String rootUrl) {
+        createUserUseCase.createAdminUser(masterPassword, dto, rootUrl);
+    }
 
 }
