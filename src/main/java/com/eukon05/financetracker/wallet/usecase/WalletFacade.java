@@ -6,6 +6,7 @@ import com.eukon05.financetracker.wallet.Wallet;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import com.eukon05.financetracker.wallet.mapper.WalletModelMapper;
+import com.eukon05.financetracker.wallet.projection.WalletStatisticProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class WalletFacade {
     private final EditWalletUseCase editWalletUseCase;
     private final GetUserWalletDTOsUseCase getUserWalletDTOsUseCase;
     private final GetWalletByIdUseCase getWalletByIdUseCase;
+    private final GetWalletStatisticsUseCase getWalletStatisticsUseCase;
 
     public void createWallet(String username, String name, String currency) {
         User user = userFacade.getUserByUsernameOrThrow(username);
@@ -54,6 +56,15 @@ public class WalletFacade {
     public Wallet getWalletById(String username, long walletID) {
         User user = userFacade.getUserByUsernameOrThrow(username);
         return getWalletByIdUseCase.getWalletById(user, walletID);
+    }
+
+    public List<WalletStatisticProjection> getWalletStatisticsById(String username, long walletID, Long categoryID) {
+        Wallet wallet = getWalletById(username, walletID);
+
+        if (categoryID != null)
+            return List.of(getWalletStatisticsUseCase.getWalletStatisticsForCategory(wallet, categoryID));
+
+        return getWalletStatisticsUseCase.getWalletStatistics(wallet);
     }
 
 }
