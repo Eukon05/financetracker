@@ -2,8 +2,10 @@ package com.eukon05.financetracker.integration;
 
 import com.eukon05.financetracker.transaction.TransactionRepository;
 import com.eukon05.financetracker.wallet.Wallet;
+import com.eukon05.financetracker.wallet.WalletStatisticRepository;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
+import com.eukon05.financetracker.wallet.projection.WalletStatisticProjection;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +30,25 @@ class WalletTests extends AbstractIntegrationTest {
 
     @MockBean
     private TransactionRepository transactionRepository;
+
+    @MockBean
+    private WalletStatisticRepository statisticRepository;
+
+    private static final WalletStatisticProjection projection;
+
+    static {
+        projection = new WalletStatisticProjection() {
+            @Override
+            public long getCategoryID() {
+                return testTransaction.getId();
+            }
+
+            @Override
+            public BigDecimal getSum() {
+                return testTransaction.getValue();
+            }
+        };
+    }
 
     @Test
     void should_create_a_new_wallet() throws Exception {
@@ -102,6 +124,28 @@ class WalletTests extends AbstractIntegrationTest {
         mockMvc.perform(get("/wallets/1/transactions")
                         .header(AUTHORIZATION, utils.getDefaultToken()))
                 .andExpectAll(status().isOk(), jsonPath("$.content.[0].name").value(testTransaction.getName()));
+    }
+
+    @Test
+    void should_get_wallet_statistics() throws Exception {
+        Mockito.when(userRepository.getUserByUsername(Mockito.any(String.class))).thenReturn(Optional.of(testUser));
+        Mockito.when(statisticRepository.getWalletStatistics(Mockito.any(Wallet.class))).thenReturn(List.of(projection));
+
+        mockMvc.perform(get("/wallets/1/statistics")
+                        .header(AUTHORIZATION, utils.getDefaultToken()))
+                .andExpectAll(status().isOk(), jsonPath("$.[0].categoryID").value(testTransaction.getId()),
+                        jsonPath("$.[0].sum").value(testTransaction.getValue()));
+    }
+
+    @Test
+    void should_get_wallet_statistics_for_category() throws Exception {
+        Mockito.when(userRepository.getUserByUsername(Mockito.any(String.class))).thenReturn(Optional.of(testUser));
+        Mockito.when(statisticRepository.getWalletStatisticsForCategory(Mockito.any(Wallet.class), Mockito.anyLong())).thenReturn(projection);
+
+        mockMvc.perform(get("/wallets/1/statistics?categoryID=0")
+                        .header(AUTHORIZATION, utils.getDefaultToken()))
+                .andExpectAll(status().isOk(), jsonPath("$.[0].categoryID").value(testTransaction.getId()),
+                        jsonPath("$.[0].sum").value(testTransaction.getValue()));
     }
 
     private ResultActions createTestWallet(CreateWalletDTO dto) throws Exception {

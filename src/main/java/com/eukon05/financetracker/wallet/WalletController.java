@@ -5,6 +5,7 @@ import com.eukon05.financetracker.transaction.usecase.transaction.TransactionFac
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
+import com.eukon05.financetracker.wallet.projection.WalletStatisticProjection;
 import com.eukon05.financetracker.wallet.usecase.WalletFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -105,6 +106,11 @@ class WalletController {
     )
     Page<TransactionDTO> getTransactions(Principal principal, @PathVariable long walletID, @ParameterObject Pageable pageable) {
         return transactionFacade.getPagedTransactionDTOsForWallet(principal.getName(), walletID, pageable);
+    }
+
+    @GetMapping(value = "/{walletID}/statistics")
+    List<WalletStatisticProjection> getWalletStatistics(Principal principal, @PathVariable long walletID, @RequestParam(name = "categoryID", required = false) Long categoryID) {
+        return walletFacade.getWalletStatisticsById(principal.getName(), walletID, categoryID);
     }
 
 }
