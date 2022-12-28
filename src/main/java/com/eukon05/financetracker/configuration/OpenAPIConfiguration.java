@@ -24,14 +24,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @OpenAPIDefinition(
         info = @Info(
                 title = "Finance Tracker API",
-                version = "V1.2",
+                version = "V1",
                 description = "A simple API for managing expenses and incomes",
                 license = @License(name = "MIT License", url = "https://github.com/Eukon05/financetracker/blob/master/LICENSE.md")
         ),
-        security = @SecurityRequirement(name = "Keycloak Access Token Authentication")
+        security = @SecurityRequirement(name = "Access Token Authentication")
 )
 @SecurityScheme(
-        name = "Keycloak Access Token Authentication",
+        name = "Access Token Authentication",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        scheme = "bearer"
+)
+@SecurityScheme(
+        name = "Refresh Token Authentication",
         type = SecuritySchemeType.HTTP,
         bearerFormat = "JWT",
         scheme = "bearer"

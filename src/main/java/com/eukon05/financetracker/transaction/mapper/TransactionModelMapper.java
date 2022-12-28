@@ -12,7 +12,7 @@ public interface TransactionModelMapper {
     Transaction mapCreateTransactionDTOtoTransaction(CreateTransactionDTO dto);
 
     @Mapping(source = "wallet.id", target = "walletID")
-    @Mapping(source = "category.id", target = "categoryID")
+    @Mapping(source = "category.name", target = "categoryName")
     TransactionDTO mapTransactionToTransactionDTO(Transaction transaction);
 
 }

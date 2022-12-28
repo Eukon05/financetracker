@@ -3,7 +3,7 @@ package com.eukon05.financetracker.transaction;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionCategoryDTO;
-import com.eukon05.financetracker.transaction.service.transactionCategory.TransactionCategoryService;
+import com.eukon05.financetracker.transaction.usecase.transactionCategory.TransactionCategoryFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,7 +21,7 @@ import java.util.List;
 @Tag(name = "Transaction Category", description = "Handles operations related to transaction categories")
 class TransactionCategoryController {
 
-    private final TransactionCategoryService facade;
+    private final TransactionCategoryFacade facade;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
