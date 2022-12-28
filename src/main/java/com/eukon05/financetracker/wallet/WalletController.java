@@ -1,12 +1,11 @@
 package com.eukon05.financetracker.wallet;
 
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
-import com.eukon05.financetracker.transaction.service.transaction.TransactionService;
+import com.eukon05.financetracker.transaction.usecase.transaction.TransactionFacade;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
-import com.eukon05.financetracker.wallet.projection.WalletStatisticProjection;
-import com.eukon05.financetracker.wallet.service.WalletService;
+import com.eukon05.financetracker.wallet.usecase.WalletFacade;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -18,10 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -30,8 +28,8 @@ import java.util.List;
 @Tag(name = "Wallet", description = "Handles operations related to wallets")
 class WalletController {
 
-    private final WalletService walletService;
-    private final TransactionService transactionService;
+    private final WalletFacade walletFacade;
+    private final TransactionFacade transactionFacade;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,8 +41,8 @@ class WalletController {
                     @ApiResponse(responseCode = "409", ref = "conflict")
             }
     )
-    void createWallet(@RequestBody @Valid CreateWalletDTO dto, @AuthenticationPrincipal Jwt jwt) {
-        walletService.createWallet(jwt.getSubject(), dto);
+    void createWallet(@RequestBody @Valid CreateWalletDTO dto, Principal principal) {
+        walletFacade.createWallet(principal.getName(), dto.name(), dto.currency());
     }
 
     @DeleteMapping("/{walletID}")
@@ -56,8 +54,8 @@ class WalletController {
                     @ApiResponse(responseCode = "401", ref = "unauthorized")
             }
     )
-    void deleteWallet(@PathVariable long walletID, @AuthenticationPrincipal Jwt jwt) {
-        walletService.deleteWallet(jwt.getSubject(), walletID);
+    void deleteWallet(@PathVariable long walletID, Principal principal) {
+        walletFacade.deleteWallet(principal.getName(), walletID);
     }
 
     @PutMapping("/{walletID}")
@@ -71,16 +69,16 @@ class WalletController {
                     @ApiResponse(responseCode = "409", ref = "conflict")
             }
     )
-    void editWallet(@PathVariable long walletID, @RequestBody @Valid EditWalletDTO dto, @AuthenticationPrincipal Jwt jwt) {
-        walletService.editWallet(jwt.getSubject(), walletID, dto);
+    void editWallet(@PathVariable long walletID, @RequestBody @Valid EditWalletDTO dto, Principal principal) {
+        walletFacade.editWallet(principal.getName(), walletID, dto);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get information about all wallets")
     @ApiResponse(responseCode = "401", ref = "unauthorized")
-    List<WalletDTO> getYourWallets(@AuthenticationPrincipal Jwt jwt) {
-        return walletService.getUserWalletDTOs(jwt.getSubject());
+    List<WalletDTO> getYourWallets(Principal principal) {
+        return walletFacade.getUserWalletDTOs(principal.getName());
     }
 
     @GetMapping(value = "/{walletID}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -92,8 +90,8 @@ class WalletController {
                     @ApiResponse(responseCode = "401", ref = "unauthorized")
             }
     )
-    WalletDTO getWallet(@AuthenticationPrincipal Jwt jwt, @PathVariable long walletID) {
-        return walletService.getWalletDTOById(jwt.getSubject(), walletID);
+    WalletDTO getWallet(Principal principal, @PathVariable long walletID) {
+        return walletFacade.getWalletDTOById(principal.getName(), walletID);
     }
 
     @GetMapping(value = "/{walletID}/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -105,13 +103,8 @@ class WalletController {
                     @ApiResponse(responseCode = "401", ref = "unauthorized")
             }
     )
-    Page<TransactionDTO> getTransactions(@AuthenticationPrincipal Jwt jwt, @PathVariable long walletID, @ParameterObject Pageable pageable) {
-        return transactionService.getPagedTransactionDTOsForWallet(jwt.getSubject(), walletID, pageable);
-    }
-
-    @GetMapping(value = "/{walletID}/statistics")
-    List<WalletStatisticProjection> getWalletStatistics(@AuthenticationPrincipal Jwt jwt, @PathVariable long walletID, @RequestParam(name = "categoryID", required = false) Long categoryID) {
-        return walletService.getWalletStatisticsById(jwt.getSubject(), walletID, categoryID);
+    Page<TransactionDTO> getTransactions(Principal principal, @PathVariable long walletID, @ParameterObject Pageable pageable) {
+        return transactionFacade.getPagedTransactionDTOsForWallet(principal.getName(), walletID, pageable);
     }
 
 }

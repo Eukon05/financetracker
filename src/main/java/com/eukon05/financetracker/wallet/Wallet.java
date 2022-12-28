@@ -1,6 +1,7 @@
 package com.eukon05.financetracker.wallet;
 
 import com.eukon05.financetracker.transaction.Transaction;
+import com.eukon05.financetracker.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Wallet {
 
-    public Wallet(String userId, String name, String currency) {
-        this.userId = userId;
+    public Wallet(String name, String currency) {
         this.name = name;
         this.currency = currency;
     }
@@ -27,7 +27,8 @@ public class Wallet {
 
     private String name;
 
-    private String userId;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private User user;
 
     private String currency;
 
