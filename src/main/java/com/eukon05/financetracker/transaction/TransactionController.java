@@ -3,7 +3,7 @@ package com.eukon05.financetracker.transaction;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
-import com.eukon05.financetracker.transaction.usecase.transaction.TransactionFacade;
+import com.eukon05.financetracker.transaction.service.transaction.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,9 +12,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/transactions")
@@ -22,7 +22,7 @@ import java.security.Principal;
 @Tag(name = "Transaction", description = "Handles operations related to transactions")
 class TransactionController {
 
-    private final TransactionFacade facade;
+    private final TransactionService facade;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,8 +32,8 @@ class TransactionController {
             @ApiResponse(responseCode = "401", ref = "unauthorized"),
             @ApiResponse(responseCode = "404", ref = "notfound")
     })
-    void createTransaction(@RequestBody @Valid CreateTransactionDTO dto, Principal principal) {
-        facade.createTransaction(principal.getName(), dto);
+    void createTransaction(@RequestBody @Valid CreateTransactionDTO dto, @AuthenticationPrincipal Jwt jwt) {
+        facade.createTransaction(jwt.getSubject(), dto);
     }
 
     @DeleteMapping("/{transactionID}")
@@ -43,8 +43,8 @@ class TransactionController {
             @ApiResponse(responseCode = "401", ref = "unauthorized"),
             @ApiResponse(responseCode = "404", ref = "notfound")
     })
-    void deleteTransaction(@PathVariable long transactionID, Principal principal) {
-        facade.deleteTransaction(principal.getName(), transactionID);
+    void deleteTransaction(@PathVariable long transactionID, @AuthenticationPrincipal Jwt jwt) {
+        facade.deleteTransaction(jwt.getSubject(), transactionID);
     }
 
     @GetMapping(value = "/{transactionID}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,8 +54,8 @@ class TransactionController {
             @ApiResponse(responseCode = "401", ref = "unauthorized"),
             @ApiResponse(responseCode = "404", ref = "notfound")
     })
-    TransactionDTO getTransaction(@PathVariable long transactionID, Principal principal) {
-        return facade.getTransactionDTOById(principal.getName(), transactionID);
+    TransactionDTO getTransaction(@PathVariable long transactionID, @AuthenticationPrincipal Jwt jwt) {
+        return facade.getTransactionDTOById(jwt.getSubject(), transactionID);
     }
 
     @PutMapping("/{transactionID}")
@@ -66,8 +66,8 @@ class TransactionController {
             @ApiResponse(responseCode = "401", ref = "unauthorized"),
             @ApiResponse(responseCode = "404", ref = "notfound")
     })
-    void editTransaction(@PathVariable long transactionID, Principal principal, @RequestBody @Valid EditTransactionDTO dto) {
-        facade.editTransaction(principal.getName(), transactionID, dto);
+    void editTransaction(@PathVariable long transactionID, @AuthenticationPrincipal Jwt jwt, @RequestBody @Valid EditTransactionDTO dto) {
+        facade.editTransaction(jwt.getSubject(), transactionID, dto);
     }
 
 }
