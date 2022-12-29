@@ -19,7 +19,7 @@ It's a project meant to provide an insight into my current knowledge on creating
 - Managing multiple transactions across different wallets, each with a name, value/price and category
 - Converting wallets from one currency to another, based on real currency exchange rates
 - Generating wallet statistics, grouped by transaction categories
-- Social media login support (required manual setup in Keycloak)
+- Social media login support (requires manual setup in Keycloak)
 
 ## Tools and dependencies
 
@@ -62,7 +62,7 @@ You can set up a development environment with Docker:
 5. Click on `Create Realm` and select the file `realm-export.json` (it's present in the docker/keycloak folder)
 
 After these steps, you should have a fully functional development environment running on your machine.  
-If you've modified the `.env` file, remember to modify `appilication.yml` file in the source code accordingly.
+If you've modified the `.env` file, remember to modify `application.yml` file in the source code accordingly.
 
 ### Deploy to production
 
