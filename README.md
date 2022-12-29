@@ -15,9 +15,11 @@ It's a project meant to provide an insight into my current knowledge on creating
 
 ## Features
 
-My goal for this project is to allow its users to keep a history of their incomes and expenses across multiple
-wallets.  
-[Check out my GitHub project page to see, which features are implemented and which are still in the process of being added](https://github.com/users/Eukon05/projects/3)
+- Managing multiple wallets, each with a given name and currency
+- Managing transactions across different wallets, each with its own name, value/price and category attached to it
+- Migrating a wallet from one currency to another by using real currency exchange rates from the day every transaction
+  was added to the app.
+- Social media login with a properly configured Keycloak server
 
 ## Tools and dependencies
 
@@ -30,24 +32,23 @@ wallets.
 - IntelliJ IDEA
 - Postman
 - JUnit 5 + Mockito
-- H2 Embedded Database (for testing)
-- [MailDev (for testing)](https://maildev.github.io/maildev/)
 - [SpringDoc](https://springdoc.org/)
 - [MapStruct](https://mapstruct.org/)
 - [exchangerate.host (for pulling currency exchange rates)](https://exchangerate.host/#/)
+- Keycloak
 
 ## How to use
 
+In order to use the API, you need to retrieve an access token from your Keycloak server.  
+Then, you can use Postman or a similar tool to make requests. Every request requires the `Authorization` field to be set
+to `Bearer yourkeycloaktokenhere`
+
 OpenAPI documentation is available after deployment on the URL below:  
-`[root]:8080/api/v1/api-docs`  
+`[root]:[port]/api/v1/api-docs`  
 You can also view interactive Swagger UI here:  
-`[root]:8080/api/v1/swagger-ui.html`
+`[root]:[port]/api/v1/swagger-ui.html`
 
 ## How to deploy
 
-You can deploy Finance Tracker with Docker:
-
-1. Download `docker-compose.yml` file from this repo and save it in an empty folder
-2. Modify the file to contain your e-mail credentials and server address. I also **STRONGLY** recommend changing the
-   default database and JWT settings!
-3. Open a new terminal window inside the folder containing the `.yml` file and run: `docker-compose up`
+Due to issues with Keycloak and Docker, I won't be providing instructions on how to deploy the app as of now.  
+As soon as I'll resolve these issues, I'll update this file to contain detailed deployment instructions.
