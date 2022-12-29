@@ -15,9 +15,11 @@ It's a project meant to provide an insight into my current knowledge on creating
 
 ## Features
 
-My goal for this project is to allow its users to keep a history of their incomes and expenses across multiple
-wallets.  
-[Check out my GitHub project page to see, which features are implemented and which are still in the process of being added](https://github.com/users/Eukon05/projects/3)
+- Managing multiple wallets, each with its own name and currency
+- Managing multiple transactions across different wallets, each with a name, value/price and category
+- Converting wallets from one currency to another, based on real currency exchange rates
+- Generating wallet statistics, grouped by transaction categories
+- Social media login support (required manual setup in Keycloak)
 
 ## Tools and dependencies
 
@@ -30,13 +32,17 @@ wallets.
 - IntelliJ IDEA
 - Postman
 - JUnit 5 + Mockito
-- H2 Embedded Database (for testing)
-- [MailDev (for testing)](https://maildev.github.io/maildev/)
 - [SpringDoc](https://springdoc.org/)
 - [MapStruct](https://mapstruct.org/)
 - [exchangerate.host (for pulling currency exchange rates)](https://exchangerate.host/#/)
+- Keycloak
 
 ## How to use
+
+In order to use the API, you'll need to retrieve an access token from your Keycloak server.  
+You can find instructions on how to do
+it [here](https://sis-cc.gitlab.io/dotstatsuite-documentation/configurations/authentication/token-in-postman/).  
+Every request to the API requires a `Bearer` type `Authorization` header with your Keycloak token.
 
 OpenAPI documentation is available after deployment on the URL below:  
 `[root]:8080/api/v1/api-docs`  
@@ -45,9 +51,27 @@ You can also view interactive Swagger UI here:
 
 ## How to deploy
 
-You can deploy Finance Tracker with Docker:
+### Deploy a development environment
 
-1. Download `docker-compose.yml` file from this repo and save it in an empty folder
-2. Modify the file to contain your e-mail credentials and server address. I also **STRONGLY** recommend changing the
-   default database and JWT settings!
-3. Open a new terminal window inside the folder containing the `.yml` file and run: `docker-compose up`
+You can set up a development environment with Docker:
+
+1. Download the `docker` folder from this repository
+2. Modify the `.env` file to suit your needs
+3. Run `docker compose up` to start up the database and Keycloak
+4. Go to [your Keycloak dashboard](http://localhost:8180) and login with credentials from the `.env` file
+5. Click on `Create Realm` and select the file `realm-export.json` (it's present in the docker/keycloak folder)
+
+After these steps, you should have a fully functional development environment running on your machine.  
+If you've modified the `.env` file, remember to modify `appilication.yml` file in the source code accordingly.
+
+### Deploy to production
+
+While deploying to production, you need to manually download and install Keycloak on your machine.  
+That's because the compose image uses Keycloak in development mode, which, according to Keycloak documentation, is not
+secure and shouldn't be used in production.
+
+After your database and Keycloak are up and running, download the latest release ZIP file
+from [here](https://github.com/Eukon05/financetracker/releases).
+
+Now, you have a few options on how to pass your database and Keycloak credentials to the app.
+Instructions on how to do it are listed [here](https://www.baeldung.com/spring-properties-file-outside-jar) 

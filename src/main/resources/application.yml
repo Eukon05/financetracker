@@ -7,24 +7,11 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
-  mail:
-    host: localhost
-    port: 1025
-    username: mail@maildev.com
-    password: dev
-    properties:
-      smtp:
-        auth: true
-        starttls:
-          enable: true
-
-jwt:
-  access:
-    secret: access01234567890ABCDEFGHIJKLMNO
-    lifetimeMinutes: 15
-  refresh:
-    secret: 01234567890ABCDEFGHIJKLMNOrefresh
-    lifetimeMinutes: 240
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/finance
 
 server:
   servlet:
@@ -35,5 +22,3 @@ server:
 springdoc:
   api-docs:
     path: /api-docs
-
-masterPassword: thisisamasterpass
