@@ -13,6 +13,7 @@ import com.eukon05.financetracker.transaction.service.transactionCategory.Transa
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static com.eukon05.financetracker.unit.TestUtils.*;
@@ -75,6 +76,7 @@ class TransactionCategoryServiceTests {
 
     @Test
     void should_delete_category() {
+        testTransaction.setValue(BigDecimal.valueOf(-100));
         testTransaction.setCategory(testExpenseCategory);
         testExpenseCategory.getTransactions().add(testTransaction);
         Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(testExpenseCategory));

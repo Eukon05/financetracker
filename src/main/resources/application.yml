@@ -22,3 +22,6 @@ server:
 springdoc:
   api-docs:
     path: /api-docs
+  oAuthFlow:
+    authorizationUrl: ${spring.security.oauth2.resource-server.jwt.issuer-uri}/protocol/openid-connect/auth
+    tokenUrl: ${spring.security.oauth2.resource-server.jwt.issuer-uri}/protocol/openid-connect/token
