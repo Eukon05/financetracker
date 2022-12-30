@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
+import io.swagger.v3.oas.annotations.security.OAuthFlow;
+import io.swagger.v3.oas.annotations.security.OAuthFlows;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.Components;
@@ -28,13 +30,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
                 description = "A simple API for managing expenses and incomes",
                 license = @License(name = "MIT License", url = "https://github.com/Eukon05/financetracker/blob/master/LICENSE.md")
         ),
-        security = @SecurityRequirement(name = "Keycloak Access Token Authentication")
+        security = @SecurityRequirement(name = "security_auth")
 )
-@SecurityScheme(
-        name = "Keycloak Access Token Authentication",
-        type = SecuritySchemeType.HTTP,
-        bearerFormat = "JWT",
-        scheme = "bearer"
+@SecurityScheme(name = "security_auth", type = SecuritySchemeType.OAUTH2,
+        flows = @OAuthFlows(
+                authorizationCode = @OAuthFlow(
+                        authorizationUrl = "${springdoc.oAuthFlow.authorizationUrl}",
+                        tokenUrl = "${springdoc.oAuthFlow.tokenUrl}"
+                )
+        )
 )
 class OpenAPIConfiguration {
     @Bean
