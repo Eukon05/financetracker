@@ -33,7 +33,7 @@ final class TestUtils {
         testTransaction.setId(1);
         testTransaction.setName("TEST");
         testTransaction.setCategory(testDefaultCategory);
-        testTransaction.setValue(BigDecimal.valueOf(-120));
+        testTransaction.setValue(BigDecimal.valueOf(120));
         testTransaction.setWallet(testWallet);
         testTransaction.setCreatedAt(Instant.now());
         testWallet.getTransactions().add(testTransaction);
