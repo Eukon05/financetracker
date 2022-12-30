@@ -39,10 +39,10 @@ It's a project meant to provide an insight into my current knowledge on creating
 
 ## How to use
 
-In order to use the API, you'll need to retrieve an access token from your Keycloak server.  
-You can find instructions on how to do
-it [here](https://sis-cc.gitlab.io/dotstatsuite-documentation/configurations/authentication/token-in-postman/).  
-Every request to the API requires a `Bearer` type `Authorization` header with your Keycloak token.
+In order to use the API, you'll need to authenticate with your Keycloak server.  
+Instructions on how to do it in Postman
+are [here](https://sis-cc.gitlab.io/dotstatsuite-documentation/configurations/authentication/token-in-postman/).  
+If you're using Swagger UI, simply press the big `Authorize` button and follow the steps listed in the pop-up.
 
 OpenAPI documentation is available after deployment on the URL below:  
 `[root]:8080/api/v1/api-docs`  
