@@ -15,6 +15,7 @@ import com.eukon05.financetracker.wallet.projection.WalletStatisticProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,10 +74,18 @@ public class WalletService {
     public List<WalletStatisticProjection> getWalletStatisticsById(String userId, long walletID, Long categoryID) {
         Wallet wallet = getWalletById(userId, walletID);
 
-        if (categoryID != null)
-            return List.of(statisticRepository.getWalletStatisticsForCategory(wallet, categoryID));
+        if (categoryID != null) {
+            Optional<WalletStatisticProjection> projection = statisticRepository.getWalletStatisticsForCategory(wallet, categoryID);
+            List<WalletStatisticProjection> list = Collections.emptyList();
+
+            if (projection.isPresent())
+                list = List.of(projection.get());
+
+            return list;
+        }
 
         return statisticRepository.getWalletStatistics(wallet);
-    }
 
+    }
+    
 }
