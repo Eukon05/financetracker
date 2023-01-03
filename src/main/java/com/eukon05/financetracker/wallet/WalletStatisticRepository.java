@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface WalletStatisticRepository extends JpaRepository<Wallet, Long> {
 
@@ -13,6 +14,6 @@ public interface WalletStatisticRepository extends JpaRepository<Wallet, Long> {
     List<WalletStatisticProjection> getWalletStatistics(@Param("wallet") Wallet wallet);
 
     @Query("SELECT t.category.id as categoryID, SUM(t.value) as sum FROM Transaction t WHERE t.wallet = :wallet AND t.category.id = :categoryID GROUP BY categoryID")
-    WalletStatisticProjection getWalletStatisticsForCategory(@Param("wallet") Wallet wallet, @Param("categoryID") long categoryID);
+    Optional<WalletStatisticProjection> getWalletStatisticsForCategory(@Param("wallet") Wallet wallet, @Param("categoryID") long categoryID);
 
 }
