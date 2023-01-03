@@ -1,9 +1,8 @@
-package com.eukon05.financetracker.transaction;
+package com.eukon05.financetracker.transaction_category;
 
-import com.eukon05.financetracker.transaction.dto.CreateTransactionCategoryDTO;
-import com.eukon05.financetracker.transaction.dto.EditTransactionCategoryDTO;
-import com.eukon05.financetracker.transaction.dto.TransactionCategoryDTO;
-import com.eukon05.financetracker.transaction.service.transactionCategory.TransactionCategoryService;
+import com.eukon05.financetracker.transaction_category.dto.CreateTransactionCategoryDTO;
+import com.eukon05.financetracker.transaction_category.dto.EditTransactionCategoryDTO;
+import com.eukon05.financetracker.transaction_category.dto.TransactionCategoryDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

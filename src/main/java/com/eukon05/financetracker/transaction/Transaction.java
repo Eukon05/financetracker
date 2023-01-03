@@ -1,6 +1,7 @@
 package com.eukon05.financetracker.transaction;
 
-import com.eukon05.financetracker.transaction.exceptions.TransactionTypeMismatchException;
+import com.eukon05.financetracker.transaction.exception.TransactionTypeMismatchException;
+import com.eukon05.financetracker.transaction_category.TransactionCategory;
 import com.eukon05.financetracker.wallet.Wallet;
 import jakarta.persistence.*;
 import lombok.Data;

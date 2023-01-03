@@ -1,14 +1,14 @@
 package com.eukon05.financetracker.unit;
 
+import com.eukon05.financetracker.transaction.TransactionModelMapper;
+import com.eukon05.financetracker.transaction.TransactionModelMapperImpl;
 import com.eukon05.financetracker.transaction.TransactionRepository;
+import com.eukon05.financetracker.transaction.TransactionService;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
-import com.eukon05.financetracker.transaction.exceptions.TransactionTypeMismatchException;
-import com.eukon05.financetracker.transaction.mapper.TransactionModelMapper;
-import com.eukon05.financetracker.transaction.mapper.TransactionModelMapperImpl;
-import com.eukon05.financetracker.transaction.service.transaction.TransactionService;
-import com.eukon05.financetracker.transaction.service.transactionCategory.TransactionCategoryService;
-import com.eukon05.financetracker.wallet.service.WalletService;
+import com.eukon05.financetracker.transaction.exception.TransactionTypeMismatchException;
+import com.eukon05.financetracker.transaction_category.TransactionCategoryService;
+import com.eukon05.financetracker.wallet.WalletService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

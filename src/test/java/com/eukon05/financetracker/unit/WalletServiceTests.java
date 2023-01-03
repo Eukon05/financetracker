@@ -4,14 +4,10 @@ import com.eukon05.financetracker.wallet.*;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.exception.WalletNameTakenException;
-import com.eukon05.financetracker.wallet.mapper.WalletModelMapperImpl;
-import com.eukon05.financetracker.wallet.projection.WalletStatisticProjection;
-import com.eukon05.financetracker.wallet.service.WalletService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,25 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class WalletServiceTests {
 
     private final WalletRepository repository = Mockito.mock(WalletRepository.class);
-    private final WalletStatisticRepository statisticRepository = Mockito.mock(WalletStatisticRepository.class);
-    private final WalletModelMapperImpl mapper = new WalletModelMapperImpl();
+    private final WalletModelMapper mapper = new WalletModelMapperImpl();
     private final CurrencyConverter converter = new CurrencyConverterImpl(new ObjectMapper());
 
-    private final WalletService service = new WalletService(mapper, repository, statisticRepository, converter);
+    private final WalletService service = new WalletService(mapper, repository, converter);
 
     private static final CreateWalletDTO createDTO = new CreateWalletDTO("new wallet", "PLN");
     private static final EditWalletDTO editDTO = new EditWalletDTO("some name", "PLN");
-    private static final WalletStatisticProjection projection = new WalletStatisticProjection() {
-        @Override
-        public long getCategoryID() {
-            return 1;
-        }
-
-        @Override
-        public BigDecimal getSum() {
-            return BigDecimal.valueOf(10000);
-        }
-    };
 
     @Test
     void should_create_wallet() {
@@ -86,13 +70,6 @@ class WalletServiceTests {
         List<Wallet> list = List.of(testWallet);
         Mockito.when(repository.getWalletsByUserId(Mockito.anyString())).thenReturn(list);
         assertEquals(list.stream().map(mapper::mapWalletToWalletDTO).toList(), service.getUserWalletDTOs(Mockito.anyString()));
-    }
-
-    @Test
-    void should_get_wallet_statistics() {
-        Mockito.when(repository.getWalletByUserIdAndId(Mockito.anyString(), Mockito.anyLong())).thenReturn(Optional.of(testWallet));
-        Mockito.when(statisticRepository.getWalletStatistics(Mockito.any(Wallet.class))).thenReturn(List.of(projection));
-        assertEquals(List.of(projection), service.getWalletStatisticsById(userID, walletID, null));
     }
 
 }
