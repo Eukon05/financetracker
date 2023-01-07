@@ -1,16 +1,13 @@
-package com.eukon05.financetracker.transaction.service.transaction;
+package com.eukon05.financetracker.transaction;
 
-import com.eukon05.financetracker.transaction.Transaction;
-import com.eukon05.financetracker.transaction.TransactionCategory;
-import com.eukon05.financetracker.transaction.TransactionRepository;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
-import com.eukon05.financetracker.transaction.exceptions.TransactionNotFoundException;
-import com.eukon05.financetracker.transaction.mapper.TransactionModelMapper;
-import com.eukon05.financetracker.transaction.service.transactionCategory.TransactionCategoryService;
+import com.eukon05.financetracker.transaction.exception.TransactionNotFoundException;
+import com.eukon05.financetracker.transaction_category.TransactionCategory;
+import com.eukon05.financetracker.transaction_category.TransactionCategoryService;
 import com.eukon05.financetracker.wallet.Wallet;
-import com.eukon05.financetracker.wallet.service.WalletService;
+import com.eukon05.financetracker.wallet.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +21,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TransactionService {
     private final WalletService walletService;
-    private final TransactionCategoryService categoryFacade;
+    private final TransactionCategoryService categoryService;
     private final TransactionModelMapper mapper;
     private final TransactionRepository repository;
 
     @Transactional
     public void createTransaction(String userId, CreateTransactionDTO dto) {
         Wallet wallet = walletService.getWalletById(userId, dto.walletID());
-        TransactionCategory category = categoryFacade.getTransactionCategory(dto.categoryID());
+        TransactionCategory category = categoryService.getTransactionCategory(dto.categoryID());
 
         Transaction transaction = mapper.mapCreateTransactionDTOtoTransaction(dto);
         transaction.setCategory(category);
@@ -50,7 +47,7 @@ public class TransactionService {
     @Transactional
     public void editTransaction(String userId, long transactionID, EditTransactionDTO dto) {
         Transaction transaction = getTransactionById(userId, transactionID);
-        TransactionCategory category = categoryFacade.getTransactionCategory(dto.categoryID());
+        TransactionCategory category = categoryService.getTransactionCategory(dto.categoryID());
 
         Optional.ofNullable(dto.name()).ifPresent(transaction::setName);
         Optional.ofNullable(dto.value()).ifPresent(transaction::setValue);

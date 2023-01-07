@@ -1,12 +1,12 @@
 package com.eukon05.financetracker.wallet;
 
+import com.eukon05.financetracker.transaction.TransactionService;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
-import com.eukon05.financetracker.transaction.service.transaction.TransactionService;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
-import com.eukon05.financetracker.wallet.projection.WalletStatisticProjection;
-import com.eukon05.financetracker.wallet.service.WalletService;
+import com.eukon05.financetracker.wallet_statistic.WalletStatistic;
+import com.eukon05.financetracker.wallet_statistic.WalletStatisticService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,6 +32,7 @@ class WalletController {
 
     private final WalletService walletService;
     private final TransactionService transactionService;
+    private final WalletStatisticService statisticService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -110,8 +111,8 @@ class WalletController {
     }
 
     @GetMapping(value = "/{walletID}/statistics")
-    List<WalletStatisticProjection> getWalletStatistics(@AuthenticationPrincipal Jwt jwt, @PathVariable long walletID, @RequestParam(name = "categoryID", required = false) Long categoryID) {
-        return walletService.getWalletStatisticsById(jwt.getSubject(), walletID, categoryID);
+    List<WalletStatistic> getWalletStatistics(@AuthenticationPrincipal Jwt jwt, @PathVariable long walletID, @RequestParam(name = "categoryID", required = false) Long categoryID) {
+        return statisticService.getWalletStatisticsById(jwt.getSubject(), walletID, categoryID);
     }
 
 }

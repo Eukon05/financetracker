@@ -1,4 +1,4 @@
-package com.eukon05.financetracker.transaction;
+package com.eukon05.financetracker.transaction_category;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

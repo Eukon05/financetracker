@@ -1,4 +1,4 @@
-package com.eukon05.financetracker.transaction.dto;
+package com.eukon05.financetracker.transaction_category.dto;
 
 import jakarta.validation.constraints.Size;
 

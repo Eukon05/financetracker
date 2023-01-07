@@ -1,6 +1,5 @@
-package com.eukon05.financetracker.wallet.mapper;
+package com.eukon05.financetracker.wallet;
 
-import com.eukon05.financetracker.wallet.Wallet;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import org.mapstruct.Mapper;
 

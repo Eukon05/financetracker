@@ -1,1 +1,15 @@
 INSERT INTO category VALUES (0, 'No category', 'DEFAULT');
+INSERT INTO category VALUES (1, 'Current expenses', 'EXPENSE');
+INSERT INTO category VALUES (2, 'Entertainment and recreation', 'EXPENSE');
+INSERT INTO category VALUES (3, 'Transport', 'EXPENSE');
+INSERT INTO category VALUES (4, 'Bills', 'EXPENSE');
+INSERT INTO category VALUES (5, 'Clothes and accessories', 'EXPENSE');
+INSERT INTO category VALUES (6, 'House', 'EXPENSE');
+INSERT INTO category VALUES (7, 'Health', 'EXPENSE');
+INSERT INTO category VALUES (8, 'Education', 'EXPENSE');
+INSERT INTO category VALUES (9, 'For others', 'EXPENSE');
+INSERT INTO category VALUES (10, 'Taxes and fees', 'EXPENSE');
+INSERT INTO category VALUES (11, 'Children', 'EXPENSE');
+INSERT INTO category VALUES (12, 'Internal charges', 'EXPENSE');
+INSERT INTO category VALUES (13, 'External incomes', 'INCOME');
+INSERT INTO category VALUES (14, 'Internal incomes', 'INCOME');

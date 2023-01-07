@@ -1,15 +1,11 @@
-package com.eukon05.financetracker.transaction.service.transactionCategory;
+package com.eukon05.financetracker.transaction_category;
 
-import com.eukon05.financetracker.transaction.TransactionCategory;
-import com.eukon05.financetracker.transaction.TransactionCategoryRepository;
-import com.eukon05.financetracker.transaction.TransactionCategoryType;
-import com.eukon05.financetracker.transaction.dto.CreateTransactionCategoryDTO;
-import com.eukon05.financetracker.transaction.dto.EditTransactionCategoryDTO;
-import com.eukon05.financetracker.transaction.dto.TransactionCategoryDTO;
-import com.eukon05.financetracker.transaction.exceptions.DefaultTransactionCategoryModificationException;
-import com.eukon05.financetracker.transaction.exceptions.TransactionCategoryAlreadyExistsException;
-import com.eukon05.financetracker.transaction.exceptions.TransactionCategoryNotFoundException;
-import com.eukon05.financetracker.transaction.mapper.TransactionCategoryModelMapper;
+import com.eukon05.financetracker.transaction_category.dto.CreateTransactionCategoryDTO;
+import com.eukon05.financetracker.transaction_category.dto.EditTransactionCategoryDTO;
+import com.eukon05.financetracker.transaction_category.dto.TransactionCategoryDTO;
+import com.eukon05.financetracker.transaction_category.exception.DefaultTransactionCategoryModificationException;
+import com.eukon05.financetracker.transaction_category.exception.TransactionCategoryAlreadyExistsException;
+import com.eukon05.financetracker.transaction_category.exception.TransactionCategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

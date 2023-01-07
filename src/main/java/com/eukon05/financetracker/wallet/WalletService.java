@@ -1,17 +1,11 @@
-package com.eukon05.financetracker.wallet.service;
+package com.eukon05.financetracker.wallet;
 
 import com.eukon05.financetracker.transaction.Transaction;
-import com.eukon05.financetracker.wallet.CurrencyConverter;
-import com.eukon05.financetracker.wallet.Wallet;
-import com.eukon05.financetracker.wallet.WalletRepository;
-import com.eukon05.financetracker.wallet.WalletStatisticRepository;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import com.eukon05.financetracker.wallet.exception.WalletNameTakenException;
 import com.eukon05.financetracker.wallet.exception.WalletNotFoundException;
-import com.eukon05.financetracker.wallet.mapper.WalletModelMapper;
-import com.eukon05.financetracker.wallet.projection.WalletStatisticProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +17,6 @@ import java.util.Optional;
 public class WalletService {
     private final WalletModelMapper mapper;
     private final WalletRepository repository;
-    private final WalletStatisticRepository statisticRepository;
     private final CurrencyConverter converter;
 
     public void createWallet(String userId, CreateWalletDTO dto) {
@@ -68,15 +61,6 @@ public class WalletService {
 
     public Wallet getWalletById(String userId, long walletID) {
         return repository.getWalletByUserIdAndId(userId, walletID).orElseThrow(() -> new WalletNotFoundException(walletID));
-    }
-
-    public List<WalletStatisticProjection> getWalletStatisticsById(String userId, long walletID, Long categoryID) {
-        Wallet wallet = getWalletById(userId, walletID);
-
-        if (categoryID != null)
-            return List.of(statisticRepository.getWalletStatisticsForCategory(wallet, categoryID));
-
-        return statisticRepository.getWalletStatistics(wallet);
     }
 
 }

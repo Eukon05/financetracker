@@ -1,8 +1,7 @@
-package com.eukon05.financetracker.transaction.mapper;
+package com.eukon05.financetracker.transaction_category;
 
-import com.eukon05.financetracker.transaction.TransactionCategory;
-import com.eukon05.financetracker.transaction.dto.CreateTransactionCategoryDTO;
-import com.eukon05.financetracker.transaction.dto.TransactionCategoryDTO;
+import com.eukon05.financetracker.transaction_category.dto.CreateTransactionCategoryDTO;
+import com.eukon05.financetracker.transaction_category.dto.TransactionCategoryDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

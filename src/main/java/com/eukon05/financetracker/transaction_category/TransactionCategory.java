@@ -1,5 +1,6 @@
-package com.eukon05.financetracker.transaction;
+package com.eukon05.financetracker.transaction_category;
 
+import com.eukon05.financetracker.transaction.Transaction;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
