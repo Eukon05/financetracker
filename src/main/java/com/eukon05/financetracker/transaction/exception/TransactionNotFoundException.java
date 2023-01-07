@@ -1,4 +1,4 @@
-package com.eukon05.financetracker.transaction.exceptions;
+package com.eukon05.financetracker.transaction.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;

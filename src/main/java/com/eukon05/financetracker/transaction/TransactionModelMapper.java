@@ -1,6 +1,5 @@
-package com.eukon05.financetracker.transaction.mapper;
+package com.eukon05.financetracker.transaction;
 
-import com.eukon05.financetracker.transaction.Transaction;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
 import org.mapstruct.Mapper;

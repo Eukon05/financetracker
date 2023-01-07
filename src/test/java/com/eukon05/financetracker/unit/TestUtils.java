@@ -1,8 +1,8 @@
 package com.eukon05.financetracker.unit;
 
 import com.eukon05.financetracker.transaction.Transaction;
-import com.eukon05.financetracker.transaction.TransactionCategory;
-import com.eukon05.financetracker.transaction.TransactionCategoryType;
+import com.eukon05.financetracker.transaction_category.TransactionCategory;
+import com.eukon05.financetracker.transaction_category.TransactionCategoryType;
 import com.eukon05.financetracker.wallet.Wallet;
 
 import java.math.BigDecimal;
