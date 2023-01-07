@@ -37,3 +37,4 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/financetracker:latest
+          platforms: linux/amd64,linux/arm64/v8
