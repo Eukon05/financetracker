@@ -6,7 +6,7 @@ import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import com.eukon05.financetracker.wallet_statistic.WalletStatistic;
-import com.eukon05.financetracker.wallet_statistic.WalletStatisticService;
+import com.eukon05.financetracker.wallet_statistic.WalletStatisticServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -32,7 +32,7 @@ class WalletController {
 
     private final WalletService walletService;
     private final TransactionService transactionService;
-    private final WalletStatisticService statisticService;
+    private final WalletStatisticServiceImpl statisticService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

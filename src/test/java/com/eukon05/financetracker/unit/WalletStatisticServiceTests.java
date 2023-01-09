@@ -7,6 +7,7 @@ import com.eukon05.financetracker.wallet.WalletService;
 import com.eukon05.financetracker.wallet_statistic.WalletStatistic;
 import com.eukon05.financetracker.wallet_statistic.WalletStatisticRepository;
 import com.eukon05.financetracker.wallet_statistic.WalletStatisticService;
+import com.eukon05.financetracker.wallet_statistic.WalletStatisticServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -22,7 +23,7 @@ class WalletStatisticServiceTests {
     private final WalletService walletService = Mockito.mock(WalletService.class);
     private final WalletStatisticRepository repository = Mockito.mock(WalletStatisticRepository.class);
     private final TransactionCategoryService categoryService = Mockito.mock(TransactionCategoryService.class);
-    private final WalletStatisticService service = new WalletStatisticService(walletService, categoryService, repository);
+    private final WalletStatisticService service = new WalletStatisticServiceImpl(walletService, categoryService, repository);
 
     private static final WalletStatistic projection = new WalletStatistic() {
         @Override

@@ -1,9 +1,6 @@
 package com.eukon05.financetracker.unit;
 
-import com.eukon05.financetracker.transaction.TransactionModelMapper;
-import com.eukon05.financetracker.transaction.TransactionModelMapperImpl;
-import com.eukon05.financetracker.transaction.TransactionRepository;
-import com.eukon05.financetracker.transaction.TransactionService;
+import com.eukon05.financetracker.transaction.*;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.exception.TransactionTypeMismatchException;
@@ -24,7 +21,7 @@ class TransactionServiceTests {
     private final TransactionCategoryService categoryService = Mockito.mock(TransactionCategoryService.class);
     private final WalletService walletService = Mockito.mock(WalletService.class);
     private final TransactionModelMapper mapper = new TransactionModelMapperImpl();
-    private final TransactionService service = new TransactionService(walletService, categoryService, mapper, repository);
+    private final TransactionService service = new TransactionServiceImpl(walletService, categoryService, mapper, repository);
     private static final String userID = "SOMEUSERID";
     private static final CreateTransactionDTO createDTO = new CreateTransactionDTO(1, "somename", BigDecimal.valueOf(120), 0);
 
