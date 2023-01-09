@@ -70,8 +70,12 @@ While deploying to production, you need to manually download and install Keycloa
 That's because the compose image uses Keycloak in development mode, which, according to Keycloak documentation, is not
 secure and shouldn't be used in production.
 
-After your database and Keycloak are up and running, download the latest release ZIP file
-from [here](https://github.com/Eukon05/financetracker/releases).
+After your database and Keycloak are up and running, you can use a Docker image of the app to start it up.  
+Here's an example docker run command you can use:
 
-Now, you have a few options on how to pass your database and Keycloak credentials to the app.
-Instructions on how to do it are listed [here](https://www.baeldung.com/spring-properties-file-outside-jar) 
+```bash
+docker run --name finance -p 8080:8080 -e SPRING.DATASOURCE.URL=jdbc:postgresql://dburl/dbname -e SPRING.DATASOURCE.USERNAME=dbuser -e SPRING.DATASOURCE.PASSWORD=dbpass -e SPRING.SECURITY.OAUTH2.RESOURCE-SERVER.JWT.ISSUER-URI=keycloakurl/realms/keycloakrealm eukon/financetracker
+```
+
+Please make sure to replace parameters in the above command with your database and Keycloak details.  
+The image is compatible with AMD64 and ARM64 processors.
