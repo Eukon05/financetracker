@@ -1,4 +1,4 @@
-FROM openjdk:17-jdk-alpine
+FROM amazoncorretto:17.0.5
 
 ARG JAR_FILE=*.jar
 ADD target/${JAR_FILE} app.jar
