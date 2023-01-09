@@ -78,7 +78,7 @@ class TransactionCategoryController {
         facade.deleteTransactionCategory(id);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Edit transaction category with a given ID")
     @ApiResponses(

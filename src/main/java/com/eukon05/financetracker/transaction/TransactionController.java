@@ -57,7 +57,7 @@ class TransactionController {
         return service.getTransactionDTOById(jwt.getSubject(), transactionID);
     }
 
-    @PutMapping("/{transactionID}")
+    @PatchMapping("/{transactionID}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Edit transaction with a given ID")
     @ApiResponses(value = {

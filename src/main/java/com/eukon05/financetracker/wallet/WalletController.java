@@ -61,7 +61,7 @@ class WalletController {
         walletService.deleteWallet(jwt.getSubject(), walletID);
     }
 
-    @PutMapping("/{walletID}")
+    @PatchMapping("/{walletID}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Edit wallet with a given ID")
     @ApiResponses(
