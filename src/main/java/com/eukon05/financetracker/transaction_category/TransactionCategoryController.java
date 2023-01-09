@@ -20,7 +20,7 @@ import java.util.List;
 @Tag(name = "Transaction Category", description = "Handles operations related to transaction categories")
 class TransactionCategoryController {
 
-    private final TransactionCategoryService facade;
+    private final TransactionCategoryService service;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,7 +34,7 @@ class TransactionCategoryController {
             }
     )
     void createTransactionCategory(@RequestBody @Valid CreateTransactionCategoryDTO dto) {
-        facade.createTransactionCategory(dto);
+        service.createTransactionCategory(dto);
     }
 
     @GetMapping
@@ -47,7 +47,7 @@ class TransactionCategoryController {
             }
     )
     List<TransactionCategoryDTO> getAllCategories(@RequestParam(name = "type", required = false) TransactionCategoryType type) {
-        return facade.getTransactionCategoryDTOs(type);
+        return service.getTransactionCategoryDTOs(type);
     }
 
     @GetMapping("/{id}")
@@ -61,7 +61,7 @@ class TransactionCategoryController {
             }
     )
     TransactionCategoryDTO getCategory(@PathVariable long id) {
-        return facade.getTransactionCategoryDTO(id);
+        return service.getTransactionCategoryDTO(id);
     }
 
     @DeleteMapping("/{id}")
@@ -75,7 +75,7 @@ class TransactionCategoryController {
             }
     )
     void deleteTransactionCategory(@PathVariable long id) {
-        facade.deleteTransactionCategory(id);
+        service.deleteTransactionCategory(id);
     }
 
     @PatchMapping("/{id}")
@@ -91,7 +91,7 @@ class TransactionCategoryController {
             }
     )
     void editTransactionCategory(@PathVariable long id, @RequestBody @Valid EditTransactionCategoryDTO dto) {
-        facade.editTransactionCategory(id, dto);
+        service.editTransactionCategory(id, dto);
     }
 
 }
