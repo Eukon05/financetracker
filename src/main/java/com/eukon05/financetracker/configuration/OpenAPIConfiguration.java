@@ -1,6 +1,5 @@
 package com.eukon05.financetracker.configuration;
 
-import com.eukon05.financetracker.handler.ApiErrorDTO;
 import io.swagger.v3.core.converter.AnnotatedType;
 import io.swagger.v3.core.converter.ModelConverters;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -19,6 +18,7 @@ import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.ProblemDetail;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -44,7 +44,7 @@ class OpenAPIConfiguration {
     @Bean
     OpenAPI openAPICustomizer() {
         OpenAPI api = new OpenAPI();
-        Schema<?> apiErrorSchema = ModelConverters.getInstance().resolveAsResolvedSchema(new AnnotatedType(ApiErrorDTO.class)).schema;
+        Schema<?> apiErrorSchema = ModelConverters.getInstance().resolveAsResolvedSchema(new AnnotatedType(ProblemDetail.class)).schema;
         Content apiErrorContent = new Content().addMediaType(APPLICATION_JSON_VALUE, new MediaType().schema(apiErrorSchema));
 
         api.components(new Components()
