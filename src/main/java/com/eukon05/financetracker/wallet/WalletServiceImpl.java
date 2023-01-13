@@ -6,6 +6,7 @@ import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import com.eukon05.financetracker.wallet.exception.WalletNameTakenException;
 import com.eukon05.financetracker.wallet.exception.WalletNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +33,7 @@ public class WalletServiceImpl implements WalletService {
         repository.delete(wallet);
     }
 
+    @Transactional
     public void editWallet(String userId, long walletID, EditWalletDTO dto) {
         Wallet wallet = getWalletById(userId, walletID);
 
