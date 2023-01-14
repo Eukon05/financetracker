@@ -27,23 +27,24 @@ public class CurrencyConverterImpl implements CurrencyConverter {
     @Override
     public BigDecimal convert(String from, String to, BigDecimal amount, Instant date) {
         try {
-            LocalDate parsedDate = LocalDate.ofInstant(date, ZoneId.systemDefault());
-            HttpResponse<String> response = getRequest(String.format(CONVERTER_API_URL, from, to, amount, parsedDate));
+            LocalDate parsedDate = LocalDate.ofInstant(date, ZoneId.of("UTC"));
+            JsonNode node = getRequest(String.format(CONVERTER_API_URL, from, to, amount.abs(), parsedDate));
+            BigDecimal result = new BigDecimal(node.get("result").asText());
 
-            JsonNode node = objectMapper.readValue(response.body(), JsonNode.class);
-            return new BigDecimal(node.get("result").asText());
+            return amount.signum() < 0 ? result.negate() : result;
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new CurrencyConversionException();
         }
     }
 
-    private HttpResponse<String> getRequest(String url) throws IOException, InterruptedException {
+    private JsonNode getRequest(String url) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest
                 .newBuilder(URI.create(url))
                 .GET()
                 .build();
-        return client.send(request, HttpResponse.BodyHandlers.ofString());
+        String body = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+        return objectMapper.readValue(body, JsonNode.class);
     }
 
 }
