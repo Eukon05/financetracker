@@ -3,18 +3,27 @@ package com.eukon05.financetracker.transaction;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
+import com.eukon05.financetracker.transaction_category.TransactionCategory;
+import com.eukon05.financetracker.wallet.Wallet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
-public interface TransactionService {
+import java.util.List;
 
-    void createTransaction(String userId, CreateTransactionDTO dto);
+interface TransactionService {
 
-    void deleteTransaction(String userId, long transactionID);
+    void createTransaction(Wallet wallet, TransactionCategory category, CreateTransactionDTO dto);
 
-    TransactionDTO getTransactionDTOById(String userId, long transactionID);
+    void deleteTransaction(Transaction transaction);
 
-    void editTransaction(String userId, long transactionID, EditTransactionDTO dto);
+    TransactionDTO getTransactionDTO(String userId, long transactionID);
 
-    Page<TransactionDTO> getPagedTransactionDTOsForWallet(String userId, long walletID, Pageable pageable);
+    void editTransaction(Transaction transaction, TransactionCategory category, EditTransactionDTO dto);
+
+    Page<TransactionDTO> getPagedTransactionDTOsForSpecification(Specification<Transaction> specification, Pageable pageable);
+
+    Transaction getTransaction(String userId, long transactionID);
+
+    List<Transaction> getTransactionsForSpecification(Specification<Transaction> specification);
 }

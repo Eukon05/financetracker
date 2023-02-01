@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Transaction", description = "Handles operations related to transactions")
 class TransactionController {
 
-    private final TransactionService service;
+    private final TransactionFacade facade;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,7 +32,7 @@ class TransactionController {
             @ApiResponse(responseCode = "404", ref = "notfound")
     })
     void createTransaction(@RequestBody @Valid CreateTransactionDTO dto, @AuthenticationPrincipal Jwt jwt) {
-        service.createTransaction(jwt.getSubject(), dto);
+        facade.createTransaction(jwt.getSubject(), dto);
     }
 
     @DeleteMapping("/{transactionID}")
@@ -43,7 +43,7 @@ class TransactionController {
             @ApiResponse(responseCode = "404", ref = "notfound")
     })
     void deleteTransaction(@PathVariable long transactionID, @AuthenticationPrincipal Jwt jwt) {
-        service.deleteTransaction(jwt.getSubject(), transactionID);
+        facade.deleteTransaction(jwt.getSubject(), transactionID);
     }
 
     @GetMapping(value = "/{transactionID}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -54,7 +54,7 @@ class TransactionController {
             @ApiResponse(responseCode = "404", ref = "notfound")
     })
     TransactionDTO getTransaction(@PathVariable long transactionID, @AuthenticationPrincipal Jwt jwt) {
-        return service.getTransactionDTOById(jwt.getSubject(), transactionID);
+        return facade.getTransactionDTO(jwt.getSubject(), transactionID);
     }
 
     @PatchMapping("/{transactionID}")
@@ -66,7 +66,7 @@ class TransactionController {
             @ApiResponse(responseCode = "404", ref = "notfound")
     })
     void editTransaction(@PathVariable long transactionID, @AuthenticationPrincipal Jwt jwt, @RequestBody @Valid EditTransactionDTO dto) {
-        service.editTransaction(jwt.getSubject(), transactionID, dto);
+        facade.editTransaction(jwt.getSubject(), transactionID, dto);
     }
 
 }

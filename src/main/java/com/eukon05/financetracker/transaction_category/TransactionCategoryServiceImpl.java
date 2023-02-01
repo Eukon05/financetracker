@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TransactionCategoryServiceImpl implements TransactionCategoryService {
+class TransactionCategoryServiceImpl implements TransactionCategoryService {
 
     private final TransactionCategoryRepository repository;
     private final TransactionCategoryModelMapper mapper;
@@ -42,12 +42,9 @@ public class TransactionCategoryServiceImpl implements TransactionCategoryServic
         repository.save(mapper.mapCreateTransactionCategoryDTOToTransactionCategory(dto));
     }
 
-    public void deleteTransactionCategory(long id) {
-        TransactionCategory category = getTransactionCategory(id);
-
-        if (category.getType().equals(TransactionCategoryType.DEFAULT)) {
-            throw new DefaultTransactionCategoryModificationException();
-        }
+    @Transactional
+    public void deleteTransactionCategory(TransactionCategory category) {
+        blockDefaultCategoryModification(category);
 
         //We can skip checking the optional's content, because the default category always exists
         TransactionCategory defaultCategory = repository.findByType(TransactionCategoryType.DEFAULT).get();
@@ -57,12 +54,8 @@ public class TransactionCategoryServiceImpl implements TransactionCategoryServic
     }
 
     @Transactional
-    public void editTransactionCategory(long id, EditTransactionCategoryDTO dto) {
-        TransactionCategory category = getTransactionCategory(id);
-
-        if (category.getType().equals(TransactionCategoryType.DEFAULT)) {
-            throw new DefaultTransactionCategoryModificationException();
-        }
+    public void editTransactionCategory(TransactionCategory category, EditTransactionCategoryDTO dto) {
+        blockDefaultCategoryModification(category);
 
         Optional.ofNullable(dto.name()).ifPresent(name -> {
             if (repository.existsByNameAndType(name, category.getType())) {
@@ -80,4 +73,13 @@ public class TransactionCategoryServiceImpl implements TransactionCategoryServic
         return mapper.mapTransactionCategoryToTransactionCategoryDTO(getTransactionCategory(id));
     }
 
+    private void blockDefaultCategoryModification(TransactionCategory category) {
+        if (category.getType().equals(TransactionCategoryType.DEFAULT)) {
+            throw new DefaultTransactionCategoryModificationException();
+        }
+    }
+
+    public boolean exists(long id) {
+        return repository.existsById(id);
+    }
 }

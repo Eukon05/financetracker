@@ -18,7 +18,7 @@ import java.time.ZoneId;
 
 @Component
 @RequiredArgsConstructor
-public class CurrencyConverterImpl implements CurrencyConverter {
+class CurrencyConverterImpl implements CurrencyConverter {
 
     private static final String CONVERTER_API_URL = "https://api.exchangerate.host/convert?from=%s&to=%s&amount=%f&date=%s";
     private final ObjectMapper objectMapper;

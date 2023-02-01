@@ -6,13 +6,13 @@ import com.eukon05.financetracker.wallet.dto.WalletDTO;
 
 import java.util.List;
 
-interface WalletService {
+public interface WalletFacade {
 
     void createWallet(String userId, CreateWalletDTO dto);
 
-    void deleteWallet(Wallet wallet);
+    void deleteWallet(String userId, long walletID);
 
-    void editWallet(Wallet wallet, EditWalletDTO dto);
+    void editWallet(String userId, long walletID, EditWalletDTO dto);
 
     List<WalletDTO> getUserWalletDTOs(String userId);
 

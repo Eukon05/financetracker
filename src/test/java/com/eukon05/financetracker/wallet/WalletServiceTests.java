@@ -1,6 +1,5 @@
-package com.eukon05.financetracker.unit;
+package com.eukon05.financetracker.wallet;
 
-import com.eukon05.financetracker.wallet.*;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.exception.WalletNameTakenException;
@@ -9,14 +8,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
-import java.util.Optional;
 
-import static com.eukon05.financetracker.unit.TestUtils.*;
+import static com.eukon05.financetracker.unit.TestUtils.testWallet;
+import static com.eukon05.financetracker.unit.TestUtils.userID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WalletServiceTests {
-
     private final WalletRepository repository = Mockito.mock(WalletRepository.class);
     private final WalletModelMapper mapper = new WalletModelMapperImpl();
     private final CurrencyConverter converter = new CurrencyConverterImpl(new ObjectMapper());
@@ -38,29 +36,21 @@ class WalletServiceTests {
 
     @Test
     void should_delete_wallet() {
-        Mockito.when(repository.getWalletByUserIdAndId(Mockito.anyString(), Mockito.anyLong()))
-                .thenReturn(Optional.of(testWallet));
-
-        service.deleteWallet(Mockito.anyString(), Mockito.anyLong());
+        service.deleteWallet(testWallet);
         Mockito.verify(repository).delete(Mockito.any(Wallet.class));
     }
 
     @Test
     void should_edit_wallet() {
-        Mockito.when(repository.getWalletByUserIdAndId(Mockito.anyString(), Mockito.anyLong()))
-                .thenReturn(Optional.of(testWallet));
-        service.editWallet(userID, walletID, editDTO);
+        service.editWallet(testWallet, editDTO);
         assertEquals(editDTO.name(), testWallet.getName());
         assertEquals(editDTO.currency(), testWallet.getCurrency());
     }
 
     @Test
     void should_not_edit_wallet() {
-        Mockito.when(repository.getWalletByUserIdAndId(Mockito.anyString(), Mockito.anyLong()))
-                .thenReturn(Optional.of(testWallet));
-        Mockito.when(repository.existsByUserIdAndName(Mockito.anyString(), Mockito.anyString())).thenReturn(true);
-
-        assertThrows(WalletNameTakenException.class, () -> service.editWallet(userID, walletID, editDTO));
+        Mockito.when(repository.existsByUserIdAndName(testWallet.getUserId(), editDTO.name())).thenReturn(true);
+        assertThrows(WalletNameTakenException.class, () -> service.editWallet(testWallet, editDTO));
     }
 
     @Test
@@ -69,5 +59,4 @@ class WalletServiceTests {
         Mockito.when(repository.getWalletsByUserId(Mockito.anyString())).thenReturn(list);
         assertEquals(list.stream().map(mapper::mapWalletToWalletDTO).toList(), service.getUserWalletDTOs(Mockito.anyString()));
     }
-
 }

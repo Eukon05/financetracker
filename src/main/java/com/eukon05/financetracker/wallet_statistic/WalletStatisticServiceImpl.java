@@ -1,39 +1,30 @@
 package com.eukon05.financetracker.wallet_statistic;
 
+import com.eukon05.financetracker.transaction.Transaction;
 import com.eukon05.financetracker.transaction_category.TransactionCategory;
-import com.eukon05.financetracker.transaction_category.TransactionCategoryService;
-import com.eukon05.financetracker.wallet.Wallet;
-import com.eukon05.financetracker.wallet.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class WalletStatisticServiceImpl implements WalletStatisticService {
+class WalletStatisticServiceImpl implements WalletStatisticService {
+    public List<WalletStatisticDTO> generateWalletStatistics(Map<TransactionCategory, List<Transaction>> transactionsByCategory) {
+        List<WalletStatisticDTO> result = new LinkedList<>();
 
-    private final WalletService walletService;
-    private final TransactionCategoryService categoryService;
-    private final WalletStatisticRepository repository;
+        long id;
+        BigDecimal sum;
 
-    public List<WalletStatistic> getWalletStatisticsById(String userId, long walletID, Long categoryID) {
-        Wallet wallet = walletService.getWalletById(userId, walletID);
-
-        if (categoryID == null) {
-            return repository.getWalletStatistics(wallet);
+        for (Map.Entry<TransactionCategory, List<Transaction>> e : transactionsByCategory.entrySet()) {
+            id = e.getKey().getId();
+            sum = e.getValue().stream().map(Transaction::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+            result.add(new WalletStatisticDTO(id, sum));
         }
 
-        TransactionCategory category = categoryService.getTransactionCategory(categoryID);
-        Optional<WalletStatistic> projection = repository.getWalletStatisticsForCategory(wallet, category);
-        List<WalletStatistic> list = Collections.emptyList();
-
-        if (projection.isPresent())
-            list = List.of(projection.get());
-
-        return list;
+        return result;
     }
-
 }

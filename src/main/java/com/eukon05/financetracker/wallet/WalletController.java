@@ -1,13 +1,16 @@
 package com.eukon05.financetracker.wallet;
 
-import com.eukon05.financetracker.transaction.TransactionService;
+import com.eukon05.financetracker.transaction.TransactionFacade;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
-import com.eukon05.financetracker.wallet_statistic.WalletStatistic;
-import com.eukon05.financetracker.wallet_statistic.WalletStatisticServiceImpl;
+import com.eukon05.financetracker.wallet_statistic.WalletStatisticDTO;
+import com.eukon05.financetracker.wallet_statistic.WalletStatisticFacade;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,17 +25,19 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/wallets")
 @RequiredArgsConstructor
 @Tag(name = "Wallet", description = "Handles operations related to wallets")
 class WalletController {
-
-    private final WalletService walletService;
-    private final TransactionService transactionService;
-    private final WalletStatisticServiceImpl statisticService;
+    private final WalletFacade walletFacade;
+    private final TransactionFacade transactionFacade;
+    private final WalletStatisticFacade statisticFacade;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -45,7 +50,7 @@ class WalletController {
             }
     )
     void createWallet(@RequestBody @Valid CreateWalletDTO dto, @AuthenticationPrincipal Jwt jwt) {
-        walletService.createWallet(jwt.getSubject(), dto);
+        walletFacade.createWallet(jwt.getSubject(), dto);
     }
 
     @DeleteMapping("/{walletID}")
@@ -58,7 +63,7 @@ class WalletController {
             }
     )
     void deleteWallet(@PathVariable long walletID, @AuthenticationPrincipal Jwt jwt) {
-        walletService.deleteWallet(jwt.getSubject(), walletID);
+        walletFacade.deleteWallet(jwt.getSubject(), walletID);
     }
 
     @PatchMapping("/{walletID}")
@@ -73,7 +78,7 @@ class WalletController {
             }
     )
     void editWallet(@PathVariable long walletID, @RequestBody @Valid EditWalletDTO dto, @AuthenticationPrincipal Jwt jwt) {
-        walletService.editWallet(jwt.getSubject(), walletID, dto);
+        walletFacade.editWallet(jwt.getSubject(), walletID, dto);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -81,7 +86,7 @@ class WalletController {
     @Operation(summary = "Get information about all wallets")
     @ApiResponse(responseCode = "401", ref = "unauthorized")
     List<WalletDTO> getYourWallets(@AuthenticationPrincipal Jwt jwt) {
-        return walletService.getUserWalletDTOs(jwt.getSubject());
+        return walletFacade.getUserWalletDTOs(jwt.getSubject());
     }
 
     @GetMapping(value = "/{walletID}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -94,7 +99,7 @@ class WalletController {
             }
     )
     WalletDTO getWallet(@AuthenticationPrincipal Jwt jwt, @PathVariable long walletID) {
-        return walletService.getWalletDTOById(jwt.getSubject(), walletID);
+        return walletFacade.getWalletDTO(jwt.getSubject(), walletID);
     }
 
     @GetMapping(value = "/{walletID}/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -106,13 +111,38 @@ class WalletController {
                     @ApiResponse(responseCode = "401", ref = "unauthorized")
             }
     )
-    Page<TransactionDTO> getTransactions(@AuthenticationPrincipal Jwt jwt, @PathVariable long walletID, @ParameterObject Pageable pageable) {
-        return transactionService.getPagedTransactionDTOsForWallet(jwt.getSubject(), walletID, pageable);
+    @Parameters(
+            value = {
+                    @Parameter(name = "fromDate", schema = @Schema(implementation = Instant.class)),
+                    @Parameter(name = "toDate", schema = @Schema(implementation = Instant.class)),
+                    @Parameter(name = "category", schema = @Schema(implementation = Long.class)),
+                    @Parameter(name = "value", schema = @Schema(implementation = BigDecimal.class)),
+                    @Parameter(name = "params", hidden = true)
+            }
+    )
+    Page<TransactionDTO> getTransactions(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable long walletID,
+            @ParameterObject Pageable pageable,
+            @RequestParam(required = false) Map<String, String> params
+    ) {
+        return transactionFacade.getPagedTransactionDTOsForWallet(jwt.getSubject(), walletID, params, pageable);
     }
 
     @GetMapping(value = "/{walletID}/statistics")
-    List<WalletStatistic> getWalletStatistics(@AuthenticationPrincipal Jwt jwt, @PathVariable long walletID, @RequestParam(name = "categoryID", required = false) Long categoryID) {
-        return statisticService.getWalletStatisticsById(jwt.getSubject(), walletID, categoryID);
+    @Parameters(
+            value = {
+                    @Parameter(name = "fromDate", schema = @Schema(implementation = Instant.class)),
+                    @Parameter(name = "toDate", schema = @Schema(implementation = Instant.class)),
+                    @Parameter(name = "category", schema = @Schema(implementation = Long.class)),
+                    @Parameter(name = "params", hidden = true)
+            }
+    )
+    List<WalletStatisticDTO> getWalletStatistics(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable long walletID,
+            @RequestParam(required = false) Map<String, String> params
+    ) {
+        return statisticFacade.getWalletStatistics(jwt.getSubject(), walletID, params);
     }
-
 }

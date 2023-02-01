@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class WalletServiceImpl implements WalletService {
+class WalletServiceImpl implements WalletService {
     private final WalletModelMapper mapper;
     private final WalletRepository repository;
     private final CurrencyConverter converter;
@@ -28,18 +28,15 @@ public class WalletServiceImpl implements WalletService {
         repository.save(new Wallet(userId, dto.name(), dto.currency()));
     }
 
-    public void deleteWallet(String userId, long walletID) {
-        Wallet wallet = getWalletById(userId, walletID);
+    public void deleteWallet(Wallet wallet) {
         repository.delete(wallet);
     }
 
     @Transactional
-    public void editWallet(String userId, long walletID, EditWalletDTO dto) {
-        Wallet wallet = getWalletById(userId, walletID);
-
+    public void editWallet(Wallet wallet, EditWalletDTO dto) {
         Optional.ofNullable(dto.name()).ifPresent(name -> {
-            if (repository.existsByUserIdAndName(userId, name)) {
-                throw new WalletNameTakenException(dto.name());
+            if (repository.existsByUserIdAndName(wallet.getUserId(), name)) {
+                throw new WalletNameTakenException(name);
             }
             wallet.setName(name);
         });
@@ -56,13 +53,17 @@ public class WalletServiceImpl implements WalletService {
         return repository.getWalletsByUserId(userId).stream().map(mapper::mapWalletToWalletDTO).toList();
     }
 
-    public WalletDTO getWalletDTOById(String userId, long walletID) {
-        Wallet wallet = getWalletById(userId, walletID);
+    public WalletDTO getWalletDTO(String userId, long walletID) {
+        Wallet wallet = getWallet(userId, walletID);
         return mapper.mapWalletToWalletDTO(wallet);
     }
 
-    public Wallet getWalletById(String userId, long walletID) {
+    public Wallet getWallet(String userId, long walletID) {
         return repository.getWalletByUserIdAndId(userId, walletID).orElseThrow(() -> new WalletNotFoundException(walletID));
+    }
+
+    public boolean checkOwnership(String userId, long walletID) {
+        return repository.existsByUserIdAndId(userId, walletID);
     }
 
 }

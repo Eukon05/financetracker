@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface TransactionModelMapper {
+interface TransactionModelMapper {
 
     Transaction mapCreateTransactionDTOtoTransaction(CreateTransactionDTO dto);
 

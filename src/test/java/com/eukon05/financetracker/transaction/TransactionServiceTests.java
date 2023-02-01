@@ -1,11 +1,8 @@
-package com.eukon05.financetracker.unit;
+package com.eukon05.financetracker.transaction;
 
-import com.eukon05.financetracker.transaction.*;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.exception.TransactionTypeMismatchException;
-import com.eukon05.financetracker.transaction_category.TransactionCategoryService;
-import com.eukon05.financetracker.wallet.WalletService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -18,18 +15,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class TransactionServiceTests {
 
     private final TransactionRepository repository = Mockito.mock(TransactionRepository.class);
-    private final TransactionCategoryService categoryService = Mockito.mock(TransactionCategoryService.class);
-    private final WalletService walletService = Mockito.mock(WalletService.class);
     private final TransactionModelMapper mapper = new TransactionModelMapperImpl();
-    private final TransactionService service = new TransactionServiceImpl(walletService, categoryService, mapper, repository);
+    private final TransactionService service = new TransactionServiceImpl(mapper, repository);
     private static final String userID = "SOMEUSERID";
     private static final CreateTransactionDTO createDTO = new CreateTransactionDTO(1, "somename", BigDecimal.valueOf(120), 0);
 
     @Test
     void should_create_transaction() {
-        Mockito.when(walletService.getWalletById(Mockito.anyString(), Mockito.anyLong())).thenReturn(testWallet);
-        Mockito.when(categoryService.getTransactionCategory(Mockito.anyLong())).thenReturn(testDefaultCategory);
-        service.createTransaction(userID, createDTO);
+        service.createTransaction(testWallet, testDefaultCategory, createDTO);
         assertTrue(testWallet.getTransactions().size() > 1);
         testWallet.getTransactions().clear();
         testWallet.getTransactions().add(testTransaction);
@@ -37,22 +30,18 @@ class TransactionServiceTests {
 
     @Test
     void should_delete_transaction() {
-        Mockito.when(repository.getTransactionByWallet_UserIdAndId(Mockito.anyString(), Mockito.anyLong()))
-                .thenReturn(Optional.of(testTransaction));
-
-        service.deleteTransaction(userID, testTransaction.getId());
+        service.deleteTransaction(testTransaction);
         Mockito.verify(repository).delete(testTransaction);
     }
 
     @Test
     void should_edit_transaction() {
-        Mockito.when(categoryService.getTransactionCategory(Mockito.anyLong())).thenReturn(testExpenseCategory);
         EditTransactionDTO dto = new EditTransactionDTO("editedname", BigDecimal.valueOf(-100), 1);
 
         Mockito.when(repository.getTransactionByWallet_UserIdAndId(Mockito.anyString(), Mockito.anyLong()))
                 .thenReturn(Optional.of(testTransaction));
 
-        service.editTransaction(userID, testTransaction.getId(), dto);
+        service.editTransaction(testTransaction, testExpenseCategory, dto);
         assertEquals(dto.name(), testTransaction.getName());
         assertEquals(dto.value(), testTransaction.getValue());
         assertEquals(testExpenseCategory, testTransaction.getCategory());
@@ -60,13 +49,12 @@ class TransactionServiceTests {
 
     @Test
     void should_not_edit_transaction() {
-        Mockito.when(categoryService.getTransactionCategory(Mockito.anyLong())).thenReturn(testExpenseCategory);
         EditTransactionDTO dto = new EditTransactionDTO(null, BigDecimal.valueOf(100), 1);
 
         Mockito.when(repository.getTransactionByWallet_UserIdAndId(Mockito.anyString(), Mockito.anyLong()))
                 .thenReturn(Optional.of(testTransaction));
 
-        assertThrows(TransactionTypeMismatchException.class, () -> service.editTransaction(userID, testTransaction.getId(), dto));
+        assertThrows(TransactionTypeMismatchException.class, () -> service.editTransaction(testTransaction, testExpenseCategory, dto));
     }
 
     @Test
@@ -74,7 +62,7 @@ class TransactionServiceTests {
         Mockito.when(repository.getTransactionByWallet_UserIdAndId(Mockito.anyString(), Mockito.anyLong()))
                 .thenReturn(Optional.of(testTransaction));
 
-        assertEquals(mapper.mapTransactionToTransactionDTO(testTransaction), service.getTransactionDTOById(userID, testTransaction.getId()));
+        assertEquals(mapper.mapTransactionToTransactionDTO(testTransaction), service.getTransactionDTO(userID, testTransaction.getId()));
     }
 
 }

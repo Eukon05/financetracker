@@ -6,15 +6,15 @@ import com.eukon05.financetracker.transaction_category.dto.TransactionCategoryDT
 
 import java.util.List;
 
-interface TransactionCategoryService {
+public interface TransactionCategoryFacade {
 
     List<TransactionCategoryDTO> getTransactionCategoryDTOs(TransactionCategoryType type);
 
     void createTransactionCategory(CreateTransactionCategoryDTO dto);
 
-    void deleteTransactionCategory(TransactionCategory category);
+    void deleteTransactionCategory(long id);
 
-    void editTransactionCategory(TransactionCategory category, EditTransactionCategoryDTO dto);
+    void editTransactionCategory(long id, EditTransactionCategoryDTO dto);
 
     TransactionCategory getTransactionCategory(long id);
 
