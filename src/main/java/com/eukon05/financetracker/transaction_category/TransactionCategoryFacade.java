@@ -3,23 +3,45 @@ package com.eukon05.financetracker.transaction_category;
 import com.eukon05.financetracker.transaction_category.dto.CreateTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction_category.dto.EditTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction_category.dto.TransactionCategoryDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface TransactionCategoryFacade {
+@Service
+@RequiredArgsConstructor
+public
+class TransactionCategoryFacade {
+    private final TransactionCategoryService service;
 
-    List<TransactionCategoryDTO> getTransactionCategoryDTOs(TransactionCategoryType type);
+    public List<TransactionCategoryDTO> getTransactionCategoryDTOs(TransactionCategoryType type) {
+        return service.getTransactionCategoryDTOs(type);
+    }
 
-    void createTransactionCategory(CreateTransactionCategoryDTO dto);
+    public void createTransactionCategory(CreateTransactionCategoryDTO dto) {
+        service.createTransactionCategory(dto);
+    }
 
-    void deleteTransactionCategory(long id);
 
-    void editTransactionCategory(long id, EditTransactionCategoryDTO dto);
+    public void deleteTransactionCategory(long id) {
+        TransactionCategory category = getTransactionCategory(id);
+        service.deleteTransactionCategory(category);
+    }
 
-    TransactionCategory getTransactionCategory(long id);
+    public void editTransactionCategory(long id, EditTransactionCategoryDTO dto) {
+        TransactionCategory category = getTransactionCategory(id);
+        service.editTransactionCategory(category, dto);
+    }
 
-    TransactionCategoryDTO getTransactionCategoryDTO(long id);
+    public TransactionCategory getTransactionCategory(long id) {
+        return service.getTransactionCategory(id);
+    }
 
-    boolean exists(long id);
+    public TransactionCategoryDTO getTransactionCategoryDTO(long id) {
+        return service.getTransactionCategoryDTO(id);
+    }
 
+    public boolean exists(long id) {
+        return service.exists(id);
+    }
 }

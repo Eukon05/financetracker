@@ -3,27 +3,57 @@ package com.eukon05.financetracker.transaction;
 import com.eukon05.financetracker.transaction.dto.CreateTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.EditTransactionDTO;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
+import com.eukon05.financetracker.transaction.exception.TransactionNotFoundException;
 import com.eukon05.financetracker.transaction_category.TransactionCategory;
 import com.eukon05.financetracker.wallet.Wallet;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
-interface TransactionService {
 
-    void createTransaction(Wallet wallet, TransactionCategory category, CreateTransactionDTO dto);
+@Service
+@RequiredArgsConstructor
+class TransactionService {
+    private final TransactionModelMapper mapper;
+    private final TransactionRepository repository;
 
-    void deleteTransaction(Transaction transaction);
+    @Transactional
+    public void createTransaction(Wallet wallet, TransactionCategory category, CreateTransactionDTO dto) {
+        Transaction transaction = mapper.mapCreateTransactionDTOtoTransaction(dto);
+        transaction.setCategory(category);
+        wallet.getTransactions().add(transaction);
+    }
 
-    TransactionDTO getTransactionDTO(String userId, long transactionID);
+    public void deleteTransaction(Transaction transaction) {
+        repository.delete(transaction);
+    }
 
-    void editTransaction(Transaction transaction, TransactionCategory category, EditTransactionDTO dto);
+    public TransactionDTO getTransactionDTO(String userId, long transactionID) {
+        return mapper.mapTransactionToTransactionDTO(getTransaction(userId, transactionID));
+    }
 
-    Page<TransactionDTO> getPagedTransactionDTOsForSpecification(Specification<Transaction> specification, Pageable pageable);
+    @Transactional
+    public void editTransaction(Transaction transaction, TransactionCategory category, EditTransactionDTO dto) {
+        Optional.ofNullable(dto.name()).ifPresent(transaction::setName);
+        Optional.ofNullable(dto.value()).ifPresent(transaction::setValue);
+        transaction.setCategory(category);
+    }
 
-    Transaction getTransaction(String userId, long transactionID);
+    public Page<TransactionDTO> getPagedTransactionDTOsForSpecification(Specification<Transaction> specification, Pageable pageable) {
+        return repository.findAll(specification, pageable).map(mapper::mapTransactionToTransactionDTO);
+    }
 
-    List<Transaction> getTransactionsForSpecification(Specification<Transaction> specification);
+    public Transaction getTransaction(String userId, long transactionId) {
+        return repository.getTransactionByWallet_UserIdAndId(userId, transactionId).orElseThrow(() -> new TransactionNotFoundException(transactionId));
+    }
+
+    public List<Transaction> getTransactionsForSpecification(Specification<Transaction> specification) {
+        return repository.findAll(specification);
+    }
 }

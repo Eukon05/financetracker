@@ -16,7 +16,7 @@ class TransactionServiceTests {
 
     private final TransactionRepository repository = Mockito.mock(TransactionRepository.class);
     private final TransactionModelMapper mapper = new TransactionModelMapperImpl();
-    private final TransactionService service = new TransactionServiceImpl(mapper, repository);
+    private final TransactionService service = new TransactionService(mapper, repository);
     private static final String userID = "SOMEUSERID";
     private static final CreateTransactionDTO createDTO = new CreateTransactionDTO(1, "somename", BigDecimal.valueOf(120), 0);
 

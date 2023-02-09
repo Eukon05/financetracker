@@ -1,5 +1,9 @@
 package com.eukon05.financetracker.wallet;
 
+import com.eukon05.financetracker.openapi.param.*;
+import com.eukon05.financetracker.openapi.response.ConflictResponse;
+import com.eukon05.financetracker.openapi.response.NotFoundResponse;
+import com.eukon05.financetracker.openapi.response.ValidationErrorResponse;
 import com.eukon05.financetracker.transaction.TransactionFacade;
 import com.eukon05.financetracker.transaction.dto.TransactionDTO;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
@@ -8,11 +12,6 @@ import com.eukon05.financetracker.wallet.dto.WalletDTO;
 import com.eukon05.financetracker.wallet_statistic.WalletStatisticDTO;
 import com.eukon05.financetracker.wallet_statistic.WalletStatisticFacade;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -42,13 +39,8 @@ class WalletController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new wallet")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "400", ref = "validation"),
-                    @ApiResponse(responseCode = "401", ref = "unauthorized"),
-                    @ApiResponse(responseCode = "409", ref = "conflict")
-            }
-    )
+    @ValidationErrorResponse
+    @ConflictResponse
     void createWallet(@RequestBody @Valid CreateWalletDTO dto, @AuthenticationPrincipal Jwt jwt) {
         walletFacade.createWallet(jwt.getSubject(), dto);
     }
@@ -56,12 +48,7 @@ class WalletController {
     @DeleteMapping("/{walletID}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete wallet with a given ID")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "404", ref = "notfound"),
-                    @ApiResponse(responseCode = "401", ref = "unauthorized")
-            }
-    )
+    @NotFoundResponse
     void deleteWallet(@PathVariable long walletID, @AuthenticationPrincipal Jwt jwt) {
         walletFacade.deleteWallet(jwt.getSubject(), walletID);
     }
@@ -69,14 +56,9 @@ class WalletController {
     @PatchMapping("/{walletID}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Edit wallet with a given ID")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "404", ref = "notfound"),
-                    @ApiResponse(responseCode = "401", ref = "unauthorized"),
-                    @ApiResponse(responseCode = "400", ref = "validation"),
-                    @ApiResponse(responseCode = "409", ref = "conflict")
-            }
-    )
+    @NotFoundResponse
+    @ConflictResponse
+    @ValidationErrorResponse
     void editWallet(@PathVariable long walletID, @RequestBody @Valid EditWalletDTO dto, @AuthenticationPrincipal Jwt jwt) {
         walletFacade.editWallet(jwt.getSubject(), walletID, dto);
     }
@@ -84,7 +66,6 @@ class WalletController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get information about all wallets")
-    @ApiResponse(responseCode = "401", ref = "unauthorized")
     List<WalletDTO> getYourWallets(@AuthenticationPrincipal Jwt jwt) {
         return walletFacade.getUserWalletDTOs(jwt.getSubject());
     }
@@ -92,12 +73,7 @@ class WalletController {
     @GetMapping(value = "/{walletID}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get information about a single wallet with a given ID")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "404", ref = "notfound"),
-                    @ApiResponse(responseCode = "401", ref = "unauthorized")
-            }
-    )
+    @NotFoundResponse
     WalletDTO getWallet(@AuthenticationPrincipal Jwt jwt, @PathVariable long walletID) {
         return walletFacade.getWalletDTO(jwt.getSubject(), walletID);
     }
@@ -105,21 +81,12 @@ class WalletController {
     @GetMapping(value = "/{walletID}/transactions", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get all transactions associated with a wallet with a given ID")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "404", ref = "notfound"),
-                    @ApiResponse(responseCode = "401", ref = "unauthorized")
-            }
-    )
-    @Parameters(
-            value = {
-                    @Parameter(name = "fromDate", schema = @Schema(implementation = Instant.class)),
-                    @Parameter(name = "toDate", schema = @Schema(implementation = Instant.class)),
-                    @Parameter(name = "category", schema = @Schema(implementation = Long.class)),
-                    @Parameter(name = "value", schema = @Schema(implementation = BigDecimal.class)),
-                    @Parameter(name = "params", hidden = true)
-            }
-    )
+    @NotFoundResponse
+    @FromDateParam
+    @ToDateParam
+    @CategoryParam
+    @ValueParam
+    @HideParamsMap
     Page<TransactionDTO> getTransactions(
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable long walletID,
@@ -130,14 +97,10 @@ class WalletController {
     }
 
     @GetMapping(value = "/{walletID}/statistics")
-    @Parameters(
-            value = {
-                    @Parameter(name = "fromDate", schema = @Schema(implementation = Instant.class)),
-                    @Parameter(name = "toDate", schema = @Schema(implementation = Instant.class)),
-                    @Parameter(name = "category", schema = @Schema(implementation = Long.class)),
-                    @Parameter(name = "params", hidden = true)
-            }
-    )
+    @FromDateParam
+    @ToDateParam
+    @CategoryParam
+    @HideParamsMap
     List<WalletStatisticDTO> getWalletStatistics(
             @AuthenticationPrincipal Jwt jwt,
             @PathVariable long walletID,

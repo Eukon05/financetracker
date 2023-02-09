@@ -3,23 +3,44 @@ package com.eukon05.financetracker.wallet;
 import com.eukon05.financetracker.wallet.dto.CreateWalletDTO;
 import com.eukon05.financetracker.wallet.dto.EditWalletDTO;
 import com.eukon05.financetracker.wallet.dto.WalletDTO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface WalletFacade {
+@Service
+@RequiredArgsConstructor
+public
+class WalletFacade {
+    private final WalletService service;
 
-    void createWallet(String userId, CreateWalletDTO dto);
+    public void createWallet(String userId, CreateWalletDTO dto) {
+        service.createWallet(userId, dto);
+    }
 
-    void deleteWallet(String userId, long walletID);
+    public void deleteWallet(String userId, long walletID) {
+        Wallet wallet = getWallet(userId, walletID);
+        service.deleteWallet(wallet);
+    }
 
-    void editWallet(String userId, long walletID, EditWalletDTO dto);
+    public void editWallet(String userId, long walletID, EditWalletDTO dto) {
+        Wallet wallet = getWallet(userId, walletID);
+        service.editWallet(wallet, dto);
+    }
 
-    List<WalletDTO> getUserWalletDTOs(String userId);
+    public List<WalletDTO> getUserWalletDTOs(String userId) {
+        return service.getUserWalletDTOs(userId);
+    }
 
-    WalletDTO getWalletDTO(String userId, long walletID);
+    public WalletDTO getWalletDTO(String userId, long walletID) {
+        return service.getWalletDTO(userId, walletID);
+    }
 
-    Wallet getWallet(String userId, long walletID);
+    public Wallet getWallet(String userId, long walletID) {
+        return service.getWallet(userId, walletID);
+    }
 
-    boolean checkOwnership(String userId, long walletID);
-
+    public boolean checkOwnership(String userId, long walletID) {
+        return service.checkOwnership(userId, walletID);
+    }
 }

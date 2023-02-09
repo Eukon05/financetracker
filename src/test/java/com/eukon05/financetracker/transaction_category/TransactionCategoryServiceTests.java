@@ -18,7 +18,7 @@ class TransactionCategoryServiceTests {
 
     private final TransactionCategoryRepository repository = Mockito.mock(TransactionCategoryRepository.class);
     private final TransactionCategoryModelMapper mapper = new TransactionCategoryModelMapperImpl();
-    private final TransactionCategoryService service = new TransactionCategoryServiceImpl(repository, mapper);
+    private final TransactionCategoryService service = new TransactionCategoryService(repository, mapper);
     private static final CreateTransactionCategoryDTO createIncomeDTO = new CreateTransactionCategoryDTO("INCOME", TransactionCategoryType.INCOME);
     private static final EditTransactionCategoryDTO editDTO = new EditTransactionCategoryDTO("EDITED");
 

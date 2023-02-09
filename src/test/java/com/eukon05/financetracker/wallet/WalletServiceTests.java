@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class WalletServiceTests {
     private final WalletRepository repository = Mockito.mock(WalletRepository.class);
     private final WalletModelMapper mapper = new WalletModelMapperImpl();
-    private final CurrencyConverter converter = new CurrencyConverterImpl(new ObjectMapper());
-    private final WalletService service = new WalletServiceImpl(mapper, repository, converter);
+    private final CurrencyConverter converter = new CurrencyConverter(new ObjectMapper());
+    private final WalletService service = new WalletService(mapper, repository, converter);
     private static final CreateWalletDTO createDTO = new CreateWalletDTO("new wallet", "PLN");
     private static final EditWalletDTO editDTO = new EditWalletDTO("some name", "PLN");
 

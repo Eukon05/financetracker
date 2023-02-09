@@ -12,7 +12,7 @@ import static com.eukon05.financetracker.unit.TestUtils.testTransaction;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class WalletStatisticServiceTests {
-    private final WalletStatisticService service = new WalletStatisticServiceImpl();
+    private final WalletStatisticService service = new WalletStatisticService();
 
     @Test
     void should_get_wallet_statistics() {
