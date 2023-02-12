@@ -1,4 +1,4 @@
-package com.eukon05.financetracker.configuration;
+package com.eukon05.financetracker.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -44,7 +44,7 @@ class SecurityConfiguration {
 
     //Code from https://stackoverflow.com/a/69333676/12945482
     @Bean
-    public JwtAuthenticationConverter keycloakJwtAuthenticationConverter() {
+    JwtAuthenticationConverter keycloakJwtAuthenticationConverter() {
         Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter = jwt -> {
             Map<String, Collection<String>> realmAccess = jwt.getClaim("realm_access");
             Collection<String> roles = realmAccess.get("roles");

@@ -5,7 +5,7 @@ import com.eukon05.financetracker.transaction_category.dto.TransactionCategoryDT
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface TransactionCategoryModelMapper {
+interface TransactionCategoryModelMapper {
 
     TransactionCategory mapCreateTransactionCategoryDTOToTransactionCategory(CreateTransactionCategoryDTO dto);
 

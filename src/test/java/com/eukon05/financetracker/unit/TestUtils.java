@@ -8,15 +8,14 @@ import com.eukon05.financetracker.wallet.Wallet;
 import java.math.BigDecimal;
 import java.time.Instant;
 
-final class TestUtils {
+public final class TestUtils {
 
-    static final String userID = "SOMEUSERID";
-    static final long walletID = 1;
+    public static final String userID = "SOMEUSERID";
 
-    static final Wallet testWallet = new Wallet();
-    static final Transaction testTransaction = new Transaction();
-    static final TransactionCategory testDefaultCategory = new TransactionCategory();
-    static final TransactionCategory testExpenseCategory = new TransactionCategory();
+    public static final Wallet testWallet = new Wallet();
+    public static final Transaction testTransaction = new Transaction();
+    public static final TransactionCategory testDefaultCategory = new TransactionCategory();
+    public static final TransactionCategory testExpenseCategory = new TransactionCategory();
 
     static {
         testWallet.setName("test");

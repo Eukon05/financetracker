@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface WalletRepository extends JpaRepository<Wallet, Long> {
+interface WalletRepository extends JpaRepository<Wallet, Long> {
 
     List<Wallet> getWalletsByUserId(String userId);
 
@@ -13,4 +13,5 @@ public interface WalletRepository extends JpaRepository<Wallet, Long> {
 
     boolean existsByUserIdAndName(String userId, String name);
 
+    boolean existsByUserIdAndId(String userId, long id);
 }

@@ -1,6 +1,5 @@
-package com.eukon05.financetracker.unit;
+package com.eukon05.financetracker.transaction_category;
 
-import com.eukon05.financetracker.transaction_category.*;
 import com.eukon05.financetracker.transaction_category.dto.CreateTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction_category.dto.EditTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction_category.exception.DefaultTransactionCategoryModificationException;
@@ -19,8 +18,7 @@ class TransactionCategoryServiceTests {
 
     private final TransactionCategoryRepository repository = Mockito.mock(TransactionCategoryRepository.class);
     private final TransactionCategoryModelMapper mapper = new TransactionCategoryModelMapperImpl();
-    private final TransactionCategoryService service = new TransactionCategoryServiceImpl(repository, mapper);
-
+    private final TransactionCategoryService service = new TransactionCategoryService(repository, mapper);
     private static final CreateTransactionCategoryDTO createIncomeDTO = new CreateTransactionCategoryDTO("INCOME", TransactionCategoryType.INCOME);
     private static final EditTransactionCategoryDTO editDTO = new EditTransactionCategoryDTO("EDITED");
 
@@ -45,22 +43,19 @@ class TransactionCategoryServiceTests {
 
     @Test
     void should_not_edit_default_category() {
-        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(testDefaultCategory));
-        assertThrows(DefaultTransactionCategoryModificationException.class, () -> service.editTransactionCategory(0, editDTO));
+        assertThrows(DefaultTransactionCategoryModificationException.class, () -> service.editTransactionCategory(testDefaultCategory, editDTO));
     }
 
     @Test
     void should_edit_category() {
-        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(testExpenseCategory));
-        service.editTransactionCategory(1, editDTO);
+        service.editTransactionCategory(testExpenseCategory, editDTO);
         assertEquals(editDTO.name(), testExpenseCategory.getName());
     }
 
     @Test
     void should_not_allow_duplicate_name_edit() {
-        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(testExpenseCategory));
         Mockito.when(repository.existsByNameAndType(Mockito.anyString(), Mockito.any(TransactionCategoryType.class))).thenReturn(true);
-        assertThrows(TransactionCategoryAlreadyExistsException.class, () -> service.editTransactionCategory(1, editDTO));
+        assertThrows(TransactionCategoryAlreadyExistsException.class, () -> service.editTransactionCategory(testExpenseCategory, editDTO));
     }
 
     @Test
@@ -74,17 +69,15 @@ class TransactionCategoryServiceTests {
         testTransaction.setValue(BigDecimal.valueOf(-100));
         testTransaction.setCategory(testExpenseCategory);
         testExpenseCategory.getTransactions().add(testTransaction);
-        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(testExpenseCategory));
         Mockito.when(repository.findByType(TransactionCategoryType.DEFAULT)).thenReturn(Optional.of(testDefaultCategory));
-        service.deleteTransactionCategory(Mockito.anyLong());
+        service.deleteTransactionCategory(testExpenseCategory);
         Mockito.verify(repository).delete(testExpenseCategory);
         assertEquals(testDefaultCategory, testTransaction.getCategory());
     }
 
     @Test
     void should_not_delete_default_category() {
-        Mockito.when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(testDefaultCategory));
-        assertThrows(DefaultTransactionCategoryModificationException.class, () -> service.deleteTransactionCategory(Mockito.anyLong()));
+        assertThrows(DefaultTransactionCategoryModificationException.class, () -> service.deleteTransactionCategory(testDefaultCategory));
     }
 
 }
