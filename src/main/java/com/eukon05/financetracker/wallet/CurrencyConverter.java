@@ -14,21 +14,21 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 @Component
 @RequiredArgsConstructor
 class CurrencyConverter {
 
     private static final String CONVERTER_API_URL = "https://api.exchangerate.host/convert?from=%s&to=%s&amount=%f&date=%s";
+    private static final String RESULT = "result";
     private final ObjectMapper objectMapper;
     private final HttpClient client = HttpClient.newHttpClient();
 
     public BigDecimal convert(String from, String to, BigDecimal amount, Instant date) {
         try {
-            LocalDate parsedDate = LocalDate.ofInstant(date, ZoneId.of("UTC"));
-            JsonNode node = getRequest(String.format(CONVERTER_API_URL, from, to, amount.abs(), parsedDate));
-            BigDecimal result = new BigDecimal(node.get("result").asText());
+            LocalDate parsedDate = LocalDate.ofInstant(date, ZoneOffset.UTC);
+            BigDecimal result = getResult(from, to, amount, parsedDate);
 
             return amount.signum() < 0 ? result.negate() : result;
         } catch (Exception ex) {
@@ -37,13 +37,18 @@ class CurrencyConverter {
         }
     }
 
-    private JsonNode getRequest(String url) throws IOException, InterruptedException {
+    private BigDecimal getResult(String from, String to, BigDecimal amount, LocalDate date) throws IOException, InterruptedException {
+        String url = String.format(CONVERTER_API_URL, from, to, amount.abs(), date);
+
         HttpRequest request = HttpRequest
                 .newBuilder(URI.create(url))
                 .GET()
                 .build();
+
         String body = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
-        return objectMapper.readValue(body, JsonNode.class);
+        String result = objectMapper.readValue(body, JsonNode.class).get(RESULT).asText();
+
+        return new BigDecimal(result);
     }
 
 }
