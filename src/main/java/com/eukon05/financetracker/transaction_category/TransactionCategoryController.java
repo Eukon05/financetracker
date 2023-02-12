@@ -1,11 +1,13 @@
 package com.eukon05.financetracker.transaction_category;
 
+import com.eukon05.financetracker.openapi.response.AccessDeniedResponse;
+import com.eukon05.financetracker.openapi.response.ConflictResponse;
+import com.eukon05.financetracker.openapi.response.NotFoundResponse;
+import com.eukon05.financetracker.openapi.response.ValidationErrorResponse;
 import com.eukon05.financetracker.transaction_category.dto.CreateTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction_category.dto.EditTransactionCategoryDTO;
 import com.eukon05.financetracker.transaction_category.dto.TransactionCategoryDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,79 +21,52 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Transaction Category", description = "Handles operations related to transaction categories")
 class TransactionCategoryController {
-
-    private final TransactionCategoryService service;
+    private final TransactionCategoryFacade facade;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Create a new transaction category")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "400", ref = "validation"),
-                    @ApiResponse(responseCode = "401", ref = "unauthorized"),
-                    @ApiResponse(responseCode = "403", ref = "unauthorized"),
-                    @ApiResponse(responseCode = "409", ref = "conflict")
-            }
-    )
+    @ValidationErrorResponse
+    @ConflictResponse
+    @AccessDeniedResponse
     void createTransactionCategory(@RequestBody @Valid CreateTransactionCategoryDTO dto) {
-        service.createTransactionCategory(dto);
+        facade.createTransactionCategory(dto);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get information about all transaction categories")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "401", ref = "unauthorized"),
-                    @ApiResponse(responseCode = "403", ref = "unauthorized")
-            }
-    )
+    @AccessDeniedResponse
     List<TransactionCategoryDTO> getAllCategories(@RequestParam(name = "type", required = false) TransactionCategoryType type) {
-        return service.getTransactionCategoryDTOs(type);
+        return facade.getTransactionCategoryDTOs(type);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Get information about a single transaction category with a given ID")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "404", ref = "notfound"),
-                    @ApiResponse(responseCode = "401", ref = "unauthorized"),
-                    @ApiResponse(responseCode = "403", ref = "unauthorized"),
-            }
-    )
+    @NotFoundResponse
+    @AccessDeniedResponse
     TransactionCategoryDTO getCategory(@PathVariable long id) {
-        return service.getTransactionCategoryDTO(id);
+        return facade.getTransactionCategoryDTO(id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Delete transaction category with a given ID")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "404", ref = "notfound"),
-                    @ApiResponse(responseCode = "401", ref = "unauthorized"),
-                    @ApiResponse(responseCode = "403", ref = "unauthorized"),
-            }
-    )
+    @NotFoundResponse
+    @AccessDeniedResponse
     void deleteTransactionCategory(@PathVariable long id) {
-        service.deleteTransactionCategory(id);
+        facade.deleteTransactionCategory(id);
     }
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Edit transaction category with a given ID")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "404", ref = "notfound"),
-                    @ApiResponse(responseCode = "401", ref = "unauthorized"),
-                    @ApiResponse(responseCode = "403", ref = "unauthorized"),
-                    @ApiResponse(responseCode = "400", ref = "validation"),
-                    @ApiResponse(responseCode = "409", ref = "conflict")
-            }
-    )
+    @NotFoundResponse
+    @AccessDeniedResponse
+    @ValidationErrorResponse
+    @ConflictResponse
     void editTransactionCategory(@PathVariable long id, @RequestBody @Valid EditTransactionCategoryDTO dto) {
-        service.editTransactionCategory(id, dto);
+        facade.editTransactionCategory(id, dto);
     }
-
 }
