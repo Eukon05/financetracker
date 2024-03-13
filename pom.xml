@@ -19,7 +19,7 @@
         <java.version>17</java.version>
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <postgresql.version>42.6.1</postgresql.version>
-        <springdoc.version>2.1.0</springdoc.version>
+        <springdoc.version>2.4.0</springdoc.version>
     </properties>
 
     <dependencies>
